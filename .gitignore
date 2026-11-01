@@ -1,3 +1,6 @@
 .venv/
 *.kuzu
 __pycache__/
+stages/04-poc-run/demo_pre_approval/traces/
+stages/04-poc-run/output/traces/
+.pytest_cache/

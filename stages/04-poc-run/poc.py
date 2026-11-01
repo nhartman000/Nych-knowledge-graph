@@ -4,11 +4,13 @@ Usage:
   python poc.py "repair the failing unit test bug"
   python poc.py --file sentences.txt        # one sentence per line
   echo "sentence" | python poc.py -         # stdin
+  python poc.py ... --rebuild               # drop and reload the persistent store
+  python poc.py ... --force-demo            # run before stage 03 is APPROVED; writes to demo_pre_approval/
   python poc.py verify path/to/run.qson [...] # check QSON hash chain / tampering
 DDL is loaded from stages/02-schema/output/schema.cypher (single source).
 """
 from __future__ import annotations
-import argparse, datetime as dt, hashlib, json, re, shutil, sqlite3, sys
+import argparse, datetime as dt, hashlib, json, re, shutil, sqlite3, sys, uuid
 from pathlib import Path
 import kuzu
 
@@ -23,6 +25,8 @@ from nych.gestalt_handoff import build_handoff  # noqa: E402
 sys.path.insert(0, str(HERE))
 import qson_ledger  # noqa: E402
 
+STAGE03_GATE = ROOT / 'stages' / '03-ontology' / 'output' / 'GATE.md'
+DEMO_DIR = HERE / 'demo_pre_approval'
 GATE_ID = 'kg.grounding.consistent'
 GATE_FILE_ID = 'knowledge-graph.kg-gates.001'  # NEW local g8son file_id
 
@@ -39,13 +43,31 @@ def now_iso() -> str:
     return dt.datetime.now(dt.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
 
 
+class StageGateError(RuntimeError):
+    pass
+
+
+def stage_gate_status(path: Path = STAGE03_GATE) -> str:
+    m = re.search(r'^status:\s*(\S+)', path.read_text(), re.M) if path.exists() else None
+    return m.group(1).upper() if m else 'MISSING'
+
+
+def check_stage_gate(path: Path = STAGE03_GATE, force_demo: bool = False) -> str:
+    """ICM discipline: stage 04 may run only when stage 03 GATE.md says status: APPROVED."""
+    st = stage_gate_status(path)
+    if st != 'APPROVED' and not force_demo:
+        raise StageGateError(f'stage 03 gate is {st} ({path}); approve it or pass --force-demo')
+    return st
+
+
 def schema_statements(path: Path = SCHEMA):
     s = re.sub(r'/\*.*?\*/', '', path.read_text(), flags=re.S)
     s = re.sub(r'//[^\n]*', '', s)
     return [x.strip() for x in s.split(';') if x.strip()]
 
 
-def open_db(db_path: Path, rebuild: bool = True):
+def open_db(db_path: Path, rebuild: bool = False):
+    """Persistent by default; rebuild=True deletes and reloads the store."""
     if rebuild:
         shutil.rmtree(db_path, ignore_errors=True)
         if db_path.exists():
@@ -133,7 +155,7 @@ def run_sentence(c, text: str) -> dict:
     h = build_handoff(text, db_path=str(TOTE)); t = h.get('tote') or {}
     loop_id = (t.get('loop') or {}).get('loop_id')
     uid = 'UTT-' + sha(text)[:12]
-    run_id = 'RUN-' + uid + '-' + sha(now_iso() + text)[:8]
+    run_id = 'RUN-' + uid + '-' + uuid.uuid4().hex[:12]  # unique per execution (QSON §2)
     c.execute('MERGE (:Utterance{utt_id:$u,text:$t})', dict(u=uid, t=text))
     grounded = gestalt_ids_for(c, t.get('matched_words') or [])
     for gid, lf in grounded:
@@ -209,15 +231,25 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('sentence', nargs='?', help='sentence to run, or - for stdin')
     ap.add_argument('--file', help='file with one sentence per line')
-    ap.add_argument('--db', default=str(HERE / 'output' / 'kg.kuzu'))
-    ap.add_argument('--trace-dir', default=str(HERE / 'output' / 'traces'))
+    ap.add_argument('--db', help='Kuzu store path (default output/kg.kuzu, or demo_pre_approval/kg.kuzu with --force-demo)')
+    ap.add_argument('--trace-dir', help='QSON output dir (default output/traces, or demo_pre_approval/traces)')
+    ap.add_argument('--rebuild', action='store_true', help='delete and reload the store before running')
+    ap.add_argument('--force-demo', action='store_true', help='override the stage 03 gate; outputs are labelled pre-approval demo')
+    ap.add_argument('--gate-file', default=str(STAGE03_GATE), help=argparse.SUPPRESS)
     argv = sys.argv[1:] if argv is None else argv
     if argv[:1] == ['verify']:
         return verify_main(argv[1:])
     args = ap.parse_args(argv)
     sentences = read_sentences(args)
     if not sentences: ap.error('no input sentence')
-    c = open_db(Path(args.db), rebuild=True)
+    try:
+        st = check_stage_gate(Path(args.gate_file), args.force_demo)
+    except StageGateError as e:
+        print('REFUSED:', e, file=sys.stderr); return 2
+    base = HERE / 'output' if st == 'APPROVED' else DEMO_DIR
+    if st != 'APPROVED': print(f'WARNING: stage 03 gate is {st}; PRE-APPROVAL DEMO run -> {base}', file=sys.stderr)
+    args.db = args.db or str(base / 'kg.kuzu'); args.trace_dir = args.trace_dir or str(base / 'traces')
+    c = open_db(Path(args.db), rebuild=args.rebuild)
     print('LOADED', {t: count(c, t) for t in 'Gestalt Sense Span Operator TOTELoop Step Gate'.split()})
     for text in sentences:
         run = run_sentence(c, text); qp = record_trace(c, run, Path(args.trace_dir))
