@@ -1,146 +1,261 @@
 {
+  "generated_from": "stages/02-schema/output/schema.cypher",
   "nodes": {
-    "Gestalt": [
-      "gestalt_id",
-      "glyph",
-      "lexical_form",
-      "sense",
-      "route",
-      "recoverability_note"
-    ],
-    "Sense": [
-      "sense_id",
-      "gestalt",
-      "surface_forms",
-      "cue_words"
-    ],
-    "Span": [
-      "span_id",
-      "phrases",
-      "gestalt",
-      "canonical_expression",
-      "protected_invariants"
-    ],
-    "Operator": [
-      "operator_id",
-      "symbol",
-      "canonical_name",
-      "evidence_channel",
-      "may_assert_action"
-    ],
-    "TOTELoop": [
-      "loop_id",
-      "name",
-      "domain",
-      "objective",
-      "initial_test",
-      "exit_predicate",
-      "max_iterations",
-      "epistemic_status"
-    ],
-    "Step": [
-      "step_key",
-      "step_index",
-      "phase",
-      "plain_text",
-      "nych_text",
-      "proposition_kind",
-      "provenance"
-    ],
-    "Gate": [
-      "gate_id",
-      "result"
-    ],
-    "Permit": [
-      "permit_id (NEW)",
-      "gate_id",
-      "scope",
-      "expires_at (NEW)"
-    ],
-    "GSTState": [
-      "state_id"
-    ],
-    "QSONTrace": [
-      "trace_id",
-      "run_id",
-      "sequence",
-      "event_type",
-      "gate_id",
-      "result",
-      "previous_event_hash",
-      "qson_version"
-    ]
+    "Gestalt": {
+      "source": "poc",
+      "fields": [
+        "gestalt_id",
+        "glyph",
+        "lexical_form",
+        "sense",
+        "route",
+        "recoverability_note",
+        "origin"
+      ],
+      "new_fields": [
+        "origin"
+      ]
+    },
+    "Sense": {
+      "source": "poc",
+      "fields": [
+        "sense_id",
+        "gestalt",
+        "surface_forms",
+        "cue_words"
+      ],
+      "new_fields": []
+    },
+    "Span": {
+      "source": "poc",
+      "fields": [
+        "span_id",
+        "phrases",
+        "gestalt",
+        "canonical_expression",
+        "protected_invariants"
+      ],
+      "new_fields": []
+    },
+    "Operator": {
+      "source": "poc",
+      "fields": [
+        "operator_id",
+        "symbol",
+        "canonical_name",
+        "evidence_channel",
+        "may_assert_action"
+      ],
+      "new_fields": []
+    },
+    "TOTELoop": {
+      "source": "poc",
+      "fields": [
+        "loop_id",
+        "name",
+        "domain",
+        "objective",
+        "initial_test",
+        "exit_predicate",
+        "max_iterations",
+        "epistemic_status"
+      ],
+      "new_fields": []
+    },
+    "Step": {
+      "source": "poc",
+      "fields": [
+        "step_key",
+        "step_index",
+        "phase",
+        "plain_text",
+        "nych_text",
+        "proposition_kind",
+        "provenance"
+      ],
+      "new_fields": []
+    },
+    "Utterance": {
+      "source": "poc",
+      "fields": [
+        "utt_id",
+        "text"
+      ],
+      "new_fields": []
+    },
+    "Gate": {
+      "source": "g8son",
+      "fields": [
+        "gate_id",
+        "file_id",
+        "order",
+        "type",
+        "conditions",
+        "outcomes"
+      ],
+      "new_fields": []
+    },
+    "Permit": {
+      "source": "mg8-runtime",
+      "fields": [
+        "permit_id",
+        "run_id",
+        "proposal_id",
+        "status",
+        "purpose",
+        "expires_at",
+        "version",
+        "epoch",
+        "evaluation_digest",
+        "actor",
+        "operation"
+      ],
+      "new_fields": []
+    },
+    "GSTState": {
+      "source": "gst",
+      "fields": [
+        "state_id",
+        "gst_version",
+        "internal",
+        "external",
+        "continuity",
+        "intent",
+        "outcome_expectation",
+        "constraints"
+      ],
+      "new_fields": []
+    },
+    "QSONTrace": {
+      "source": "qson",
+      "fields": [
+        "trace_id",
+        "run_id",
+        "sequence",
+        "event_type",
+        "file_id",
+        "gate_id",
+        "input_state_id",
+        "result",
+        "action",
+        "output_state_id",
+        "actor_type",
+        "actor_id",
+        "timestamp",
+        "previous_event_hash",
+        "event_hash"
+      ],
+      "new_fields": []
+    }
   },
   "relations": [
     {
-      "from": "TOTELoop",
       "type": "USES_GESTALT",
-      "to": "Gestalt"
-    },
-    {
       "from": "TOTELoop",
+      "to": "Gestalt",
+      "new": false
+    },
+    {
       "type": "HAS_STEP",
-      "to": "Step"
+      "from": "TOTELoop",
+      "to": "Step",
+      "new": false
     },
     {
-      "from": "Step",
       "type": "NEXT_ON_MATCH",
-      "to": "Step"
+      "from": "Step",
+      "to": "Step",
+      "new": false
     },
     {
-      "from": "Step",
       "type": "NEXT_ON_MISMATCH",
-      "to": "Step"
+      "from": "Step",
+      "to": "Step",
+      "new": false
     },
     {
-      "from": "Step",
       "type": "USES_OPERATOR",
-      "to": "Operator"
-    },
-    {
-      "from": "QSONTrace",
-      "type": "PRECEDES",
-      "to": "QSONTrace"
-    },
-    {
-      "from": "Sense",
-      "type": "SENSE_OF (NEW)",
-      "to": "Gestalt"
-    },
-    {
-      "from": "Span",
-      "type": "SPANS (NEW)",
-      "to": "Gestalt"
-    },
-    {
-      "from": "Gate",
-      "type": "GUARDS (NEW)",
-      "to": "TOTELoop"
-    },
-    {
-      "from": "Gate",
-      "type": "ISSUES (NEW)",
-      "to": "Permit"
-    },
-    {
-      "from": "Permit",
-      "type": "AUTHORIZES (NEW)",
-      "to": "Step"
-    },
-    {
-      "from": "GSTState",
-      "type": "TRANSITIONS_TO (NEW)",
-      "to": "GSTState"
-    },
-    {
       "from": "Step",
-      "type": "IN_STATE (NEW)",
-      "to": "GSTState"
+      "to": "Operator",
+      "new": false
     },
     {
+      "type": "SENSE_OF",
+      "from": "Sense",
+      "to": "Gestalt",
+      "new": true
+    },
+    {
+      "type": "SPANS",
+      "from": "Span",
+      "to": "Gestalt",
+      "new": true
+    },
+    {
+      "type": "GROUNDED_TO",
+      "from": "Utterance",
+      "to": "Gestalt",
+      "new": false
+    },
+    {
+      "type": "SELECTED_LOOP",
+      "from": "Utterance",
+      "to": "TOTELoop",
+      "new": false
+    },
+    {
+      "type": "GUARDS",
+      "from": "Gate",
+      "to": "TOTELoop",
+      "new": true
+    },
+    {
+      "type": "ISSUES",
+      "from": "Gate",
+      "to": "Permit",
+      "new": true
+    },
+    {
+      "type": "AUTHORIZES",
+      "from": "Permit",
+      "to": "TOTELoop",
+      "new": true
+    },
+    {
+      "type": "TRANSITIONS_TO",
+      "from": "GSTState",
+      "to": "GSTState",
+      "new": true
+    },
+    {
+      "type": "INPUT_STATE",
       "from": "QSONTrace",
-      "type": "RECORDS (NEW)",
-      "to": "Gate"
+      "to": "GSTState",
+      "new": true
+    },
+    {
+      "type": "OUTPUT_STATE",
+      "from": "QSONTrace",
+      "to": "GSTState",
+      "new": true
+    },
+    {
+      "type": "RECORDS",
+      "from": "QSONTrace",
+      "to": "Gate",
+      "new": true
+    },
+    {
+      "type": "TRACE_OF",
+      "from": "QSONTrace",
+      "to": "Utterance",
+      "new": false
+    },
+    {
+      "type": "PRECEDES",
+      "from": "QSONTrace",
+      "to": "QSONTrace",
+      "new": false
     }
   ]
 }
