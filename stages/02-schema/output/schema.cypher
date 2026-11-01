@@ -1,0 +1,17 @@
+CREATE NODE TABLE Gestalt(gestalt_id STRING, glyph STRING, lexical_form STRING, sense STRING, route STRING, recoverability_note STRING, PRIMARY KEY(gestalt_id));
+CREATE NODE TABLE Sense(sense_id STRING, gestalt STRING, surface_forms STRING[], cue_words STRING[], PRIMARY KEY(sense_id));
+CREATE NODE TABLE Span(span_id STRING, phrases STRING[], gestalt STRING, canonical_expression STRING, protected_invariants STRING[], PRIMARY KEY(span_id));
+CREATE NODE TABLE Operator(operator_id STRING, symbol STRING, canonical_name STRING, evidence_channel STRING, may_assert_action BOOLEAN, PRIMARY KEY(operator_id));
+CREATE NODE TABLE TOTELoop(loop_id STRING, name STRING, domain STRING, objective STRING, initial_test STRING, exit_predicate STRING, max_iterations INT64, epistemic_status STRING, PRIMARY KEY(loop_id));
+CREATE NODE TABLE Step(step_key STRING, step_index INT64, phase STRING, plain_text STRING, nych_text STRING, proposition_kind STRING, provenance STRING, PRIMARY KEY(step_key));
+CREATE NODE TABLE Utterance(utt_id STRING, text STRING, PRIMARY KEY(utt_id));
+CREATE NODE TABLE TraceEvent(trace_id STRING, run_id STRING, sequence INT64, event_type STRING, gate_id STRING, result STRING, previous_event_hash STRING, PRIMARY KEY(trace_id));
+CREATE REL TABLE USES_GESTALT(FROM TOTELoop TO Gestalt, role STRING);
+CREATE REL TABLE HAS_STEP(FROM TOTELoop TO Step);
+CREATE REL TABLE NEXT_ON_MATCH(FROM Step TO Step);
+CREATE REL TABLE NEXT_ON_MISMATCH(FROM Step TO Step);
+CREATE REL TABLE USES_OPERATOR(FROM Step TO Operator);
+CREATE REL TABLE GROUNDED_TO(FROM Utterance TO Gestalt, word STRING);
+CREATE REL TABLE SELECTED_LOOP(FROM Utterance TO TOTELoop, match_method STRING);
+CREATE REL TABLE TRACE_OF(FROM TraceEvent TO Utterance);
+CREATE REL TABLE PRECEDES(FROM TraceEvent TO TraceEvent);

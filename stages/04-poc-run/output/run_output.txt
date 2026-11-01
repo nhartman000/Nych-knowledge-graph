@@ -1,0 +1,12 @@
+LOADED {'Gestalt': 8, 'Sense': 14, 'Span': 11, 'Operator': 4, 'TOTELoop': 22, 'Step': 132}
+NYCH lookup_loop: gestalt-lexical ['repair', 'test', 'bug'] -> code.unit_test_repair
+KG gate kg.grounding.consistent: PASS (status, grounded, in-loop) = ['CANONICAL', 3, 3]
+Loop steps:
+   [0, 'TEST', '👀', 'Run the unchanged tests and capture failures.']
+   [1, 'TEST', '👁️🧠', 'Compare observed state with the exit predicate.']
+   [2, 'OPERATE', '🗯️', 'Select one admissible operation without asserting its outcome.']
+   [3, 'OPERATE', '💪', 'Execute the selected operation.']
+   [4, 'TEST', '👀', 'Reinspect external evidence; repeat if the exit predicate is false.']
+Provenance:
+   [1, 'grounding', '', 'code.unit_test_repair']
+   [2, 'gate_evaluated', 'PASS', 'code.unit_test_repair']
