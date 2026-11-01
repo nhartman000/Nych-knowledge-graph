@@ -1,0 +1,32 @@
+{
+  "registry_version": "0.1.0",
+  "senses": [
+    {"sense_id":"perception.read.written_material","gestalt":"👁️📖","surface_forms":["read"],"cue_words":["book","sign","report","article","text","reading"]},
+    {"sense_id":"property.color.red","gestalt":"🔴","surface_forms":["red"],"cue_words":["color","colour","paint","bright","blood"]},
+    {"sense_id":"infrastructure.road.segment","gestalt":"🛣️","surface_forms":["road"],"cue_words":["street","highway","drive","traffic","lane","down"],"is_default":true},
+    {"sense_id":"transport.ride.bicycle","gestalt":"🚲➡️","surface_forms":["ride","riding"],"cue_words":["bike","bicycle","pedal"]},
+    {"sense_id":"transport.ride.motorcycle","gestalt":"🏍️➡️","surface_forms":["ride","riding"],"cue_words":["motorcycle","motorbike","harley"]},
+    {"sense_id":"responsibility.role","gestalt":"🎭","surface_forms":["role"],"cue_words":["job","responsibility","position","played","acting"]},
+    {"sense_id":"logic.rule","gestalt":"📋","surface_forms":["rule"],"cue_words":["rules","policy","constraint","invariant","gate","follows"],"is_default":true},
+    {"sense_id":"epistemics.real","gestalt":"✅","surface_forms":["real"],"cue_words":["actually","genuine","truly","fact","actual"]},
+    {"sense_id":"motion.roll","gestalt":"🎲","surface_forms":["roll"],"cue_words":["dice","rolled","rolling","tumble"]},
+    {"sense_id":"intent.plan","gestalt":"📋📅","surface_forms":["plan"],"cue_words":["schedule","intend","strategy","roadmap","will"],"is_default":true},
+    {"sense_id":"property.plain","gestalt":"▫️","surface_forms":["plain"],"cue_words":["simple","clear","ordinary","unadorned"]},
+    {"sense_id":"software.pipeline","gestalt":"🔧➡️","surface_forms":["pipeline"],"cue_words":["stage","build","ci","deploy","step"]},
+    {"sense_id":"finance.bank.institution","gestalt":"🏦","surface_forms":["bank"],"cue_words":["money","account","loan","deposit","deposited","atm","withdraw"]},
+    {"sense_id":"geography.riverbank","gestalt":"🌊","surface_forms":["bank"],"cue_words":["river","shore","water","fishing","stream"]}
+  ],
+  "gestalt_spans": [
+    {"span_id":"aspect.not_yet","phrases":["not yet"],"gestalt":"¬⌛","canonical_expression":"negated completion remains pending","protected_invariants":["negation","aspect"]},
+    {"span_id":"process.unit_test_repair","phrases":["unit test repair","unit-test repair"],"gestalt":"🧪🔧","canonical_expression":"repair while preserving the unchanged unit-test predicate","protected_invariants":["objective","exit_predicate","provenance"]},
+    {"span_id":"process.continuous_integration","phrases":["continuous integration"],"gestalt":"🔄🧪","canonical_expression":"automated integration verification process","protected_invariants":["process","verification"]},
+    {"span_id":"modality.external_observation","phrases":["external observation"],"gestalt":"👀","canonical_expression":"externally licensed observation","protected_invariants":["modality","provenance"]},
+    {"span_id":"modality.internal_model","phrases":["internal model"],"gestalt":"👁️🧠","canonical_expression":"modeled, remembered, imagined, or predicted state","protected_invariants":["modality"]},
+    {"span_id":"modality.operative_intention","phrases":["operative intention"],"gestalt":"🗯️","canonical_expression":"explicit operative intention","protected_invariants":["modality"]},
+    {"span_id":"action.execute_selected_operation","phrases":["execute selected operation"],"gestalt":"💪","canonical_expression":"execute the selected licensed operation","protected_invariants":["action","authorization"]},
+    {"span_id":"field.machine_learning","phrases":["machine learning"],"gestalt":"🤖🧠","canonical_expression":"machine learning","protected_invariants":["domain"]},
+    {"span_id":"artifact.source_code","phrases":["source code"],"gestalt":"💻📄","canonical_expression":"program source code","protected_invariants":["artifact_type"]},
+    {"span_id":"artifact.test_suite","phrases":["test suite"],"gestalt":"🧪📚","canonical_expression":"declared collection of tests","protected_invariants":["artifact_type","scope"]},
+    {"span_id":"artifact.revised_report","phrases":["revised report"],"gestalt":"📝📄","canonical_expression":"report with a revision state","protected_invariants":["revision","artifact_type"]}
+  ]
+}

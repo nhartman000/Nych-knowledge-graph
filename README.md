@@ -1,8 +1,6 @@
 # knowledge-graph
-A small graph database (Kùzu) that links NYCH words/meanings (Gestalt, Sense, Span) to T.O.T.E. loops, their steps and operators, plus gates, permits, GST states and QSON audit traces.
+A small graph database that connects NYCH word meanings to T.O.T.E. task loops, so a sentence like "repair the failing unit test bug" can be traced to the exact loop, steps, and a pass/fail check, with an audit trail.
 
-**Run:** `pip install -r requirements.txt && cd 03_poc && python poc.py` (expects the NYCH registry/db referenced inside poc.py). Example output: `03_poc/output/output.txt`.
+Organised with **Interpretable Context Methodology (ICM)** — https://arxiv.org/abs/2603.16021, https://github.com/RinDig/Interpretable-Context-Methodology. Work flows through numbered folders in `stages/`; each has instructions (`CONTEXT.md`), stable rules (`references/`) and results (`output/`). A person approves each stage by editing `output/GATE.md`.
 
-**Map:** `02_ontology/ONTOLOGY.md`. Items marked NEW are proposals.
-
-**Note on structure:** "ICM" was not found in any nhartman000 repo; this layout (numbered stage folders + CONTEXT.md each) is a guess at Interpreted Context Methodology — confirm.
+Quick start: see `setup/questionnaire.md`, then `python stages/04-poc-run/poc.py`. Ontology map: `stages/03-ontology/output/ONTOLOGY.md`.
