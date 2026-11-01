@@ -1,5 +1,5 @@
 # Ontology map
-Fields marked **NEW** are proposed (not in any repo yet). Everything else is from `03_poc/poc.py` or gst/qson/mgate-keeper (`gate_id`, `state_id`, `trace_id`, `qson_version`, `scope`).
+Fields marked **NEW** are proposed (not in any repo yet). Everything else is from `stages/04-poc-run/poc.py` or gst/qson/mgate-keeper (`gate_id`, `state_id`, `trace_id`, `qson_version`, `scope`).
 ```mermaid
 graph LR
   TOTELoop -->|USES_GESTALT role| Gestalt
