@@ -4,6 +4,7 @@ Usage:
   python poc.py "repair the failing unit test bug"
   python poc.py --file sentences.txt        # one sentence per line
   echo "sentence" | python poc.py -         # stdin
+  python poc.py verify path/to/run.qson [...] # check QSON hash chain / tampering
 DDL is loaded from stages/02-schema/output/schema.cypher (single source).
 """
 from __future__ import annotations
@@ -19,6 +20,8 @@ TOTE = SH / 'data' / 'tote_loops.sqlite3'
 REGISTRY = SH / 'data' / 'sense_registry.json'
 sys.path.insert(0, str(SH / 'vendor' / 'nych'))
 from nych.gestalt_handoff import build_handoff  # noqa: E402
+sys.path.insert(0, str(HERE))
+import qson_ledger  # noqa: E402
 
 GATE_ID = 'kg.grounding.consistent'
 GATE_FILE_ID = 'knowledge-graph.kg-gates.001'  # NEW local g8son file_id
@@ -165,16 +168,33 @@ def run_sentence(c, text: str) -> dict:
                 evaluation=evaluation, result=result, input_state_id=in_state['state_id'], output_state_id=out_state_id, permit_id=permit_id)
 
 
-def record_trace(c, run: dict):
-    """Step-2 in-graph trace (replaced by QSON ledger in step 3)."""
-    prev = ''; prevtid = None
-    for i, (et, res) in enumerate([('external_input', None), ('gate_attempt', run['result'])], 1):
-        tid = f"trace-{run['run_id']}-{i:06d}"
-        c.execute('CREATE (:QSONTrace{trace_id:$t,run_id:$r,sequence:$s,event_type:$e,gate_id:$g,result:$x,previous_event_hash:$p})',
-                  dict(t=tid, r=run['run_id'], s=i, e=et, g=GATE_ID if res else '', x=res or '', p=prev))
-        c.execute('MATCH (e:QSONTrace{trace_id:$t}),(u:Utterance{utt_id:$u}) CREATE (e)-[:TRACE_OF]->(u)', dict(t=tid, u=run['utt_id']))
-        if prevtid: c.execute('MATCH (a:QSONTrace{trace_id:$a}),(b:QSONTrace{trace_id:$b}) CREATE (a)-[:PRECEDES]->(b)', dict(a=prevtid, b=tid))
-        prev = sha(tid); prevtid = tid
+def record_trace(c, run: dict, trace_dir: Path) -> Path:
+    """Serialize the run to a QSON v1 ledger file and mirror its events into the graph."""
+    led = qson_ledger.build_ledger(run, GATE_ID, GATE_FILE_ID, now_iso())
+    path = qson_ledger.write(led, trace_dir / f"{run['run_id']}.qson")
+    prevtid = None
+    for ev in led['events']:
+        c.execute('CREATE (:QSONTrace{trace_id:$t,run_id:$r,sequence:$s,event_type:$e,file_id:$f,gate_id:$g,input_state_id:$i,result:$x,action:$a,output_state_id:$o,actor_type:$at,actor_id:$ai,timestamp:$ts,previous_event_hash:$p,event_hash:$h})',
+                  dict(t=ev['trace_id'], r=ev['run_id'], s=ev['sequence'], e=ev['event_type'], f=ev.get('file_id', ''), g=ev.get('gate_id', ''),
+                       i=ev.get('input_state_id', ''), x=ev.get('result', ''), a=ev['action'] if isinstance(ev.get('action'), str) else canon(ev.get('action')),
+                       o=ev.get('output_state_id') or '', at=ev['actor']['type'], ai=ev['actor']['id'], ts=ev['timestamp'], p=ev['previous_event_hash'], h=ev['event_hash']))
+        c.execute('MATCH (e:QSONTrace{trace_id:$t}),(u:Utterance{utt_id:$u}) CREATE (e)-[:TRACE_OF]->(u)', dict(t=ev['trace_id'], u=run['utt_id']))
+        if ev.get('gate_id'): c.execute('MATCH (e:QSONTrace{trace_id:$t}),(g:Gate{gate_id:$g}) CREATE (e)-[:RECORDS]->(g)', dict(t=ev['trace_id'], g=ev['gate_id']))
+        for rel, key in (('INPUT_STATE', 'input_state_id'), ('OUTPUT_STATE', 'output_state_id')):
+            if ev.get(key): c.execute(f'MATCH (e:QSONTrace{{trace_id:$t}}),(s:GSTState{{state_id:$s}}) CREATE (e)-[:{rel}]->(s)', dict(t=ev['trace_id'], s=ev[key]))
+        if prevtid: c.execute('MATCH (a:QSONTrace{trace_id:$a}),(b:QSONTrace{trace_id:$b}) CREATE (a)-[:PRECEDES]->(b)', dict(a=prevtid, b=ev['trace_id']))
+        prevtid = ev['trace_id']
+    return path
+
+
+def verify_main(paths) -> int:
+    bad = 0
+    for p in paths:
+        errs = qson_ledger.verify(p)
+        print(('OK      ' if not errs else 'TAMPERED') + f' {p}')
+        for e in errs: print('   -', e)
+        bad += bool(errs)
+    return 1 if bad else 0
 
 
 def read_sentences(args):
@@ -190,14 +210,18 @@ def main(argv=None):
     ap.add_argument('sentence', nargs='?', help='sentence to run, or - for stdin')
     ap.add_argument('--file', help='file with one sentence per line')
     ap.add_argument('--db', default=str(HERE / 'output' / 'kg.kuzu'))
+    ap.add_argument('--trace-dir', default=str(HERE / 'output' / 'traces'))
+    argv = sys.argv[1:] if argv is None else argv
+    if argv[:1] == ['verify']:
+        return verify_main(argv[1:])
     args = ap.parse_args(argv)
     sentences = read_sentences(args)
     if not sentences: ap.error('no input sentence')
     c = open_db(Path(args.db), rebuild=True)
     print('LOADED', {t: count(c, t) for t in 'Gestalt Sense Span Operator TOTELoop Step Gate'.split()})
     for text in sentences:
-        run = run_sentence(c, text); record_trace(c, run)
-        print(json.dumps({k: run[k] for k in ('text', 'loop_id', 'matched_words', 'result', 'permit_id')}, ensure_ascii=False))
+        run = run_sentence(c, text); qp = record_trace(c, run, Path(args.trace_dir))
+        print(json.dumps({**{k: run[k] for k in ('text', 'loop_id', 'matched_words', 'result', 'permit_id')}, 'qson': str(qp)}, ensure_ascii=False))
     return 0
 
 

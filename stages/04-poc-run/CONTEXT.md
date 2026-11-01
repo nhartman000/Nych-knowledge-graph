@@ -1,2 +1,2 @@
 # Stage 04 — POC run (Layer 2)
-Job: from repo root run `python stages/04-poc-run/poc.py > stages/04-poc-run/output/run_output.txt`. Expect gate kg.grounding.consistent: PASS. Inputs come only from shared/.
+Job: run sentences through `python stages/04-poc-run/poc.py "sentence"` (or --file / stdin). Each run writes a QSON v1 ledger to output/traces/<run_id>.qson (hash-chained, see qson_ledger.py). Check with `python stages/04-poc-run/poc.py verify output/traces/*.qson`.
