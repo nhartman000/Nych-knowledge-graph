@@ -103,8 +103,18 @@ def _is_unit(t):
     return measure_decision(t, _DOMAIN[0])[0]
 
 
+LENGTH_UNITS = {"inch", "inches", "in.", "foot", "feet", "ft.", "yard", "yards", "line", "lines"}
+
+
+def is_length_fraction(t):
+    """'one thirty-second of an inch': 'second' here is an ordinal fraction of a length, never a time."""
+    d = t.doc
+    after = [x.lower_ for x in d[t.i + 1:t.i + 4]]
+    return "of" in after and any(a in LENGTH_UNITS for a in after) or (t.i > 0 and d[t.i - 1].text in ("-", "–") and "of" in after)
+
+
 def _is_time(t):
-    return _lemma(t) in inv()["time_units"]
+    return _lemma(t) in inv()["time_units"] and not is_length_fraction(t)
 
 
 FRACTION_WORDS = {"half": 2, "halves": 2, "third": 3, "thirds": 3, "fourth": 4, "fourths": 4, "quarter": 4, "quarters": 4,
@@ -290,6 +300,8 @@ def non_location(p: str, pobj) -> bool:
     lst = nl.get(p)
     if lst is None:
         return False
+    if _lemma(pobj) in ("place", "lieu"):   # only 'in place of X' / 'in lieu of X'; 'in a cool place' is a real location
+        return any(c.dep_ == "prep" and c.lower_ == "of" for c in pobj.children) and not any(c.dep_ in ("det", "amod") for c in pobj.children)
     return "*" in lst or _lemma(pobj) in lst
 
 
@@ -315,6 +327,14 @@ def sense_mentions(doc):
                 out.append((t.i, ch, w, step))
                 break
     return out
+
+
+def mental_marker(text: str, modreg: dict):
+    """-> (glyph, cue). Internal senses carry 💭 (remembered) when a memory cue is present, else 🧠🗯 (imagined)."""
+    mm = modreg["mental_markers"]
+    low = " " + text.lower() + " "
+    cue = next((c for c in mm["memory_cues"] if re.search(r"\b" + re.escape(c) + r"\b", low)), None)
+    return (mm["memory"], cue) if cue else (mm["imagined"], mm["default_cue"])
 
 
 def channel_for(lem: str, modreg: dict):
@@ -366,9 +386,13 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None, s
     while stack:
         v = stack.pop()
         for c in v.children:
-            if (c.dep_ == "conj" or (c.dep_ == "parataxis" and injected) or (c.dep_ == "ccomp" and injected and any(g.dep_ == "nsubj" and g.i == 0 for g in c.children))) \
+            if (c.dep_ == "conj" or (c.dep_ == "dep" and c.pos_ == "VERB" and c.tag_ in ("VB", "VBP")) or (c.dep_ == "parataxis" and injected) or (c.dep_ == "ccomp" and injected and any(g.dep_ == "nsubj" and g.i == 0 for g in c.children))) \
                     and verbish(c) and c not in cands:
                 cands.append(c); stack.append(c)
+        for c in v.children:   # 'Take from water, dry between towels, and fry': verb used as advcl (dry/cool/warm are actions here)
+            if c.dep_ == "advcl" and c not in cands and ((c.lower_ in lexverbs and c.pos_ in ("VERB", "ADJ", "NOUN")) or (c.pos_ == "VERB" and c.tag_ in ("VB", "VBP"))) \
+                    and not any(g.dep_ in ("mark", "nsubj", "nsubjpass", "aux", "auxpass") for g in c.children) and c.i > v.i:
+                cands.append(c); stack.append(c); promoted.add(c.i)
         for c in v.subtree:
             if c in cands or c.dep_ != "conj" or c.head.pos_ not in ("NOUN", "PROPN"):
                 continue
@@ -377,9 +401,14 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None, s
                 continue   # 'cook butter, shallot, and pepper': an ingredient, not a verb
             if (c.pos_ == "VERB" and c.tag_ in ("VB", "VBP")) or (c.lower_ in lexverbs and c.lower_ not in keepnoun and bare and c.pos_ in ("NOUN", "PROPN")):
                 cands.append(c); stack.append(c); promoted.add(c.i)
+    if injected and off < len(doc) and doc[off] not in cands and doc[off].lower_ in lexverbs and doc[off].dep_ in ("amod", "advcl", "compound", "nmod"):
+        cands.append(doc[off])   # 'Clean one-fourth pound mushrooms, break ...': parser hung the first imperative off its object
     if not cands:
         return _ret("non_action", [], "no_action_verb")
     cands.sort(key=lambda t: t.i)
+    cand_i = {c.i for c in cands}
+    senses = [m for m in senses if m[0] not in cand_i or _lemma(doc[m[0]]) in
+              {w for k, sp in I["sense_cues"].items() if not k.startswith("_") for w in sp["cue_verbs"]}]   # 'dry', 'cool', 'warm' used as verbs are actions
     loops, reasons, state = [], [], {}
     for v in cands:
         lem = v.lower_ if v.pos_ != "VERB" else _lemma(v)
@@ -423,7 +452,11 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None, s
         else:
             mood, actor_kind, actor_text = "unresolved", "unresolved", "UNRESOLVED"
         state[v.i] = {"mood": mood, "passive": passive, "actor_kind": actor_kind, "actor_text": actor_text, "modal": modal}
-        if lem in STATIVE_EXTRA or lem in I["_verbs"]["stative_or_descriptive"]:
+        let_aux = any(c.lower_ == "let" for c in v.children if c.dep_ in ("aux", "auxpass"))
+        if let_aux and mood == "unresolved":
+            mood, actor_kind, actor_text = "imperative", "implied_you", "you(implied)"
+            state[v.i].update(mood=mood, actor_kind=actor_kind, actor_text=actor_text)
+        if (lem in STATIVE_EXTRA or lem in I["_verbs"]["stative_or_descriptive"]) and not (let_aux and lem in ("stand", "rise", "cool", "rest", "simmer", "boil")):
             reasons.append("stative_or_nonaction_verb"); continue
         manip = modreg["lemma_channels"].get(lem) == "external_kinesthetic"
         G = I["instruction_gate"]
@@ -464,6 +497,10 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None, s
         # objects
         objs, co_objs, tool, locs, exitc = [], [], None, [], None
         dobj = next((c for c in leaf.children if c.dep_ in ("dobj", "obj")), None)
+        if dobj is None and leaf.dep_ in ("amod", "compound", "nmod") and leaf.head.pos_ in ("NOUN", "PROPN"):
+            dobj = leaf.head
+        if dobj is None:
+            dobj = next((c for c in leaf.children if c.dep_ == "appos" and c.pos_ in ("NOUN", "PROPN")), None)   # 'Braise the beef' (NN root + appos)
         if passive and subj is not None:
             dobj = subj
         prt_in = next((c for c in leaf.children if c.dep_ == "prt" and c.lower_ in ("in", "into", "on")), None)
@@ -584,14 +621,22 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None, s
                 continue
             ch, prov_ = channel_for(tl, modreg)
             links.append({"channel": ch, "word": tl, "provenance": prov_, "role": "action"})
+            if ch in modreg["mental_markers"]["internal_channels"]:
+                g, cue = mental_marker(text, modreg)
+                links.append({"channel": "memory" if g == modreg["mental_markers"]["memory"] else "imagine", "word": tl,
+                              "provenance": f"mental_marker:{cue}", "role": "mental_marker"})
             c = operator_cell({"channel": ch, "channel_provenance": prov_}, {"predicate": (text.split()[0].strip(",.;:") if injected and t.i == off else t.text), "verb_form": _verb_form(t)}, modreg)
             if c:
-                ops.append(c.replace(" [inferred]", "") + ("" if prov_ == "explicit" else f" [{prov_}]"))
+                c = c.replace(" [inferred]", "")
+                if ch in modreg["mental_markers"]["internal_channels"]:
+                    c += mental_marker(text, modreg)[0]
+                ops.append(c + ("" if prov_ == "explicit" else f" [{prov_}]"))
         if not any(l["role"] == "action" for l in links):
             ch, prov_ = channel_for(leaf_lem, modreg)
             links.append({"channel": ch, "word": leaf_lem, "provenance": prov_, "role": "action"})
             ops.append(f"{leaf.text},{modreg['operators'][ch]}" + ("" if prov_ == "explicit" else f" [{prov_}]"))
         chans = sorted({modreg["lemma_channels"].get(_lemma(t)) for t in chain} - {None})
+        prohibition_hint = bool(neg)
         # sense mentions -> TEST/EXIT steps of THIS loop (never stored alone)
         nxt_v = min([c.i for c in cands if c.i > v.i] or [len(doc)])
         prev_v = max([c.i for c in cands if c.i < v.i] or [-1])
@@ -603,15 +648,21 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None, s
                 continue   # the action verb itself is a sense verb (look, feel): already its modality
             state["_used"].add(ti)
             in_exit = bool(exitc) and w in (exitc.get("text") or "").lower()
-            sense_tests.append({"op": modreg["operators"][ch], "channel": ch, "word": w, "step": f"{modreg['operators'][ch]} {step}",
-                                "role": "exit" if in_exit else "test"})
-            links.append({"channel": ch, "word": w, "provenance": "sense_mention", "role": "exit" if in_exit else "test"})
+            op = modreg["operators"][ch]
+            st_ = {"op": op, "channel": ch, "word": w, "step": f"{op} {step}", "role": "exit" if in_exit else "test"}
+            links.append({"channel": ch, "word": w, "provenance": "sense_mention", "role": st_["role"]})
+            if ch in modreg["mental_markers"]["internal_channels"]:
+                g, cue = mental_marker(text, modreg)
+                st_.update(op=op + g, step=f"{op}{g} {step}", mental_marker=g, marker_cue=cue)
+                links.append({"channel": "memory" if g == modreg["mental_markers"]["memory"] else "imagine", "word": w,
+                              "provenance": f"mental_marker:{cue}", "role": "mental_marker"})
+            sense_tests.append(st_)
         if exitc is None and sense_tests:
             st0 = sense_tests[0]
             st0["role"] = "exit"
             exitc = {"kind": "sense_test", "text": st0["step"], "condition": f"{st0['channel']}: {st0['step']}",
                      "provenance": "implied_by_text", "rule": "EXIT-SENSE-TEST"}
-        if not (objs or co_objs or tool or exitc):
+        if not (objs or co_objs or tool or exitc or (mood == "imperative" and locs and not prohibition_hint)):
             for (ti, ch, w, step) in mine:
                 state["_used"].discard(ti)
             reasons.append("no_object_tool_or_exit"); continue

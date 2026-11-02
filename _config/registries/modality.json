@@ -8,7 +8,7 @@
   "internal_auditory": "👂",
   "external_auditory": "👂👂",
   "memory": "💭",
-  "imagine": "👁️‍🗨️",
+  "imagine": "🧠🗯",
   "smell": "👃",
   "taste": "👅"
  },
@@ -198,7 +198,29 @@
   "verify": "external_visual",
   "inspect": "external_visual",
   "examine": "external_visual",
-  "sight": "external_visual"
+  "sight": "external_visual",
+  "determine": "imagine",
+  "decide": "imagine",
+  "judge": "imagine",
+  "estimate": "imagine",
+  "plan": "imagine",
+  "consider": "imagine",
+  "calculate": "imagine",
+  "reckon": "imagine",
+  "design": "imagine",
+  "conceive": "imagine",
+  "project": "imagine",
+  "foresee": "imagine",
+  "anticipate": "imagine",
+  "suppose": "imagine",
+  "assume": "imagine",
+  "expect": "imagine",
+  "intend": "imagine",
+  "choose": "imagine",
+  "figure": "imagine",
+  "think": "imagine",
+  "guess": "imagine",
+  "predict": "imagine"
  },
  "lemma_channels_inferred": {
   "_doc": "Channel assigned with provenance=inferred and alternatives kept (the verb does not fix the sense).",
@@ -213,13 +235,6 @@
   "sense": {
    "channel": "unresolved",
    "alternatives": []
-  },
-  "think": {
-   "channel": "internal_auditory",
-   "alternatives": [
-    "internal_visual",
-    "unresolved"
-   ]
   },
   "test": {
    "channel": "external_visual",
@@ -254,5 +269,26 @@
   "_doc": "Fix 4: every action verb gets a default modality. Verbs not in lemma_channels/lemma_channels_inferred default to external_kinesthetic (hands acting on the world), marked [default]. Valence (good/bad feeling) belongs to the Gestalt, never to the modality.",
   "channel": "external_kinesthetic",
   "provenance": "default"
- }
+ },
+ "mental_markers": {
+  "_doc": "User rule 2026-11-02 (round 3): imagine/projection is 🧠🗯 (replaces the old eye-in-speech-bubble glyph, which was too close to 👁️). Every INTERNAL sense (internal_visual 👁️, internal_auditory 👂, internal_kinesthetic 🫶) also carries a mental marker: 💭 remembered or 🧠🗯 imagined. Chosen deterministically: a memory cue in the sentence -> 💭, otherwise 🧠🗯; the deciding cue is recorded.",
+  "internal_channels": [
+   "internal_visual",
+   "internal_auditory",
+   "internal_kinesthetic"
+  ],
+  "memory_cues": [
+   "remember",
+   "remembered",
+   "recall",
+   "recalled",
+   "recollect",
+   "as before",
+   "as previously"
+  ],
+  "memory": "💭",
+  "imagined": "🧠🗯",
+  "default_cue": "no_memory_cue"
+ },
+ "_doc_mental_verbs": "Mental/projection verbs (determine, decide, judge, estimate, plan, consider, ...) map to imagine 🧠🗯."
 }

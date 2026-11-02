@@ -52,7 +52,7 @@
   ],
   [
    "OP-IMG",
-   "👁️‍🗨️",
+   "🧠🗯",
    "imagine",
    "actor_internal",
    false
@@ -240,11 +240,11 @@
    "name": "stir sauce",
    "domain": "cooking",
    "objective": "keep the sauce agitated / in motion with a spoon in a (round) saucepan",
-   "initial_test": "🫶 feel sauce resistance",
+   "initial_test": "🫶🧠🗯 feel sauce resistance",
    "exit_predicate": "G-EXIT-STIR-SAUCE-001",
    "max_iterations": -1,
    "epistemic_status": "ACT",
-   "modality_cell": "hold,🙌 ; feel,🫶 ; stir,🙌 ; verify,👀²",
+   "modality_cell": "hold,🙌 ; feel,🫶🧠🗯 ; stir,🙌 ; verify,👀²",
    "actor_cell": "you(implied),",
    "action_cell": "stir,",
    "object_cell": "sauce, ; tool: spoon,",
@@ -270,10 +270,12 @@
     },
     {
      "step": 2,
-     "op": "🫶",
+     "op": "🫶🧠🗯",
      "channel": "internal_kinesthetic",
      "text": "feel sauce resistance",
-     "role": "test"
+     "role": "test",
+     "mental_marker": "🧠🗯",
+     "marker_cue": "no_memory_cue"
     },
     {
      "step": 3,
@@ -330,6 +332,10 @@
     {
      "channel": "external_visual",
      "word": "verify|step4"
+    },
+    {
+     "channel": "imagine",
+     "word": "feel|step2|mental_marker:no_memory_cue"
     }
    ]
   }

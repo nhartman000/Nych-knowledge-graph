@@ -23,7 +23,9 @@ One row = one TOTE loop. Cells: **modality operators** (one cell, every operator
 | internal auditory | 👂 |
 | external auditory | 👂👂 |
 | memory | 💭 |
-| imagine | 👁️‍🗨️ |
+| imagine | 🧠🗯 |
+
+Rule (user, 2026-11-02): imagine/projection is 🧠🗯, and mental/projection verbs (determine, decide, judge, estimate, plan, consider) map to it. Every internal sense (👁️, 👂, 🫶) also carries a mental marker: 💭 remembered (cue: remember / recall / as before) or 🧠🗯 imagined (default). The deciding cue is recorded.
 | smell | 👃 |
 | taste | 👅 |
 

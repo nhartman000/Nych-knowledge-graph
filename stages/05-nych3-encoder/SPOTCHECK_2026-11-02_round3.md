@@ -1,0 +1,44 @@
+# Spot check, round 3 (2026-11-02): 40 random harvested loops, seed 30303, final DB
+
+correct 21, partly correct 15, wrong 4. Graded by hand. Round 2 was 22 / 17 / 1, round 1 was 17 / 16 / 7.
+
+- #1 `TL-H-c32baefbfff9` (cooking) **partly correct** - Wipe pears, remove stems, quarter, and core; then cut in small pieces.
+- #2 `TL-H-c25e419ec263` (cooking) **wrong** - Melt one tablespoon butter, add one tablespoon corn-starch, and pour on gradually one-fourth cup White Stock; then add one-third cup parboiled sweetbread cut in
+- #3 `TL-H-dd86d77a37c1` (craft.knitting) **correct** - Then proceed to make the crossed loop and knit it off in the same way for the next and following stitches.
+- #4 `TL-H-0f9cca87eee0` (cooking) **wrong** - Soak one-half cup lentils and one-fourth cup dried lima beans over night, in cold water to cover; drain, add three pints water, one-half small onion, one stalk 
+- #5 `TL-H-cf94d18d5d70` (cooking) **partly correct** - Mix corn-starch, sugar, and salt, dilute with cold milk, add to scalded milk, and cook over hot water ten minutes, stirring constantly until thickened; melt cho
+- #6 `TL-H-7ca9cbd983e7` (cooking) **correct** - Scald milk.
+- #7 `TL-H-f4cc640a6afe` (cooking) **partly correct** - Apply with a brush to top and sides of cakes.
+- #8 `TL-H-4e7af51cecb5` (cooking) **correct** - Cream the butter; add sugar, gradually, eggs well beaten, and milk; then add dry ingredients mixed and sifted, and currants.
+- #9 `TL-H-8a2f34708a5e` (cooking) **partly correct** - Put two or three buttered muffin rings in the water.
+- #10 `TL-H-ff3f3b2a1ce5` (cooking) **correct** - Make custard of first four ingredients, strain, cool, add cream, pineapple syrup, and chestnuts; then freeze.
+- #11 `TL-H-7a43262bb29b` (cooking) **partly correct** - Dip peaches quickly in hot water, then rub off the fur with a towel.
+- #12 `TL-H-a2a3d3a50870` (cooking) **correct** - Cook milk thirty minutes in double boiler, with fine bread crumbs and onion stuck with cloves.
+- #13 `TL-H-cf1b36274e53` (cooking) **correct** - Add one-half cup Tomato Sauce II and cook three minutes; then add two tablespoons Sherry wine, cover, and cook in oven seven minutes.
+- #14 `TL-H-769990203afb` (cooking) **partly correct** - Cut French pancakes in pieces two by four inches.
+- #15 `TL-H-87e5f46fed54` (cooking) **correct** - Bake three sheets of pastry, pricking before baking.
+- #16 `TL-H-ced17133dc5b` (cooking) **correct** - Peel caps, and break in pieces.
+- #17 `TL-H-801ae527493a` (cooking) **wrong** - Live, to Broil, 189.
+- #18 `TL-H-46e468eb057d` (craft.woodworking) **partly correct** - If the beam projects beyond the end of the wood, it should be reversed.
+- #19 `TL-H-16157994a5f4` (cooking) **correct** - Prepare watercress and add one cucumber, pared, chilled, and cut in one-half inch dice.
+- #20 `TL-H-bc634f4fc804` (cooking) **correct** - Remove scales which have not been taken off.
+- #21 `TL-H-a7ea5f8ac263` (cooking) **correct** - Stack around a mound of lettuce leaves.
+- #22 `TL-H-da252ebb1e8a` (cooking) **correct** - Roll to one-fourth inch thickness, brush over with melted butter, and sprinkle with fruit, sugar, and cinnamon.
+- #23 `TL-H-4d1c91fe44b5` (cooking) **correct** - Throughout the cooking, the liquid should be kept below the boiling-point.
+- #24 `TL-H-74202a750306` (craft.woodworking) **partly correct** - Points should not be confused with teeth, for there is always one more point per inch than there are teeth.
+- #25 `TL-H-1a6c253f5ae7` (cooking) **wrong** - Glacé fruits keep but a day, and should only be attempted in cold and clear weather.
+- #26 `TL-H-eacbf4fec1ca` (cooking) **partly correct** - Dip in syrup made as for Glacé Nuts, holding by stem with pincers.
+- #27 `TL-H-c9f15ed2400b` (cooking) **partly correct** - Put in a stewpan and add one and one-half pounds light brown sugar, juice and rind of one and one-half lemons, one-half ounce ginger root, a few grains salt, an
+- #28 `TL-H-3b451f8f1ea4` (cooking) **correct** - Add yolks two eggs, salt, pepper, cayenne, and white wine to taste.
+- #29 `TL-H-da438b353991` (cooking) **correct** - Fry cubes of bread in butter until well browned and crisp.
+- #30 `TL-H-cc5355daa203` (cooking) **partly correct** - Bake, remove from paper, and place caps on stems.
+- #31 `TL-H-4778f1652942` (craft.ropework) **correct** - Take a spar or piece of wood the size of the intended eye A.
+- #32 `TL-H-2a2b587eea2c` (cooking) **correct** - Remove from fire, beat until creamy, add nuts, raisins, and vanilla, and pour at once into a buttered tin.
+- #33 `TL-H-63123ab5b3b6` (cooking) **correct** - Soak one and one-half cups pea beans over night in cold water to cover, drain, and parboil until soft; again drain, put in earthen-ware dish or bean-pot, add to
+- #34 `TL-H-2ebd4b0424e9` (cooking) **correct** - Make a sauce of butter, flour, and milk.
+- #35 `TL-H-2d02d4821c89` (cooking) **partly correct** - Fold into the mixture, and drop by spoonfuls on a sheet dredged with corn-starch and powdered sugar in equal proportions.
+- #36 `TL-H-b3750c4df3b0` (cooking) **correct** - Place two broomstick-handles over backs of chairs, and spread paper on the floor under them.
+- #37 `TL-H-20f956ce1446` (cooking) **partly correct** - Put slices on wire toaster, lock toaster and place over clear fire to dry, holding some distance from coals; turn and dry other side.
+- #38 `TL-H-c95da912bcf3` (cooking) **partly correct** - Garnish with heavy cream beaten until stiff, sweetened, and flavored.
+- #39 `TL-H-d2fb9af328d3` (cooking) **correct** - Baste often with one-third cup butter melted in two-thirds cup boiling water.
+- #40 `TL-H-b4b56a1b2d8e` (cooking) **partly correct** - Put on an upper crust and bake in a moderate oven.

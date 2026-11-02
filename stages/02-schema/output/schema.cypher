@@ -49,7 +49,7 @@ CREATE REL TABLE TRACE_OF(FROM QSONTrace TO Utterance);
 CREATE REL TABLE PRECEDES(FROM QSONTrace TO QSONTrace);
 
 // ======================= [nych3] additions (NEW) =======================
-// Modality operators (🫶 🙌 👀¹²³ 👁️ 👂 👂👂 💭 👁️‍🗨️ 👃 👅) are rows of the existing Operator table (ids OP-*), not a new table.
+// Modality operators (🫶 🙌 👀¹²³ 👁️ 👂 👂👂 💭 🧠🗯 👃 👅) are rows of the existing Operator table (ids OP-*), not a new table.
 CREATE REL TABLE USES_MODALITY(FROM TOTELoop TO Operator, word STRING);
 // Cell -> existing Gestalt / Sense tables (filled when stage 10 resolves a cell's Gestalt); no duplicate gestalt table.
 CREATE REL TABLE CELL_GESTALT(FROM TOTELoop TO Gestalt, cell STRING, word STRING, session STRING, provenance STRING);

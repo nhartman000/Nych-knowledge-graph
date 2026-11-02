@@ -76,9 +76,9 @@ def test_user_seed_loop_canonical(tmp_path):
     r = db.get("TL-STIR-SAUCE-001")
     assert r["status"] == "canonical" and r["domain"] == "cooking" and r["object_lemma"] == "sauce"
     assert r["provenance"]["source_kind"] == "user_prior_knowledge" and r["provenance"]["isbn"] is None
-    assert [s["op"] for s in r["techniques"]] == ["🙌", "🫶", "🙌", "👀"]
+    assert [s["op"] for s in r["techniques"]] == ["🙌", "🫶🧠🗯", "🙌", "👀"]   # internal sense carries its mental marker
     ops = db.q("MATCH (l:TOTELoop {loop_id:'TL-STIR-SAUCE-001'})-[u:USES_MODALITY]->(o:Operator) RETURN o.symbol AS s ORDER BY u.word")
-    assert sorted(o["s"] for o in ops) == sorted(["🙌", "🫶", "🙌", "👀"])
+    assert sorted(o["s"] for o in ops) == sorted(["🙌", "🫶", "🙌", "👀", "🧠🗯"])
     db.close()
 
 
@@ -174,3 +174,68 @@ def test_bore_and_smooth_plane():
     assert loops[0]["lemma"] == "bore"
     _, loops, _ = X("Where one plane is made to serve the purpose of smooth, jack and fore-plane, it should be ground straight across.", "craft.woodworking")
     assert all(t["word"] != "smooth" for lp in loops for t in lp["sense_tests"])
+
+
+# ---- round 3 (2026-11-02): 🧠🗯 imagine, mental markers, verbs, place, inch fractions ----
+def test_imagine_glyph_replaced_everywhere():
+    assert MR["operators"]["imagine"] == "🧠🗯"
+    import pathlib
+    root = pathlib.Path(__file__).resolve().parents[1]
+    while not (root / "_config").exists():
+        root = root.parent
+    for f in [root / "_config/registries/modality.json", root / "shared/data/tote_seed.json"]:
+        assert "👁️‍🗨️" not in f.read_text(encoding="utf-8")
+
+
+def test_mental_verbs_are_imagine():
+    for v in ["Determine the size of the views.", "Estimate the amount of lumber.", "Plan the cuts carefully.", "Decide the order of the steps."]:
+        _, loops, _ = X(v, "craft.woodworking")
+        assert loops and any(ln["channel"] == "imagine" for ln in loops[0]["modality_links"]), v
+        assert "🧠🗯" in loops[0]["row"]["modality"]
+
+
+def test_internal_sense_carries_mental_marker():
+    _, loops, _ = X("Stir until thick.")
+    t = loops[0]["sense_tests"][0]
+    assert t["op"] == "🫶🧠🗯" and t["mental_marker"] == "🧠🗯" and t["marker_cue"] == "no_memory_cue"
+    _, loops, _ = X("Beat until stiff, as before.")
+    t = loops[0]["sense_tests"][0]
+    assert t["op"] == "🫶💭" and t["marker_cue"] == "as before"
+    _, loops, _ = X("Remember to feel the dough.")
+    assert all(x for x in loops)   # parses; any internal link has its marker
+    for lp in loops:
+        internal = [l for l in lp["modality_links"] if l["channel"] in MR["mental_markers"]["internal_channels"]]
+        markers = [l for l in lp["modality_links"] if l["role"] == "mental_marker"]
+        assert len(markers) >= len(internal)
+    _, loops, _ = X("Fry until golden.")          # external senses carry no mental marker
+    assert "mental_marker" not in loops[0]["sense_tests"][0]
+
+
+def test_more_verbs_attach_time_and_until():
+    _, loops, _ = X("Clean one-fourth pound mushrooms, break caps in pieces, and sauté five minutes in one tablespoon butter.")
+    by = {lp["lemma"]: lp for lp in loops}
+    assert by["sauté"]["exit"]["condition"] == "elapsed >= 5 minute" and by["clean"]["exit"] is None
+    _, loops, _ = X("Line melon mould with ice, turn in mixture, and let stand three hours.")
+    by = {lp["lemma"]: lp for lp in loops}
+    assert by["stand"]["exit"]["condition"] == "elapsed >= 3 hour" and by["line"]["exit"] is None
+    _, loops, _ = X("Braise the beef until tender.")
+    assert loops[0]["lemma"] == "braise" and loops[0]["objects"][0]["head"] == "beef"
+
+
+def test_dry_cool_warm_as_verbs_are_actions():
+    st = {}
+    _, loops, _ = X("Take from water, dry between towels, and fry in deep fat.", st=st)
+    assert {"take", "dry", "fry"} <= {lp["lemma"] for lp in loops}
+    assert all(t["word"] != "dry" for lp in loops for t in lp["sense_tests"])
+
+
+def test_only_in_place_of_is_dropped():
+    _, loops, _ = X("Meat should be kept in a cool place.")
+    assert "in place," in loops[0]["row"]["perspective_location"]
+    _, loops, _ = X("Use butter in place of lard.")
+    assert "place" not in loops[0]["row"]["perspective_location"]
+
+
+def test_inch_fraction_is_length_not_time():
+    _, loops, _ = X("Chisel a line parallel to the given line, about one thirty-second of an inch away from it.", "craft.woodworking")
+    assert loops and all(not (lp["exit"] and lp["exit"]["kind"] == "duration") for lp in loops)
