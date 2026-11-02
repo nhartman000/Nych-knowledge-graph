@@ -11,5 +11,7 @@
 | 2026-11-02 16:04 | First tech.ui ingest into knowledge-graph store (2,637 articles) | 81 + 33,053 loops, 56,116 SourceRefs; commit 9fb844f |
 | 2026-11-02 16:55 | Rebuild tech.ui from all 2,887 cached articles | 65,929 actions; top-10/25/50/100 = 55.9/79.7/93.1/96.3% |
 | 2026-11-02 17:00–17:15 | Re-ingest attempts OOM-killed (Kuzu memory growth on one connection) | restored pre-tech.ui backup; fix: reconnect per 500-loop batch + 2 GiB pool |
-| 2026-11-02 17:30 | tech.ui re-ingest (from pre-tech.ui backup) | 81 + 36,445 loops, 63,487 SourceRefs; store 40,071 loops |
-| 2026-11-02 | pytest knowledge-graph | 143 passed |
+| 2026-11-02 17:15–17:22 | tech.ui re-ingest (from pre-tech.ui backup) | 81 + 36,445 loops, 63,487 SourceRefs; store 40,071 loops |
+| 2026-11-02 17:23 | pytest knowledge-graph (dev env with private mg8/nych/tcta installed) | 143 passed |
+| 2026-11-02 17:24–17:31 | `bash REVIEW/reproduce.sh` in a fresh clone (/tmp/kgclone, new venv from requirements.lock, books re-fetched from Gutenberg) | ALL PASS: checksums match, rebuilt store == expected_store.json, pytest 140 passed / 1 skipped (mg8 compat; private repos absent), nych3-eval == expected, tech.ui coverage recomputed == committed |
+| 2026-11-02 17:3x | nych-3-pro: tech.ui port + ingest | 40,071 loops; pytest 116 passed; local commit 359dd58 |
