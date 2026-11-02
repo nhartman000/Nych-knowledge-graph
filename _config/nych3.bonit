@@ -1,0 +1,21 @@
+BONIT/3.0
+NAME NYCH3_PRO
+POINTER README.md
+POINTER CLAUDE.md
+AUTHORITY nych_encoder=stages_01_09,11_deterministic ; llm_call_1=ASSIGN_GESTALTS_only ; mg8=gate_authoring_after_12
+DIRECTIVE "This pipeline ENCODES the narrative. Questions or dialogue inside the story are invariant story content: flag them, keep them verbatim, never answer them."
+WORKFLOW 1 LOAD_RULES_AND_SCHEMA_VERSIONS
+WORKFLOW 2 READ_GST_AND_SOURCE
+WORKFLOW 3 LLM_CALL_1 ASSIGN_GESTALTS(eligible_only)
+WORKFLOW 4 VALIDATE(invariants, protected, skeleton_inclusion, pins, collisions)
+WORKFLOW 5 PERSIST_MAPPINGS(after GATE 10)
+WORKFLOW 6 CONTEXT_PRUNE_AND_PATHS(stage 11, after GATE 11 review)
+WORKFLOW 7 HANDOFF_MG8(stage 12)
+VALIDATION REJECT gestalt_on_protected
+VALIDATION REJECT missing_skeleton_suffix
+VALIDATION REJECT remap_of_pinned
+VALIDATION REJECT modality_operator_glyph_in_gestalt
+VALIDATION REJECT source_text_mutated
+VALIDATION REJECT forced_tote_match
+VALIDATION REJECT unrequested_word
+VALIDATION ERROR skeleton_collision_unresolved

@@ -1,0 +1,251 @@
+{
+ "_doc": "MASTER list of measurements and quantity modifiers, shared across domains, with per-domain overrides. Purpose: stop measurement words colliding with their literal meaning. sense_weight = ordered likelihood class (high > medium > low) that the word is used as a MEASUREMENT/AMOUNT rather than literally. All weights are hand-set priors (weight_source = assumed_prior); none are calibrated. Context rules (below, in order) override the weight.",
+ "weight_source": "assumed_prior",
+ "classes": [
+  "high",
+  "medium",
+  "low"
+ ],
+ "context_rules": [
+  {
+   "rule_id": "MEAS-WORTH",
+   "pattern": "X's worth | a X worth | N X worth",
+   "effect": "ALWAYS amount (overrides everything)"
+  },
+  {
+   "rule_id": "MEAS-NUM-BEFORE",
+   "pattern": "number/number-word (or 'a'/'an' for approx kinds) before the word",
+   "effect": "measurement"
+  },
+  {
+   "rule_id": "MEAS-A-X-OF",
+   "pattern": "after 'with': 'a X of N' ('with a clove of garlic')",
+   "effect": "measurement (N is a co-object)"
+  },
+  {
+   "rule_id": "MEAS-WITH-TOOL",
+   "pattern": "word is the object of 'with'/'using' and has no number before it",
+   "effect": "literal (tool), even if weight is high"
+  },
+  {
+   "rule_id": "MEAS-DEFINITE-REFERENCE",
+   "pattern": "definite determiner or possessive before the word ('the foot of the board', 'the stitches')",
+   "effect": "literal"
+  },
+  {
+   "rule_id": "MEAS-WEIGHT",
+   "pattern": "no rule fired",
+   "effect": "measurement iff sense_weight (after domain override) is high"
+  }
+ ],
+ "entries": {
+  "tablespoon": {
+   "kind": "unit",
+   "sense_weight": "high",
+   "domains": {
+    "cooking": "high"
+   }
+  },
+  "teaspoon": {
+   "kind": "unit",
+   "sense_weight": "high"
+  },
+  "saltspoon": {
+   "kind": "unit",
+   "sense_weight": "high"
+  },
+  "cup": {
+   "kind": "unit",
+   "sense_weight": "medium",
+   "domains": {
+    "cooking": "high"
+   }
+  },
+  "spoonful": {
+   "kind": "unit",
+   "sense_weight": "high"
+  },
+  "ounce": {
+   "kind": "unit",
+   "sense_weight": "high"
+  },
+  "pound": {
+   "kind": "unit",
+   "sense_weight": "high"
+  },
+  "quart": {
+   "kind": "unit",
+   "sense_weight": "high"
+  },
+  "pint": {
+   "kind": "unit",
+   "sense_weight": "high"
+  },
+  "gill": {
+   "kind": "unit",
+   "sense_weight": "high"
+  },
+  "gallon": {
+   "kind": "unit",
+   "sense_weight": "high"
+  },
+  "peck": {
+   "kind": "unit",
+   "sense_weight": "high"
+  },
+  "dozen": {
+   "kind": "count",
+   "sense_weight": "high"
+  },
+  "pinch": {
+   "kind": "approx_act",
+   "sense_weight": "high"
+  },
+  "dash": {
+   "kind": "approx_act",
+   "sense_weight": "high"
+  },
+  "splash": {
+   "kind": "approx_act",
+   "sense_weight": "high"
+  },
+  "drop": {
+   "kind": "approx_unit",
+   "sense_weight": "medium",
+   "domains": {
+    "cooking": "high"
+   }
+  },
+  "handful": {
+   "kind": "approx_vessel",
+   "sense_weight": "high"
+  },
+  "mouthful": {
+   "kind": "approx_vessel",
+   "sense_weight": "high"
+  },
+  "bit": {
+   "kind": "approx_unit",
+   "sense_weight": "low",
+   "domains": {
+    "woodworking": "low"
+   }
+  },
+  "slice": {
+   "kind": "count",
+   "sense_weight": "medium"
+  },
+  "clove": {
+   "kind": "count",
+   "sense_weight": "medium",
+   "domains": {
+    "cooking": "high"
+   }
+  },
+  "sprig": {
+   "kind": "count",
+   "sense_weight": "high"
+  },
+  "stalk": {
+   "kind": "count",
+   "sense_weight": "medium"
+  },
+  "bunch": {
+   "kind": "count",
+   "sense_weight": "medium"
+  },
+  "blade": {
+   "kind": "count",
+   "sense_weight": "low",
+   "domains": {
+    "cooking": "medium"
+   }
+  },
+  "can": {
+   "kind": "vessel",
+   "sense_weight": "low",
+   "domains": {
+    "cooking": "medium"
+   }
+  },
+  "inch": {
+   "kind": "unit",
+   "sense_weight": "high"
+  },
+  "foot": {
+   "kind": "unit",
+   "sense_weight": "medium",
+   "domains": {
+    "woodworking": "high",
+    "first_aid": "low"
+   }
+  },
+  "yard": {
+   "kind": "unit",
+   "sense_weight": "medium"
+  },
+  "mile": {
+   "kind": "unit",
+   "sense_weight": "high"
+  },
+  "degree": {
+   "kind": "unit",
+   "sense_weight": "high"
+  },
+  "gauge": {
+   "kind": "unit",
+   "sense_weight": "low",
+   "domains": {
+    "woodworking": "low",
+    "knitting": "high"
+   }
+  },
+  "gage": {
+   "kind": "unit",
+   "sense_weight": "low"
+  },
+  "board-foot": {
+   "kind": "unit",
+   "sense_weight": "high"
+  },
+  "stitch": {
+   "kind": "count",
+   "sense_weight": "low",
+   "domains": {
+    "knitting": "high"
+   }
+  },
+  "row": {
+   "kind": "count",
+   "sense_weight": "low",
+   "domains": {
+    "knitting": "high"
+   }
+  },
+  "round": {
+   "kind": "count",
+   "sense_weight": "low",
+   "domains": {
+    "knitting": "medium"
+   }
+  },
+  "skein": {
+   "kind": "unit",
+   "sense_weight": "high"
+  },
+  "ply": {
+   "kind": "unit",
+   "sense_weight": "medium"
+  },
+  "percent": {
+   "kind": "unit",
+   "sense_weight": "high"
+  }
+ },
+ "domain_aliases": {
+  "cooking": "cooking",
+  "craft.woodworking": "woodworking",
+  "craft.knitting": "knitting",
+  "scouting.first_aid.outdoor": "first_aid"
+ }
+}

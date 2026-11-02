@@ -1,0 +1,52 @@
+{
+  "_doc": "Seed TOTE rows (user TOTE DB model). Status: canonical | candidate. Canonical requires a named authority in provenance. Never auto-promoted.",
+  "operators": [
+    ["OP-KI", "🫶", "internal_kinesthetic", "actor_internal", false],
+    ["OP-KE", "🙌", "external_kinesthetic", "actor_external", true],
+    ["OP-VE", "👀", "external_visual", "actor_external", true],
+    ["OP-VI", "👁️", "internal_visual", "actor_internal", false],
+    ["OP-AI", "👂", "internal_auditory", "actor_internal", false],
+    ["OP-AE", "👂👂", "external_auditory", "actor_external", true],
+    ["OP-MEM", "💭", "memory", "actor_internal", false],
+    ["OP-IMG", "👁️‍🗨️", "imagine", "actor_internal", false],
+    ["OP-OLF", "👃", "smell", "actor_external", true],
+    ["OP-GUS", "👅", "taste", "actor_external", true]
+  ],
+  "domains": ["human_action.perception", "human_action.locomotion", "astronomy.observation"],
+  "gates": [
+    {"gate_id": "G-EXIT-LOOK-AT-STARS-001", "file_id": "nych3.tote.exit", "order": 1, "type": "condition",
+     "conditions": ["object_visually_available == false OR activity_continues == false"],
+     "outcomes": {"PASS": "exit", "FAIL": "repeat"}},
+    {"gate_id": "G-EXIT-APPROACH-001", "file_id": "nych3.tote.exit", "order": 1, "type": "condition",
+     "conditions": ["actor_position == target_position"],
+     "outcomes": {"PASS": "exit", "FAIL": "repeat"}}
+  ],
+  "loops": [
+    {"loop_id": "TL-LOOK-AT-STARS-001", "name": "look at stars", "domain": "human_action.perception",
+     "objective": "keep visual attention on the stars while they remain visible and the activity continues",
+     "initial_test": "object_visually_available == true", "exit_predicate": "G-EXIT-LOOK-AT-STARS-001", "max_iterations": -1,
+     "epistemic_status": "ACT", "modality_cell": "looking,👀¹", "actor_cell": "<actor>,", "action_cell": "look,",
+     "object_cell": "stars,", "perspective_cell": "<vantage>,", "exit_gate_id": "G-EXIT-LOOK-AT-STARS-001",
+     "action_lemma": "look", "object_lemma": "star",
+     "termination_triggers": [{"trigger": "daylight", "effect": "object_visually_available=false", "provenance": "inferred"},
+                              {"trigger": "falls_asleep", "effect": "activity_continues=false", "provenance": "inferred"}],
+     "techniques": [], "status": "canonical",
+     "provenance": {"source": "user golden case (N Hartman, 2026-11-01) + handoff spec section 4", "authority": "user", "method": "manual_seed"},
+     "version": "1",
+     "in_domain": [["human_action.perception", "primary", "golden case"],
+                   ["astronomy.observation", "cross_link", "naked-eye stargazing reuses the same look/retest loop"]]},
+    {"loop_id": "TL-APPROACH-LOCATION-001", "name": "approach a location", "domain": "human_action.locomotion",
+     "objective": "move until the actor is at the target position",
+     "initial_test": "actor_position != target_position", "exit_predicate": "G-EXIT-APPROACH-001", "max_iterations": -1,
+     "epistemic_status": "ACT", "modality_cell": "approach,🙌", "actor_cell": "<actor>,", "action_cell": "approach,",
+     "object_cell": "<location>,", "perspective_cell": "<start: unresolved>,", "exit_gate_id": "G-EXIT-APPROACH-001",
+     "action_lemma": "approach", "object_lemma": "*",
+     "termination_triggers": [{"trigger": "target_reached", "effect": "actor_position=target_position", "provenance": "inferred"}],
+     "techniques": [{"technique": "walking", "likelihood_class": "high", "provenance": "assumed_default", "source": "spec section 4 worked pattern"},
+                    {"technique": "biking", "likelihood_class": "latent", "provenance": "assumed_default", "source": "spec section 4/6 worked pattern"}],
+     "status": "candidate",
+     "provenance": {"source": "handoff spec section 4 worked pattern (hill-approach)", "authority": null, "method": "manual_seed"},
+     "version": "1",
+     "in_domain": [["human_action.locomotion", "primary", "spec worked pattern"]]}
+  ]
+}
