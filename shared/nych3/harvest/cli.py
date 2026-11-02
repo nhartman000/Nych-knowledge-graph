@@ -10,7 +10,7 @@ def main(argv=None):
     ap.add_argument("--db", default=str(DEFAULT_DB)); ap.add_argument("--out", default=str(HARVEST_DIR))
     sub = ap.add_subparsers(dest="cmd", required=True)
     r = sub.add_parser("run"); r.add_argument("--books", nargs="*"); r.add_argument("--max-sentences", type=int)
-    r.add_argument("--max-seconds", type=int); r.add_argument("--parser", default="rule")
+    r.add_argument("--max-seconds", type=int); r.add_argument("--parser", default="auto", choices=["auto", "spacy", "rule"])
     s = sub.add_parser("suggest", help="threshold SUGGESTION only; never promotes")
     s.add_argument("--min-repeats", type=int, default=5); s.add_argument("--min-sources", type=int, default=2)
     p = sub.add_parser("promote"); p.add_argument("loop_id"); p.add_argument("--authority", required=True); p.add_argument("--note", default="")

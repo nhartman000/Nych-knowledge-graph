@@ -35,19 +35,28 @@ def loop_id_for(key: str) -> str:
 
 
 class Harvester:
-    def __init__(self, db_path=DEFAULT_DB, out_dir: Path = HARVEST_DIR, parser="rule", fetcher=fetch):
+    def __init__(self, db_path=DEFAULT_DB, out_dir: Path = HARVEST_DIR, parser="auto", fetcher=fetch):
         self.db = ToteDB(db_path)
         self.out = Path(out_dir); (self.out / "runs").mkdir(parents=True, exist_ok=True)
         self.ckpt_path = self.out / "checkpoint.json"
         self.ckpt = json.loads(self.ckpt_path.read_text()) if self.ckpt_path.exists() else {}
-        self.parser = get_parser(parser)
+        self.use_spacy = False
+        if parser in ("spacy", "auto"):
+            try:
+                from .spacy_extract import nlp as _nlp
+                _nlp(); self.use_spacy = True
+            except Exception:
+                if parser == "spacy":
+                    raise
+        self.parser = get_parser("rule")
+        self.lexverbs = set(registry("lexicon")["verbs"])
         self.modreg = registry("modality")
         self.fetcher = fetcher
         self.stop = False
         self.run_id = datetime.now().strftime("%Y%m%dT%H%M%S")
-        self.stats = {"run_id": self.run_id, "started": datetime.now().isoformat(timespec="seconds"), "parser": self.parser.version,
+        self.stats = {"run_id": self.run_id, "started": datetime.now().isoformat(timespec="seconds"), "parser": "spacy-en_core_web_sm+nych3" if self.use_spacy else self.parser.version,
                       "sentences_seen": 0, "skipped_already_processed": 0, "skipped_dialogue": 0, "skipped_question": 0,
-                      "skipped_too_long": 0, "non_action": 0, "action_sentences": 0, "action_clauses": 0, "loops_new": 0,
+                      "skipped_too_long": 0, "skipped_apparatus": 0, "non_action": 0, "non_action_reasons": {}, "action_sentences": 0, "action_clauses": 0, "loops_new": 0,
                       "loops_repeat": 0, "no_match": 0, "no_match_reasons": {}, "modality_unresolved": 0, "errors": 0,
                       "error_samples": [], "per_book": {}, "samples_new": []}
 
@@ -80,8 +89,12 @@ class Harvester:
         sem = analysis.semantics(st, tagged, scope, temp)
         return st, tagged, temp, sem
 
-    def extract(self, sent, temp, sem):
+    def extract(self, sent, temp, sem, domain=None):
         """-> (outcome, [loop dicts], reason). Pure; no DB."""
+        from .spacy_extract import is_apparatus
+        app = is_apparatus(sent["text"])
+        if app:
+            return "skipped_apparatus", [], app
         if sent["dialogue_spans"] or any(q in sent["text"] for q in ('"', "“", "”")):
             return "skipped_dialogue", [], None
         if sent["is_question"]:
@@ -90,6 +103,12 @@ class Harvester:
             return "non_action", [], None   # heading, ingredient or list line (no sentence terminator)
         if len(sent["tokens"]) > MAX_TOKENS:
             return "skipped_too_long", [], None
+        if self.use_spacy:
+            from .spacy_extract import extract as sx
+            o, loops, r = sx(sent["text"], self.modreg, self.lexverbs, domain)
+            for lp in loops:
+                lp["loop_id"] = loop_id_for(lp["key"])
+            return o, loops, r
         evs = {e["event_id"]: e for e in temp["events"]}
         props = [p for p in sem["propositions"] if p["span"]["sent_id"] == sent["sent_id"]]
         mats = [p for p in props if p["parent_event"] is None]
@@ -155,7 +174,8 @@ class Harvester:
                 "epistemic_status": "ACT", "modality_cell": lp["row"]["modality"], "actor_cell": lp["row"]["actor"],
                 "action_cell": lp["row"]["action"], "object_cell": lp["row"]["object"], "perspective_cell": lp["row"]["perspective_location"],
                 "exit_gate_id": gate["gate_id"], "action_lemma": lp["lemma"], "object_lemma": lp["object_lemma"],
-                "termination_triggers": ([{"trigger": lp["exit"]["text"], "provenance": "explicit"}] if lp["exit"] else
+                "termination_triggers": ([{"trigger": lp["exit"]["text"], "condition": lp["exit"].get("condition", lp["exit"]["text"]),
+                                           "provenance": lp["exit"].get("provenance", "explicit"), "rule": lp["exit"].get("rule")}] if lp["exit"] else
                                          [{"trigger": f"{lp['lemma']}_complete", "provenance": "inferred"}]),
                 "techniques": [], "version": "1", "repeat_count": 1, "structure_key": lp["key"],
                 "in_domain": [[book["domain"], "primary", "harvested"]]},
@@ -165,7 +185,7 @@ class Harvester:
         else:
             trig = row["termination_triggers"] or []
             if lp["exit"] and len(trig) < MAX_EXITS and all(t["trigger"] != lp["exit"]["text"] for t in trig):
-                trig.append({"trigger": lp["exit"]["text"], "provenance": "explicit"})
+                trig.append({"trigger": lp["exit"]["text"], "provenance": lp["exit"].get("provenance", "explicit")})
             self.db.c.execute("MATCH (l:TOTELoop {loop_id:$l}) SET l.repeat_count = l.repeat_count + 1, l.termination_triggers=$t",
                               {"l": lid, "t": json.dumps(trig, ensure_ascii=False)})
             if not self.db.q("MATCH (l:TOTELoop {loop_id:$l})-[:IN_DOMAIN]->(d:Domain {domain_id:$d}) RETURN d.domain_id AS d",
@@ -210,14 +230,16 @@ class Harvester:
                         self.stats["skipped_already_processed"] += 1; continue
                     self.stats["sentences_seen"] += 1; pb["sentences_seen"] += 1
                     try:
-                        outcome, loops, reason = self.extract(dict(s, tokens=tagged[s["sent_id"]]), temp, sem)
+                        outcome, loops, reason = self.extract(dict(s, tokens=tagged[s["sent_id"]]), temp, sem, book.get("domain"))
                     except Exception as e:
                         outcome, loops, reason = "error", [], repr(e)[:200]
                         self.stats["errors"] += 1
                         if len(self.stats["error_samples"]) < 10:
                             self.stats["error_samples"].append({"sent_key": key, "error": reason})
-                    if outcome in ("skipped_dialogue", "skipped_question", "skipped_too_long", "non_action"):
+                    if outcome in ("skipped_dialogue", "skipped_question", "skipped_too_long", "skipped_apparatus", "non_action"):
                         self.stats[outcome] += 1
+                        if outcome == "non_action" and reason:
+                            self.stats["non_action_reasons"][reason] = self.stats["non_action_reasons"].get(reason, 0) + 1
                     elif outcome == "no_match":
                         self.stats["action_sentences"] += 1; pb["action_sentences"] += 1; self._nm(reason)
                     elif outcome == "action":

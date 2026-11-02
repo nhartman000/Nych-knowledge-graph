@@ -2,7 +2,10 @@
 Confidence is never a bare float: kind is calibrated | likelihood_class | unavailable."""
 from __future__ import annotations
 
-PROVENANCE = ("explicit", "inferred", "predicted", "assumed_default")
+# Ranked strongest -> weakest. implied_by_text: not stated as a condition, but entailed by a phrase in
+# the text (e.g. 'ride to the store' -> exit actor_location == store). Ranked between explicit and inferred.
+PROVENANCE = ("explicit", "implied_by_text", "inferred", "predicted", "assumed_default")
+PROVENANCE_RANK = {p: i for i, p in enumerate(PROVENANCE)}
 PROPOSITION_STATUS = ("narrator_asserted", "explicit_dialogue", "inferred", "predicted")
 LIKELIHOOD_CLASSES = ("high", "medium", "low", "latent")   # ordered, uncalibrated
 

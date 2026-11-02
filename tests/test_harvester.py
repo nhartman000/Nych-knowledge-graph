@@ -79,7 +79,7 @@ def test_duration_exit_and_cross_domain(H):
     h = H(); h.run(books=[BOOK_A, BOOK_B])
     r = {(x["a"], x["o"]): x for x in rows(h)}
     stir = r[("stir", "soup")]
-    assert h.db.gate(stir["g"])["conditions"][0] == "for 10 minutes [explicit]"
+    assert h.db.gate(stir["g"])["conditions"][0] == "elapsed >= 10 minute [explicit]"
     doms = h.db.domains_of(r[("cut", "board")]["id"])
     assert {(d["domain"], d["role"]) for d in doms} == {("craft.test", "primary"), ("cooking.test", "cross_link")}
     assert any(c["loop_id"] == r[("cut", "board")]["id"] for c in h.db.commonality())
