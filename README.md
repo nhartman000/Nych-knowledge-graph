@@ -28,6 +28,9 @@ mg8 compatibility tests need mg8-engine importable: `pip install --no-deps -e <m
 | 11 | Ordered likelihood classes, latent/expanded alternatives, pruned list, and trace.jsonl. **The Bayesian formula is not evaluated, because there are no sourced priors.** |
 | 12 | CONTEXT.md only. The mg8 unit assembly is exercised in tests, not shipped as a stage. |
 
+## TOTE harvester
+See `HARVEST.md`. It is a resumable batch extraction of candidate TOTE rows from public-domain instructional books, with ISBN + page provenance.
+
 ## Open questions
 1. **Page marking** (user decision 5, undecided): form-feed or `--- page N ---` lines are accepted, and the default is a single page. Is a JSON page list, or an explicit `expected_pages` from the prompt, preferred?
 2. **Superscript ⁴** for present finite (*looks*) is a NYCH3 extension to the user's ¹/²/³ table. Should superscripts also apply to channels other than 👀?
