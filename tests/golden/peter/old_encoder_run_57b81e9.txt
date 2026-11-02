@@ -1,0 +1,66 @@
+ROLES Peter loved looking at the stars from the hill behind his house.
+{
+ "sentence": "Peter loved looking at the stars from the hill behind his house.",
+ "action": {
+  "word": "loved",
+  "position": 1,
+  "lemma": "lov"
+ },
+ "enumerator": null,
+ "object": {
+  "word": "looking at the stars from the hill behind his house.",
+  "start": 2,
+  "end": 12
+ },
+ "tense": null,
+ "state": null
+}
+TOTE {
+ "matched": true,
+ "match_method": "objective",
+ "matched_words": [
+  "from"
+ ],
+ "loop": {
+  "loop_id": "MB-B-WAI-001",
+  "name": "Review, revise and recheck page title",
+  "domain": "accessibility_web_qa",
+  "objective": "Give one scoped page a brief descriptive title distinguishable from other scoped site pages.",
+  "initial_test": "Check that a page title adequately and briefly describes page content and differs from titles of other pages on the website.",
+  "exit_predicate": "Fresh inspection shows a present, adequate brief description of current page content and a title distinct from every page in the declared comparison set, confirmed by reviewer.",
+  "max_iterations": 3,
+  "epistemic_status": "DERIVED",
+  "gestalts": [
+   "exit predicate",
+   "provenance"
+  ]
+ }
+}
+ROLES One clear night he noticed a wolf.
+{
+ "sentence": "One clear night he noticed a wolf.",
+ "action": {
+  "word": "noticed",
+  "position": 4,
+  "lemma": "notic"
+ },
+ "enumerator": null,
+ "object": {
+  "word": "a wolf.",
+  "start": 5,
+  "end": 7
+ },
+ "tense": null,
+ "state": null
+}
+TOTE {
+ "matched": false,
+ "fallback": "state_roles",
+ "reason": "no loop matched the object/action words"
+}
+DOMAIN general {"text": "Peter loved looking at the stars from the hill behind his house. One clear night he noticed a wolf.", "modality": "UNRESOLVED", "modality_score": 0, "domain": "UNRESOLVED", "domain_score": 0, "competency": null}
+TOTE_MATCH MB-B-WAI-001
+FALLBACK None
+NEEDS [{"word": "loved", "skeleton": "lvd", "id": "gestalt.lvd", "skeleton_fallback": false}, {"word": "looking", "skeleton": "lkng", "id": "gestalt.lkng", "skeleton_fallback": false}, {"word": "at", "skeleton": "t", "id": "gestalt.t", "skeleton_fallback": false}, {"word": "stars", "skeleton": "strs", "id": "gestalt.strs", "skeleton_fallback": false}, {"word": "from", "skeleton": "frm", "id": "gestalt.frm", "skeleton_fallback": false}, {"word": "hill", "skeleton": "hl", "id": "gestalt.hl", "skeleton_fallback": false}, {"word": "behind", "skeleton": "bhnd", "id": "gestalt.bhnd", "skeleton_fallback": false}, {"word": "his", "skeleton": "hs", "id": "gestalt.hs", "skeleton_fallback": false}, {"word": "house.", "skeleton": "hs", "id": "gestalt.hs", "skeleton_fallback": false}, {"word": "One", "skeleton": "n", "id": "gestalt.n", "skeleton_fallback": false}, {"word": "clear", "skeleton": "clr", "id": "gestalt.clr", "skeleton_fallback": false}, {"word": "night", "skeleton": "nght", "id": "gestalt.nght", "skeleton_fallback": false}, {"word": "he", "skeleton": "h", "id": "gestalt.h", "skeleton_fallback": false}, {"word": "noticed", "skeleton": "ntcd", "id": "gestalt.ntcd", "skeleton_fallback": false}, {"word": "wolf.", "skeleton": "wlf", "id": "gestalt.wlf", "skeleton_fallback": false}]
+PROTECTED []
+STATE KEYS ['source_text', 'roles'] toplevel ['gst_version', 'state_id', 'domain', 'state', 'nych_pretext']
