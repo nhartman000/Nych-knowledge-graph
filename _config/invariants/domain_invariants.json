@@ -180,7 +180,18 @@
    "box",
    "bag",
    "pail",
-   "bucket"
+   "bucket",
+   "jars",
+   "tumbler",
+   "crock",
+   "glass",
+   "bottle",
+   "can",
+   "basket",
+   "stewpan",
+   "casserole",
+   "platter",
+   "plate"
   ]
  },
  "verb_classes": {
@@ -285,6 +296,20 @@
    "think",
    "hope",
    "wish"
+  ],
+  "particle_in": [
+   "fold",
+   "stir",
+   "beat",
+   "mix",
+   "work",
+   "cut",
+   "rub",
+   "add",
+   "whisk",
+   "knead",
+   "pour",
+   "sift"
   ]
  },
  "apparatus_patterns": [
@@ -419,7 +444,37 @@
    "shall",
    "ought"
   ],
-  "_doc_modals": "'may/can/might be used' is optional/descriptive, not an instruction; only should/must/shall/ought count."
+  "_doc_modals": "'may/can/might be used' is optional/descriptive, not an instruction; only should/must/shall/ought count.",
+  "descriptive_adverbs": [
+   "often",
+   "usually",
+   "generally",
+   "sometimes",
+   "commonly",
+   "frequently",
+   "easily",
+   "seldom",
+   "rarely",
+   "always",
+   "never_desc",
+   "occasionally",
+   "mostly",
+   "chiefly",
+   "largely",
+   "principally",
+   "readily",
+   "very",
+   "extremely",
+   "now"
+  ],
+  "descriptive_subjects": [
+   "this",
+   "these",
+   "that",
+   "those",
+   "which"
+  ],
+  "_doc_passive": "2026-11-02 round 2: every passive without should/must/shall/ought is descriptive and rejected ('slippers are easily knitted', 'peas are often drained', 'slabs are sawed'). Frequency/ease adverbs or a demonstrative subject also reject a modal clause."
  },
  "non_location_prep_objects": {
   "_doc": "Fix 3: 'in place of X', 'in case of', 'in order to', 'in addition to', 'in the same way' etc. are not locations.",
@@ -655,5 +710,52 @@
     "make"
    ]
   }
- }
+ },
+ "noun_verbs_kept_as_nouns": [
+  "butter",
+  "cream",
+  "oil",
+  "stuff",
+  "line",
+  "file",
+  "plane",
+  "saw",
+  "water",
+  "salt",
+  "pepper",
+  "flour",
+  "sugar",
+  "milk",
+  "ice",
+  "dust",
+  "sand",
+  "paste",
+  "pin",
+  "needle",
+  "hook",
+  "thread",
+  "stitch",
+  "knot",
+  "loop",
+  "row",
+  "hammer",
+  "clamp",
+  "glue",
+  "nail",
+  "screw",
+  "brush",
+  "whip",
+  "dice",
+  "mark",
+  "coat",
+  "stain",
+  "paint",
+  "varnish",
+  "wax",
+  "bandage",
+  "splint",
+  "drill",
+  "chisel",
+  "bore"
+ ]
 }

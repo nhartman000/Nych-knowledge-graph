@@ -61,3 +61,10 @@ $VENV/python -m nych3.harvest.cli promote TL-H-xxxxxxxxxxxx --authority "N Hartm
 ```bash
 $VENV/python -m nych3.harvest.cli prun --workers 6
 ```
+## 2026-11-02 round 2 (user-approved)
+1. **Descriptive and passive sentences are rejected.** A passive without `should/must/shall/ought` is `descriptive_passive`. Frequency or ease adverbs (`often`, `easily`, `usually`, `now`...) or a demonstrative subject give `descriptive_frequency`.
+2. **Exits and sense tests go to the right verb.** Verbs the parser hangs off a noun ("spread saltines with mixture **and bake**") are promoted to their own loop. An `until` clause goes to the nearest verb before it. Sense words are searched only from a verb up to the next verb. Bare durations ("cook ... five minutes") are read within the verb's own span.
+3. **Objects.** A verb is never an object ("season", "bake"). Ingredient and tool nouns that happen to be verbs (butter, pepper...) stay nouns (`noun_verbs_kept_as_nouns`). With placement verbs, containers are locations ("Put in a stone jar" gives `in jar`). "fold/stir in X" makes X the object. A repeated verb in the same sentence inherits the object ("beat whites ... continue beating").
+4. **Quantities.** `one-half cup` → `1/2 cup`, `one and one-half cups` → `1 1/2 cup`, `two-thirds of sugar` → sugar `[2/3]`, `1/2` and `½` are kept. `No. 16` is a **size** (`[size No. 16]`), not a count.
+5. **Cross-references** ("See directions ..., page 434") are skipped (`cross_reference`). **Negatives** ("Never ...", "Do not ...") are stored as **prohibitions**: the action cell reads `NEVER put, [prohibition]`, the name starts with "never", techniques include `kind=prohibition`, the exit is "the action must not occur", and the structure key carries `PROHIBIT`, so a prohibition never merges with the positive action.
+- `Bore` is no longer lemmatized to `bear` (the lexicon verb wins), and tool names such as "smooth, jack and fore-plane" are no longer read as feel tests.

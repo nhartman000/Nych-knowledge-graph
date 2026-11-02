@@ -1,0 +1,44 @@
+# Spot check, round 2 (2026-11-02): 40 random harvested loops, seed 93003, final DB
+
+correct 22, partly correct 17, wrong 1. Graded by hand against the source sentence. Round 1 was 17 / 16 / 7.
+
+- #1 `TL-H-163c8f1baf8b` (cooking) **partly correct** - Take from water, dry between towels, and fry in deep fat.
+- #2 `TL-H-2960286d6895` (craft.woodworking) **correct** - (1) Place the door in position; keep it tight against the top and the hinge side of the frame. (2) Measure from top and bottom of the door to locate the positio
+- #3 `TL-H-f65f28022103` (cooking) **correct** - Cut gashes in top, and insert a narrow strip of fat salt pork in each gash.
+- #4 `TL-H-48d9b56d18dc` (cooking) **partly correct** - Keep the small strainer in place during frying with a long handled spoon.
+- #5 `TL-H-d3d3bd8ee1ba` (cooking) **partly correct** - Add squash, sugar, salt, and butter to milk; when lukewarm, add dissolved yeast cake and flour; cover, and let rise over night.
+- #6 `TL-H-b9d53056b1b2` (cooking) **correct** - Watch carefully and turn pan frequently during baking, that all may be evenly cooked.
+- #7 `TL-H-a0cc6aa0346c` (cooking) **partly correct** - Clean one-fourth pound mushrooms, break caps in pieces, and sauté five minutes in one tablespoon butter.
+- #8 `TL-H-443b8e751c2e` (cooking) **partly correct** - Cook oyster plant as for Creamed Oyster Plant.
+- #9 `TL-H-d01b1f6556db` (cooking) **partly correct** - Pick over and wash prunes, then soak one hour in cold water, and boil until soft; remove stones, obtain meat from stones and add to prunes; then add sugar, cinn
+- #10 `TL-H-52cf343a2d1a` (cooking) **partly correct** - Meat should be kept in a cool place.
+- #11 `TL-H-5466fd52bbb7` (cooking) **correct** - Wash, pick over, and cook spinach thirty minutes in boiling water to which has been added one-fourth teaspoon powdered sugar and one-eighth teaspoon of soda; dr
+- #12 `TL-H-32412f6f406b` (cooking) **partly correct** - Make syrup by boiling water and sugar ten minutes; add pineapple and lemon juice, cool, strain, and add ice-water.
+- #13 `TL-H-8d1abf691f72` (cooking) **correct** - Season with salt and pepper and moisten with beaten egg.
+- #14 `TL-H-d118b2ee1380` (cooking) **correct** - Wash and clean a calf’s head, and cook until tender in boiling water to cover.
+- #15 `TL-H-bac200dc3dbc` (cooking) **correct** - Put cork in opening of cover, then put on cover.
+- #16 `TL-H-d151a88c3324` (cooking) **partly correct** - Make a syrup as for Lemon Ice, add cordial and coloring; strain and freeze.
+- #17 `TL-H-5c186454bcdf` (craft.knitting) **correct** - Knit another piece to correspond for back.
+- #18 `TL-H-a99e015d6878` (cooking) **correct** - Roll puff or plain paste one-eighth inch thick, and cut in two and one-half inch squares; wet the corners, fold toward the centre, and press lightly; bake on a 
+- #19 `TL-H-fd51db281ad3` (craft.woodworking) **partly correct** - Use a wet sponge and chamois skin to clean off the pumice.
+- #20 `TL-H-335f5426ee3d` (craft.woodworking) **correct** - The piece should be reversed and the cut finished by cutting in a similar manner from the second side.
+- #21 `TL-H-f4a85e9d98d4` (cooking) **correct** - Remove pork from bones before serving, and fill centre with Purée of Chestnuts.
+- #22 `TL-H-3bdfeb66defc` (craft.woodworking) **partly correct** - To overcome this action, chisel a line parallel to the given line, about one thirty-second of an inch away from it, on the waste.
+- #23 `TL-H-ed08725f5c46` (craft.knitting) **correct** - With color, work the cuff in star-stitch, only omit taking the stitch under the back loop of star in last row, and take a loop through each of 2 eyes of stars i
+- #24 `TL-H-29709da96fa8` (craft.ropework) **correct** - Then pass the bight up again and run the end over the lower bight and up between it and the upper bight.
+- #25 `TL-H-086b2ca34e6a` (cooking) **correct** - The outer stalks of celery, often not suitable for serving, should be saved for soups.
+- #26 `TL-H-ae38ce52e19d` (craft.woodworking) **wrong** - Work rapidly but carefully. (6) Place the parts in the clamps and set away to dry; ten hours is usually long enough.
+- #27 `TL-H-56b681175f2b` (cooking) **correct** - Clean clams, remove soft parts, and finely chop hard parts.
+- #28 `TL-H-bcb92576f5ef` (cooking) **partly correct** - Add oil, at first drop by drop, stirring with a wooden spoon or wire whisk.
+- #29 `TL-H-853157ce14a8` (cooking) **correct** - Line bottom and sides of slightly buttered Dario moulds with long strips of boiled spaghetti coiled around the inside.
+- #30 `TL-H-f8c5b7d58f52` (cooking) **correct** - Peel and cut rhubarb in one-inch pieces.
+- #31 `TL-H-b8bca113e843` (craft.knitting) **partly correct** - Follow with a row of loops, and continue same as for cuffs, widening as directed and twice putting 6 trebles under each of 2 consecutive loops in outer row.
+- #32 `TL-H-48b4a9a6fa40` (cooking) **partly correct** - Mix and sift flour and salt; work in lard with tips of fingers, and moisten to a stiff dough.
+- #33 `TL-H-e4cc866318dd` (cooking) **correct** - Melt butter, add flour, and pour on gradually hot liquid; add salt, cayenne, parsley, oysters, and egg slightly beaten.
+- #34 `TL-H-3fd1dcc580b6` (cooking) **correct** - Mix ingredients in the order given, except brandy, and let simmer one and one-half hours; then add brandy and shavings from the rind of the lemons and oranges.
+- #35 `TL-H-63b95b4afcf6` (cooking) **partly correct** - Make a custard of first four ingredients, strain, cool; add cream, chestnut purée, flavoring, and glacé fruit cut in pieces and previously soaked in Maraschino 
+- #36 `TL-H-35e99bfb78d0` (cooking) **correct** - Spread end of loaf sparingly and evenly with butter which has been creamed.
+- #37 `TL-H-862a51cb1a54` (cooking) **correct** - Mix and sift dry ingredients; work in butter with tips of fingers; add milk and berries.
+- #38 `TL-H-f7a2b98f32eb` (craft.woodworking) **partly correct** - (1) Determine the size and spacings of the views so that the parts of the drawings may be properly placed.
+- #39 `TL-H-18b873fa5386` (cooking) **partly correct** - Spices, including whole cloves, allspice berries, peppercorns, and stick cinnamon, should be kept on hand.
+- #40 `TL-H-a0f5030afec1` (craft.knitting) **correct** - Make another piece in same manner and sew together.

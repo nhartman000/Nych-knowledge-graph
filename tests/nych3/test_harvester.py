@@ -55,7 +55,7 @@ def test_harvest_extracts_skips_and_dedupes(H):
     gate = h.db.gate(plane["g"])
     assert gate["conditions"][0].startswith("until the edge is square") and "[explicit]" in gate["conditions"][0]
     assert r[("hold", "plane")]["m"] == "Hold,🙌"
-    assert r[("press", "plane")]["actor"].startswith("agent(implied")
+    assert ("press", "plane") not in r   # 2026-11-02 round 2: non-modal passives are descriptive and rejected (user decision)
     assert ("cut", "board") in r and ("sand", "edge") in r   # coordinated imperatives split
     refs = h.db.q("MATCH (l:TOTELoop {loop_id:$l})-[:SOURCED_FROM]->(s:SourceRef) RETURN s.isbn AS i, s.isbn_status AS st, s.page AS p, "
                   "s.page_kind AS k, s.fallback_gutenberg_id AS g ORDER BY p", {"l": plane["id"]})

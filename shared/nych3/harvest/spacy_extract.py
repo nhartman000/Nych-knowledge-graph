@@ -107,7 +107,71 @@ def _is_time(t):
     return _lemma(t) in inv()["time_units"]
 
 
+FRACTION_WORDS = {"half": 2, "halves": 2, "third": 3, "thirds": 3, "fourth": 4, "fourths": 4, "quarter": 4, "quarters": 4,
+                  "fifth": 5, "fifths": 5, "sixth": 6, "sixths": 6, "eighth": 8, "eighths": 8}
+SIZE_MARKERS = {"no", "no.", "number", "size", "#"}
+_UNI_FRAC = {"½": "1/2", "¼": "1/4", "¾": "3/4", "⅓": "1/3", "⅔": "2/3", "⅛": "1/8"}
+
+
+def _numtok(x):
+    w = x.lower_
+    return x.like_num or w in inv()["number_words"] or w in FRACTION_WORDS or w in _UNI_FRAC or bool(re.fullmatch(r"\d+/\d+|\d*[½¼¾⅓⅔⅛]", x.text))
+
+
+def normalize_quantity(words):
+    """['one','-','half'] -> '1/2'; ['one','and','one','-','half'] -> '1 1/2'; ['two','-','thirds'] -> '2/3'; ['1/2'] -> '1/2'."""
+    nw = inv()["number_words"]
+    out, cur = [], []
+    for w in words + ["and"]:
+        lw = w.lower()
+        if lw in ("and", "a"):
+            if cur:
+                out.append(cur); cur = []
+            continue
+        if lw in ("-", "–"):
+            continue
+        cur.append(lw)
+    parts = []
+    for c in out:
+        if len(c) >= 2 and c[-1] in FRACTION_WORDS:
+            num = nw.get(c[-2], c[-2])
+            parts.append(f"{num}/{FRACTION_WORDS[c[-1]]}")
+        elif len(c) == 1 and c[0] in FRACTION_WORDS:
+            parts.append(f"1/{FRACTION_WORDS[c[0]]}")
+        else:
+            parts.append(" ".join(_UNI_FRAC.get(x, nw.get(x, x)) for x in c))
+    return " ".join(parts) if parts else None
+
+
+def _size(t):
+    """'No. 16 steel needles' -> 'No. 16' (a size, not a count)."""
+    d = t.doc
+    for j in range(max(0, t.i - 4), t.i):
+        if d[j].lower_.rstrip(".") in ("no", "number", "size", "#") and j + 1 < len(d):
+            k = j + 1
+            if d[k].text == ".":
+                k += 1
+            if k < t.i + 1 and d[k].like_num:
+                return f"No. {d[k].text}"
+    return None
+
+
 def _quantity(t):
+    """Number words / fractions immediately left of the head (or as nummod/quantmod children). None if it is a size."""
+    if _size(t):
+        return None
+    d = t.doc
+    j = t.i - 1
+    while j >= 0 and (d[j].dep_ in ("compound", "amod") and not _numtok(d[j]) and d[j].pos_ in ("NOUN", "ADJ") and j > t.i - 3):
+        j -= 1   # skip one or two compounds/adjectives ('one-half cup cracker crumbs')
+    words = []
+    while j >= 0 and (_numtok(d[j]) or (d[j].text in ("-", "–") and j > 0 and _numtok(d[j - 1])) or
+                      (d[j].lower_ == "and" and j > 0 and _numtok(d[j - 1]) and words)):
+        words.insert(0, d[j].text); j -= 1
+    if words and words[0].lower() == "and":
+        words = words[1:]
+    if words:
+        return normalize_quantity(words)
     nums = [c for c in t.children if c.dep_ == "nummod" or (c.dep_ in ("amod", "det", "quantmod") and c.text.lower() in inv()["number_words"])]
     return " ".join(_num(n) for n in nums) if nums else None
 
@@ -116,6 +180,16 @@ def resolve_np(head):
     """-> {head, lemma, quantity, unit, span_text} applying the unit invariant."""
     if head is None:
         return None
+    if head.lower_ in FRACTION_WORDS:
+        of = next((c for c in head.children if c.dep_ == "prep" and c.lower_ == "of"), None)
+        noun = next((c for c in of.children if c.dep_ == "pobj"), None) if of is not None else None
+        if noun is not None:
+            q = _quantity(head)
+            q = q if q and "/" in q else normalize_quantity([*(q.split() if q else ["one"]), head.lower_])
+            return {"head": noun.text, "lemma": _lemma(noun), "quantity": q, "rule": "INV-FRACTION-OF"}
+    sz = _size(head)
+    if sz:
+        return {"head": head.text, "lemma": _lemma(head), "quantity": None, "size": sz, "rule": "INV-SIZE-NOT-COUNT"}
     if head.lower_ != "worth" and _worth(head):
         wt = next((c for c in head.children if c.lower_ == "worth"), None) or \
             next((x for x in head.doc[head.i + 1:head.i + 3] if x.lower_ == "worth"), None)
@@ -188,6 +262,9 @@ def parse(text: str):
     return nlp()(text), False, 0
 
 
+CROSS_REF = re.compile(r"^\s*(see|cf\.?|compare|refer to)\b|\b(see|cf\.?)\s+(page|p\.|pp\.|fig\.?|figure|chapter|directions|recipe|rule|table)\b|"
+                       r"\(\s*(see|follow)\b[^)]*\bp(age|\.)\s*\d+|^[^.]{0,60}\bon page \d+\.?$", re.I)
+PROHIBIT = re.compile(r"^\s*(never|do not|don't|avoid|nor)\b", re.I)
 _ENUM = re.compile(r"^\s*(?:\(?\d{1,3}[.)]|\(?[a-z][.)]|[A-Z][A-Za-z -]{0,30}:)\s+(?=[A-Z])")
 PRONOUN_OBJ = {"it", "them", "this", "that", "these", "those", "one", "ones", "him", "her", "us", "me", "you", "itself", "themselves",
                "each", "all", "both", "some", "any", "other", "others", "same", "which", "what", "former", "latter", "rest"}
@@ -224,6 +301,9 @@ def sense_mentions(doc):
         w = t.lower_
         if t.dep_ in ("amod", "compound", "nmod") and t.head.pos_ in ("NOUN", "PROPN"):
             continue   # attributive ('boiling water', 'cold milk', 'soft-shelled clams'): describes an ingredient, not a sense test
+        if t.dep_ in ("pobj", "conj", "nmod", "appos", "dobj") and any(
+                _lemma(x) in inv()["_classes"]["instrument"] or x.lower_.endswith("plane") for x in list(t.conjuncts) + list(t.subtree) if x is not t):
+            continue   # 'smooth, jack and fore-plane': names of tools, not a feel test
         for ch, spec in cues.items():
             if w in spec["words"] or _lemma(t) in spec["cue_verbs"]:
                 if _lemma(t) in spec["cue_verbs"] or w in spec["cue_verbs"]:
@@ -260,6 +340,8 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None, s
     low = text.lower()
     if any(m in low for m in I["instruction_gate"]["figurative_markers"]):
         return "non_action", [], "figurative"
+    if CROSS_REF.search(text):
+        return "non_action", [], "cross_reference"
     doc, injected, off = parse(text)
     senses = sense_mentions(doc)
 
@@ -279,25 +361,41 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None, s
     # candidate action verbs: root + coordinated verbs (+ repair of conj verbs tagged NN, e.g. 'cook')
     cands = [root] if verbish(root) else []
     stack = list(cands)
+    promoted = set()   # verbs the parser hung off a noun ('spread saltines with mixture and bake'; 'add milk, season, and bind')
+    keepnoun = I["_classes"]["ingredient"] | I["_classes"]["instrument"] | I["_classes"]["container"] | set(I.get("noun_verbs_kept_as_nouns", []))
     while stack:
         v = stack.pop()
         for c in v.children:
             if (c.dep_ == "conj" or (c.dep_ == "parataxis" and injected) or (c.dep_ == "ccomp" and injected and any(g.dep_ == "nsubj" and g.i == 0 for g in c.children))) \
                     and verbish(c) and c not in cands:
                 cands.append(c); stack.append(c)
+        for c in v.subtree:
+            if c in cands or c.dep_ != "conj" or c.head.pos_ not in ("NOUN", "PROPN"):
+                continue
+            bare = not any(g.dep_ in ("det", "amod", "compound", "nummod", "poss") for g in c.children)
+            if c.lower_ in keepnoun:
+                continue   # 'cook butter, shallot, and pepper': an ingredient, not a verb
+            if (c.pos_ == "VERB" and c.tag_ in ("VB", "VBP")) or (c.lower_ in lexverbs and c.lower_ not in keepnoun and bare and c.pos_ in ("NOUN", "PROPN")):
+                cands.append(c); stack.append(c); promoted.add(c.i)
     if not cands:
         return _ret("non_action", [], "no_action_verb")
     cands.sort(key=lambda t: t.i)
     loops, reasons, state = [], [], {}
     for v in cands:
         lem = v.lower_ if v.pos_ != "VERB" else _lemma(v)
+        if v.lower_ in lexverbs and lem not in lexverbs:
+            lem = v.lower_          # 'Bore these holes' -> bore, not bear (lemmatizer picked another verb's past tense)
+        elif injected and v.i == off and v.lower_ in lexverbs:
+            lem = v.lower_          # sentence-initial imperative is already base form
         subj = next((c for c in v.children if c.dep_ in ("nsubj", "nsubjpass")), None)
         passive = any(c.dep_ in ("auxpass", "nsubjpass") for c in v.children)
         auxes = [c for c in v.children if c.dep_ in ("aux", "auxpass")]
         modal = any(a.lower_ in MODALS for a in auxes)
-        neg = any(c.dep_ == "neg" for c in v.children)
+        neg = any(c.dep_ == "neg" for c in v.children) or bool(PROHIBIT.match(text) and v.i == min(x.i for x in cands))
         # carry-over along coordination: inherit only when the conjunct has no own subject AND matches form
         parent = state.get(v.head.i) if v.dep_ == "conj" else None
+        if v.i in promoted:
+            parent = next((state[c.i] for c in sorted(cands, key=lambda x: -x.i) if c.i < v.i and c.i in state), None)
         if subj is not None and injected and subj.i == 0:
             mood, actor_kind, actor_text = "imperative", "implied_you", "you(implied)"
         elif subj is not None:
@@ -309,7 +407,7 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None, s
             else:
                 actor_kind, actor_text = ("you" if subj.lower_ == "you" else "agent"), subj.text
         elif parent is not None:
-            if parent["mood"] == "imperative" and (v.tag_ in ("VB", "VBP", "NN", "JJ") or (injected and lem in lexverbs and not auxes)):
+            if parent["mood"] == "imperative" and (v.tag_ in ("VB", "VBP", "NN", "NNP", "JJ") or (injected and lem in lexverbs and not auxes)):
                 mood, actor_kind, actor_text = "imperative", "implied_you", "you(implied)"
             elif parent["passive"] and v.tag_ == "VBN":
                 mood, actor_kind, actor_text, passive = "indicative", parent["actor_kind"], parent["actor_text"], True
@@ -318,6 +416,8 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None, s
                 mood, actor_kind, actor_text = "indicative", parent["actor_kind"], parent["actor_text"]
             else:
                 mood, actor_kind, actor_text = "unresolved", "unresolved", "UNRESOLVED"
+        elif v.tag_ == "VB" and not passive and auxes and all(a.lower_ in ("do", "don't") for a in auxes) and neg:
+            mood, actor_kind, actor_text = "imperative", "implied_you", "you(implied)"
         elif (v.tag_ == "VB" or (injected and (v.tag_ == "VBP" or (lem in lexverbs and v.tag_ in ("VBZ", "VBD", "NN"))))) and not passive and not auxes:   # base-form verb with no subject = imperative
             mood, actor_kind, actor_text = "imperative", "implied_you", "you(implied)"
         else:
@@ -338,9 +438,11 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None, s
                 reasons.append("narrative_past"); continue
             subj_l = subj.lower_ if subj is not None else ""
             strong = any(a.lower_ in G["procedural_modals"] for a in auxes)
-            procedural = (strong and (passive or subj_l in G["procedural_subjects"])) or \
-                         (passive and not modal and manip and actor_kind == "implied_agent_passive") or \
-                         (not passive and subj_l in G["procedural_subjects"] and v.tag_ in ("VBP", "VB") and manip)
+            freq = any(c.lower_ in G["descriptive_adverbs"] for c in v.children) or (subj is not None and subj.lower_ in G["descriptive_subjects"])
+            procedural = not freq and ((strong and (passive or subj_l in G["procedural_subjects"])) or
+                                       (not passive and subj_l in G["procedural_subjects"] and v.tag_ in ("VBP", "VB") and manip))
+            if passive and not strong:
+                reasons.append("descriptive_passive" if not freq else "descriptive_frequency"); continue
             if not procedural:
                 reasons.append("not_instruction"); continue
             if passive and not modal and not manip:
@@ -375,6 +477,14 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None, s
                     continue
                 if bad_object(n):
                     reasons.append(bad_object(n)); continue
+                if n.i in promoted or (n.lower_ in lexverbs and n.lower_ not in keepnoun and n.dep_ == "conj"
+                                       and not any(g.dep_ in ("det", "amod", "compound", "nummod") for g in n.children)):
+                    continue   # a verb ('season', 'bake') is never an object
+                if leaf_lem in I["_verbs"]["placement"] and _lemma(n) in I["_classes"]["container"] and \
+                        any(c.dep_ == "prep" and c.i < n.i and c.lower_ in ("in", "into", "on") and not list(c.children) for c in leaf.children):
+                    locs.append(f"in {n.text},"); exitc = exitc or {"kind": "object_location", "text": f"in {n.text}", "condition": f"object_location == {_lemma(n)}",
+                                                                     "provenance": "implied_by_text", "rule": "EXIT-PLACEMENT-CONTAINER"}
+                    continue   # 'Put in a stone jar': the jar is where, not what
                 r = resolve_np(n)
                 if r and not (r.get("object_is_unit") and r["lemma"] != "amount" and not r.get("quantity")) and r["lemma"] not in PRONOUN_OBJ:
                     objs.append(r)
@@ -391,6 +501,9 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None, s
                 if pobj is not None:
                     objs = [o for o in objs if o["lemma"] != _lemma(pobj)]
             if p in ("until", "till"):
+                owner = max([c.i for c in cands if c.i < prep.i] or [v.i])
+                if owner != v.i and owner != leaf.i:
+                    continue   # the until-clause belongs to a later verb in the sentence
                 exitc = {"kind": "until", "text": _clause_text_from(prep), "condition": _clause_text_from(prep),
                          "provenance": "explicit", "rule": "EXIT-UNTIL"}
                 continue
@@ -402,6 +515,11 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None, s
                 objs.append(resolve_np(pobj)); continue
             if bad_object(pobj):
                 continue
+            if p in ("in", "into") and prep.i == leaf.i + 1 and leaf_lem in I["_verbs"].get("particle_in", []) and not objs \
+                    and _lemma(pobj) not in I["_classes"]["container"] and not _is_time(pobj):
+                objs.append(resolve_np(pobj)); continue   # 'fold in remaining sugar', 'stir in the flour'
+            if p in ("with", "using") and _lemma(pobj) in I["_classes"]["container"] and leaf_lem in I["_verbs"]["placement"]:
+                locs.append(f"{p} {pobj.text},"); continue
             if p == "for" and _is_time(pobj) and _quantity(pobj):
                 q = _quantity(pobj)
                 exitc = {"kind": "duration", "text": f"for {q} {_lemma(pobj)}", "condition": f"elapsed >= {q} {_lemma(pobj)}",
@@ -441,6 +559,18 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None, s
             if u is not None:
                 exitc = {"kind": "until", "text": _clause_text_from(u), "condition": _clause_text_from(u),
                          "provenance": "explicit", "rule": "EXIT-UNTIL-SPAN"}
+        if exitc is None:
+            nxt_v2 = min([c.i for c in cands if c.i > v.i] or [len(doc)])
+            tt = next((t for t in doc if v.i < t.i < nxt_v2 and _is_time(t) and _quantity(t) and t.dep_ in ("npadvmod", "appos", "dobj", "nsubj")
+                       and not any(x.lower_ in ("every", "each", "after", "before", "last", "first") for x in doc[max(0, t.i - 4):t.i])), None)
+            if tt is not None:
+                q = _quantity(tt)
+                exitc = {"kind": "duration", "text": f"{q} {_lemma(tt)}", "condition": f"elapsed >= {q} {_lemma(tt)}",
+                         "provenance": "implied_by_text", "rule": "EXIT-BARE-DURATION-SPAN"}
+        if not objs and not co_objs:
+            prev = next((lp for lp in reversed(loops) if lp["lemma"] == leaf_lem and lp["objects"]), None)
+            if prev is not None:
+                objs = [dict(o, rule="INHERIT-SAME-VERB-IN-SENTENCE") for o in prev["objects"]]   # 'beat whites ..., continue beating until ...'
         if not objs and _DOMAIN[0] in I["implied_count_noun"] and leaf_lem in I["implied_count_noun"][_DOMAIN[0]]["verbs"]:
             n = next((c for c in leaf.children if c.dep_ in ("dobj", "obj", "npadvmod", "nummod", "attr") and bad_object(c) == "bare_number_object"), None)
             if n is not None:
@@ -457,11 +587,16 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None, s
             c = operator_cell({"channel": ch, "channel_provenance": prov_}, {"predicate": (text.split()[0].strip(",.;:") if injected and t.i == off else t.text), "verb_form": _verb_form(t)}, modreg)
             if c:
                 ops.append(c.replace(" [inferred]", "") + ("" if prov_ == "explicit" else f" [{prov_}]"))
+        if not any(l["role"] == "action" for l in links):
+            ch, prov_ = channel_for(leaf_lem, modreg)
+            links.append({"channel": ch, "word": leaf_lem, "provenance": prov_, "role": "action"})
+            ops.append(f"{leaf.text},{modreg['operators'][ch]}" + ("" if prov_ == "explicit" else f" [{prov_}]"))
         chans = sorted({modreg["lemma_channels"].get(_lemma(t)) for t in chain} - {None})
         # sense mentions -> TEST/EXIT steps of THIS loop (never stored alone)
         nxt_v = min([c.i for c in cands if c.i > v.i] or [len(doc)])
         prev_v = max([c.i for c in cands if c.i < v.i] or [-1])
-        mine = [m for m in senses if (prev_v < m[0] < nxt_v or (m[0] == v.i)) and m[0] not in state.setdefault("_used", set())]
+        first_v = min(c.i for c in cands)
+        mine = [m for m in senses if ((v.i <= m[0] < nxt_v) or (v.i == first_v and m[0] < v.i)) and m[0] not in state.setdefault("_used", set())]
         sense_tests = []
         for (ti, ch, w, step) in mine:
             if ti in {x.i for x in chain}:
@@ -485,25 +620,27 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None, s
                 state.setdefault("_used", set()).add(ti)
         allobjs = objs + co_objs
         ol = sorted(o["lemma"] for o in allobjs)
-        key = json.dumps([leaf_lem, ol, tool["lemma"] if tool else "", actor_kind, chans, exitc["kind"] if exitc else "inferred_completion"],
+        prohibition = bool(neg)
+        key = json.dumps(([("PROHIBIT")] if prohibition else []) + [leaf_lem, ol, tool["lemma"] if tool else "", actor_kind, chans, exitc["kind"] if exitc else "inferred_completion"],
                          ensure_ascii=False)
         def ocell(o):
-            q = f" [{o['quantity']}]" if o.get("quantity") else ""
+            q = f" [{o['quantity']}]" if o.get("quantity") else (f" [size {o['size']}]" if o.get("size") else "")
             role = " (with)" if o.get("role") == "with_ingredient" else ""
             return f"{o['head']}{q}{role},"
         loops.append({
-            "key": key, "negated": neg, "lemma": leaf_lem, "object_lemma": ol[0] if ol else (tool["lemma"] if tool else ""),
+            "key": key, "negated": neg, "prohibition": prohibition, "lemma": leaf_lem, "object_lemma": ol[0] if ol else (tool["lemma"] if tool else ""),
             "objects": allobjs, "tool": tool, "exit": exitc, "mood": mood, "passive": passive,
             "modality_unresolved": not ops, "modality_links": links, "sense_tests": sense_tests,
             "row": {"modality": " ; ".join(ops) or "UNRESOLVED,", "actor": f"{actor_text},",
-                    "action": f"{leaf_lem},",
+                    "action": (f"NEVER {leaf_lem}, [prohibition]" if prohibition else f"{leaf_lem},"),
                     "object": " ; ".join([ocell(o) for o in allobjs] + ([f"tool: {tool['head']},"] if tool else [])) or "UNRESOLVED,",
                     "perspective_location": " ; ".join(locs) or "UNRESOLVED,",
-                    "exit": (f"{exitc['condition']} [{exitc['provenance']}]" if exitc else f"{leaf_lem}_complete == true [inferred]")},
+                    "exit": ("prohibition: the action must not occur (no exit test) [explicit]" if prohibition else
+                             f"{exitc['condition']} [{exitc['provenance']}]" if exitc else f"{leaf_lem}_complete == true [inferred]")},
             "sentence": text})
     if not loops:
         return _ret("non_action" if all(r in ("stative_or_nonaction_verb", "descriptive_passive", "descriptive_present", "unresolved_mood",
-                                               "not_instruction", "narrative_past", "figurative_imperative") for r in reasons)
+                                               "not_instruction", "narrative_past", "figurative_imperative", "descriptive_frequency") for r in reasons)
                     else "no_match", [], (reasons[0] if reasons else "unknown"))
     if stats is not None:
         used = state.get("_used", set())

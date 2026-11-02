@@ -129,5 +129,7 @@ def merge(db_path, out_dir=HARVEST_DIR, books=None):
         merged.add(f.name); h.ckpt["_merged_shards"] = sorted(merged); h._save_ckpt()
     h.stats["finished"] = datetime.now().isoformat(timespec="seconds"); h.stats["stopped_by"] = "merge_complete"
     h.stats["mode"] = "parallel-merge"
+    if hasattr(h.db, "refresh_domain_links"):   # knowledge-graph store: derive DOMAIN_LINK edges after the merge
+        h.stats["domain_links"] = h.db.refresh_domain_links()
     h.save_stats(); st = h.stats; h.close()
     return st

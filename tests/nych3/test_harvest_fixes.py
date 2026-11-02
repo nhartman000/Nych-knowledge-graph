@@ -116,3 +116,61 @@ def test_attributive_sense_words_are_not_tests():
     _, loops, _ = X("Add vegetables and three quarts boiling water.")
     assert loops and all(not lp["sense_tests"] for lp in loops)
     assert X("Half of the fat may be used for frying.")[0] != "action"
+
+
+# ---- round 2 (2026-11-02, user-approved) ----
+@pytest.mark.parametrize("t", ["These slippers are very easily knitted.", "Canned peas are often drained, rinsed, and reheated in this way.",
+                               "Slabs are sawed to a length of four feet.", "The plane is pressed to the board with the right hand."])
+def test_descriptive_and_passive_rejected(t):
+    assert X(t)[0] != "action"
+
+
+def test_exit_and_sense_go_to_the_right_verb():
+    _, loops, _ = X("Spread saltines with mixture and bake until delicately browned.")
+    by = {lp["lemma"]: lp for lp in loops}
+    assert set(by) == {"spread", "bake"}
+    assert by["spread"]["exit"] is None and not by["spread"]["sense_tests"]
+    assert by["bake"]["exit"]["kind"] == "until" and by["bake"]["sense_tests"][0]["step"] == "👀 verify color browned"
+    _, loops, _ = X("Then add milk, stir lightly with a fork, cover, and steam until rice is soft.")
+    by = {lp["lemma"]: lp for lp in loops}
+    assert by["steam"]["exit"]["kind"] == "until" and by["stir"]["exit"] is None
+
+
+def test_objects_whites_verbs_containers():
+    _, loops, _ = X("Beat whites until stiff, and continue beating until mixture will hold its shape.")
+    assert all(lp["objects"] and lp["objects"][0]["head"] == "whites" for lp in loops if lp["lemma"] == "beat")
+    _, loops, _ = X("Add milk, season, and bind.")
+    assert all(o["lemma"] not in ("season", "bind") for lp in loops for o in lp["objects"])
+    _, loops, _ = X("Put on a sheet and bake until the cheese melts.")
+    assert all(o["lemma"] != "bake" for lp in loops for o in lp["objects"])
+    _, loops, _ = X("Put in a stone jar or tumblers.")
+    assert loops[0]["objects"] == [] and "in jar," in loops[0]["row"]["perspective_location"]
+
+
+def test_fractions_and_sizes():
+    _, loops, _ = X("Add one-half cup cracker crumbs, 1/2 teaspoon salt and one and one-half cups milk.")
+    q = {o["head"]: o["quantity"] for o in loops[0]["objects"]}
+    assert q == {"crumbs": "1/2 cup", "salt": "1/2 teaspoon", "milk": "1 1/2 cup"}
+    _, loops, _ = X("Add one-fourth cup rice.")
+    assert loops[0]["objects"][0]["quantity"] == "1/4 cup"
+    _, loops, _ = X("Add gradually two-thirds of sugar.")
+    assert loops[0]["objects"][0]["quantity"] == "2/3"
+    _, loops, _ = X("Use No. 16 steel needles.", "craft.knitting")
+    o = loops[0]["objects"][0]
+    assert o["size"] == "No. 16" and o["quantity"] is None
+
+
+def test_cross_reference_and_prohibition():
+    assert X("See directions for freezing, page 434.") == ("non_action", [], "cross_reference")
+    for t in ["Never put cogs of a Dover Egg-beater in water.", "Do not stir the sauce."]:
+        _, loops, _ = X(t)
+        assert loops[0]["prohibition"] and loops[0]["row"]["action"].startswith("NEVER ") and "PROHIBIT" in loops[0]["key"]
+    a = X("Stir the sauce.")[1][0]["key"]; b = X("Do not stir the sauce.")[1][0]["key"]
+    assert a != b   # a prohibition never merges with the positive action
+
+
+def test_bore_and_smooth_plane():
+    _, loops, _ = X("Bore these holes so that they connect.", "craft.woodworking")
+    assert loops[0]["lemma"] == "bore"
+    _, loops, _ = X("Where one plane is made to serve the purpose of smooth, jack and fore-plane, it should be ground straight across.", "craft.woodworking")
+    assert all(t["word"] != "smooth" for lp in loops for t in lp["sense_tests"])

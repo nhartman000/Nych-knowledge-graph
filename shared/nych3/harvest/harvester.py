@@ -191,7 +191,7 @@ class Harvester:
                     "conditions": [lp["row"]["exit"]], "outcomes": {"PASS": "exit", "FAIL": "repeat"}}
             self.db.add_gate(gate)
             self.db.add_loop({
-                "loop_id": lid, "name": f"{lp['lemma']} {lp['object_lemma']}".strip(), "domain": book["domain"],
+                "loop_id": lid, "name": (("never " if lp.get("prohibition") else "") + f"{lp['lemma']} {lp['object_lemma']}").strip(), "domain": book["domain"],
                 "objective": "UNRESOLVED",
                 "initial_test": " ; ".join(t["step"] for t in lp.get("sense_tests", []) if t["role"] == "test") or "UNRESOLVED", "exit_predicate": gate["gate_id"], "max_iterations": -1,
                 "epistemic_status": "ACT", "modality_cell": lp["row"]["modality"], "actor_cell": lp["row"]["actor"],
@@ -200,7 +200,8 @@ class Harvester:
                 "termination_triggers": ([{"trigger": lp["exit"]["text"], "condition": lp["exit"].get("condition", lp["exit"]["text"]),
                                            "provenance": lp["exit"].get("provenance", "explicit"), "rule": lp["exit"].get("rule")}] if lp["exit"] else
                                          [{"trigger": f"{lp['lemma']}_complete", "provenance": "inferred"}]),
-                "techniques": [dict(t, kind="sense_test") for t in lp.get("sense_tests", [])], "version": "1", "repeat_count": 1, "structure_key": lp["key"],
+                "techniques": [dict(t, kind="sense_test") for t in lp.get("sense_tests", [])] +
+                              ([{"kind": "prohibition", "note": "negated instruction ('never/do not'): the action must NOT be performed"}] if lp.get("prohibition") else []), "version": "1", "repeat_count": 1, "structure_key": lp["key"],
                 "in_domain": [[book["domain"], "primary", "harvested"]]},
                 status="candidate", provenance={"source": "nych3 batch harvester", "method": "HARVEST-BATCH-1", "authority": None,
                                                 "first_ref": prov_ref})
