@@ -271,7 +271,7 @@
   "provenance": "default"
  },
  "mental_markers": {
-  "_doc": "User rule 2026-11-02 (round 3): imagine/projection is 🧠🗯 (replaces the old eye-in-speech-bubble glyph, which was too close to 👁️). Every INTERNAL sense (internal_visual 👁️, internal_auditory 👂, internal_kinesthetic 🫶) also carries a mental marker: 💭 remembered or 🧠🗯 imagined. Chosen deterministically: a memory cue in the sentence -> 💭, otherwise 🧠🗯; the deciding cue is recorded.",
+  "_doc": "User rule 2026-11-02 (round 3): imagine/projection is 🧠🗯 (replaces the old eye-in-speech-bubble glyph, which was too close to 👁️). Every INTERNAL sense (internal_visual 👁️, internal_auditory 👂, internal_kinesthetic 🫶) also carries a mental marker: 💭 remembered or 🧠🗯 imagined. Chosen deterministically: a memory cue in the sentence -> 💭, otherwise 🧠🗯; the deciding cue is recorded. Round 4 user decision: memory is itself imagined, so 🧠🗯 is the DEFAULT on every internal sense; 💭 only for an explicit accurate-recall cue (remember, recall, as before, exactly as last time). 'recollect'/'as previously' dropped.",
   "internal_channels": [
    "internal_visual",
    "internal_auditory",
@@ -282,9 +282,9 @@
    "remembered",
    "recall",
    "recalled",
-   "recollect",
    "as before",
-   "as previously"
+   "exactly as last time",
+   "as last time"
   ],
   "memory": "💭",
   "imagined": "🧠🗯",

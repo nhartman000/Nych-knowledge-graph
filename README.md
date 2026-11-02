@@ -29,6 +29,40 @@ python -m nych3.harvest.cli run --max-sentences 8000            # resumable, pol
 ```
 See `stages/05-nych3-encoder/README.md`, `CONTEXT.md`, `HARVEST.md`.
 
+## Demo + measured accuracy (round 4, local only)
+Paste an instructional sentence; see the encoded TOTE loop(s) with modality emojis, the exit gate and
+its tier, provenance, and a graph lookup of matching stored loops (same structure, its book sources,
+same-action loops). The store is opened read-only; the web page binds 127.0.0.1 only (not deployed).
+```
+export PYTHONPATH=shared
+python -m nych3.demo "Stir the sauce with a spoon until thick, exactly as last time."     # CLI (add --json, --domain craft.knitting)
+python -m nych3.demo --serve --port 8765                                                 # page at http://127.0.0.1:8765/
+python -m nych3.eval.accuracy [--json report.json]                                       # gold-set accuracy (also: nych3-eval)
+```
+Sample transcript:
+```
+$ python -m nych3.demo "Stir the sauce with a spoon until thick, exactly as last time."
+sentence: Stir the sauce with a spoon until thick, exactly as last time.
+domain:   cooking   outcome: action
+
+LOOP 1  TL-H-adf1a0c0945a
+  modality : Stir,🙌
+  actor    : you(implied),
+  action   : stir,
+  object   : sauce, ; tool: spoon,
+  location : UNRESOLVED,
+  exit gate: G-TL-H-adf1a0c0945a  [explicit]  until thick [explicit]  PASS->exit FAIL->repeat
+  exit     : 🫶💭 feel thick   (marker 💭, cue: exactly as last time)
+  provenance: demo input (pasted by user) (no ISBN/page)
+  graph: same structure not in store (new loop)
+         same action: stir [cooking, 69x]; stir soup [cooking, 4x]; stir fork [cooking, 4x]; stir [cooking, 2x]; stir stock [cooking, 2x]
+         lookup(stir): exact_action_object -> TL-STIR-SAUCE-001
+```
+Accuracy is measured against `tests/nych3/gold/gold_v1.jsonl` (300 sentences, 75 per domain), which is
+**agent-graded, pending human review** — see `tests/nych3/gold/README.md` for notation and judgment
+calls. `tests/nych3/test_round4.py::test_accuracy_report` prints the per-field / per-domain table on
+every test run (non-failing; xfails only if a field collapses below a floor).
+
 ## Schema (single source: `stages/02-schema/output/schema.cypher`)
 - TOTELoop: legacy columns + NYCH 3.0 row cells (`modality_cell`, `actor_cell`, `action_cell`, `object_cell`, `perspective_cell`), lemmas, triggers, status (candidate/canonical), provenance, repeat_count.
 - Mapped onto existing tables: modality operators are `Operator` rows (`USES_MODALITY`); cells link to `Gestalt` / `Sense` (`CELL_GESTALT`, `CELL_SENSE`); exits are `Gate` rows (`GUARDS`).

@@ -15,6 +15,8 @@ test = ["pytest>=8", "pydantic>=2.8", "click>=8.1"]
 [project.scripts]
 nych3 = "nych3.cli:main"
 nych3-harvest = "nych3.harvest.cli:main"
+nych3-eval = "nych3.eval.accuracy:main"
+nych3-demo = "nych3.demo:main"
 
 [tool.setuptools.packages.find]
 where = ["shared"]

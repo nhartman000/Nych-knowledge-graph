@@ -325,7 +325,9 @@
   "project gutenberg",
   "spellings? (retained|preserved)",
   "typographical error",
-  "^\\s*\\d+\\s*\\.?\\s*$"
+  "^\\s*\\d+\\s*\\.?\\s*$",
+  "^[^.;:!?]{1,90},\\s*\\d{2,4}(\\s*,\\s*\\d{2,4})*\\s*\\.?\\s*$",
+  "[—–-]\\s*page\\s+\\d+\\s*\\.?\\s*$"
  ],
  "apparatus_all_caps_min_letters": 6,
  "instruction_gate": {
@@ -757,5 +759,6 @@
   "drill",
   "chisel",
   "bore"
- ]
+ ],
+ "_doc_index_lines": "Round 4: back-of-book index entries ('Live, to Broil, 189.' / 'Ice Cream, 446, 447.') and plate captions ending '—Page 43.' are apparatus, never instructions. Index page numbers are 2-4 digits directly after a comma, so knitting counts ('knit 2, purl 1.') are not matched."
 }
