@@ -1,0 +1,13 @@
+# NYCH 3.0 Pro schema/version pins. Recorded into every run manifest by stage 01.
+nych3_version: "3.0.0-pre1"
+gst_version: "1.0"            # mg8-engine Gst model / gst spec v1 compatibility (top-level field)
+nych3_gst_profile: "3.0.0"   # NYCH 3 payload riding on mg8 Gst extra="allow"
+bonit_version: "3.0"
+tote_db_schema: "nych3-tote-1"
+lexicon_version: "1"
+modality_registry: "2026-11-01"
+pinned_refs:
+  nych: "nhartman000/nych@57b81e9220069dd5ff72197b41288c9613e3343b (salvage source, read-only)"
+  mg8_engine: "nhartman000/mg8-engine@daf260d (compatibility target)"
+  gst_spec: "nhartman000/gst@0d8aefb spec/gst_v1.md"
+  knowledge_graph: "/workspace/knowledge-graph stages/02-schema/output/schema.cypher (storage style)"
