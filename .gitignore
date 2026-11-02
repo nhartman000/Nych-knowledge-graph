@@ -13,3 +13,6 @@ shared/data/corpus/
 shared/data/harvest/
 stages/05-nych3-encoder/*/output/*
 !stages/05-nych3-encoder/*/output/.gitkeep
+*.whl
+*.tar.gz
+REVIEW/_run/
