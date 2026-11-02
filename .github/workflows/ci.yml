@@ -1,7 +1,7 @@
 name: ci
 on:
   push:
-    branches: [main]
+    branches: [main, nych3-integration]
   pull_request:
 jobs:
   test:
@@ -11,5 +11,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: pip
       - run: pip install -r requirements.txt -r requirements-dev.txt
+      # Optional: private repos. Without them tests/nych3/test_mg8_compat.py is skipped, never failed.
+      - name: optional mg8-engine
+        continue-on-error: true
+        run: pip install --no-deps -r requirements-mg8.txt
       - run: pytest -q

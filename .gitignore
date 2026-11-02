@@ -4,3 +4,12 @@ __pycache__/
 stages/04-poc-run/demo_pre_approval/traces/
 stages/04-poc-run/output/traces/
 .pytest_cache/
+*.pyc
+*.kuzu.wal
+*.egg-info/
+# NYCH 3.0 encoder + harvester run artifacts (no DB / harvest blobs in git)
+shared/data/tote.kuzu*
+shared/data/corpus/
+shared/data/harvest/
+stages/05-nych3-encoder/*/output/*
+!stages/05-nych3-encoder/*/output/.gitkeep

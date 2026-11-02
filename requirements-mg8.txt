@@ -1,0 +1,5 @@
+# Optional: mg8-engine .gst compatibility tests (tests/nych3/test_mg8_compat.py is skipped without it).
+# Private repos; install with --no-deps (their other deps are covered by requirements*.txt).
+mg8-engine @ git+https://github.com/nhartman000/mg8-engine.git@daf260dae62bd27810d84b3107e0d22f1dd30736
+nych @ git+https://github.com/nhartman000/nych.git@57b81e9220069dd5ff72197b41288c9613e3343b
+tcta-engine @ git+https://github.com/nhartman000/TCTA.git@f2882c131e3e220d1cf1c9b7448625aabd51a85f
