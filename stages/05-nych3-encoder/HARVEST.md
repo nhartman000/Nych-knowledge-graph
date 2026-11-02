@@ -76,3 +76,9 @@ $VENV/python -m nych3.harvest.cli prun --workers 6
 - **Place filter narrowed:** only `in place of` / `in lieu of` is dropped. `in a cool place` is a real location.
 - **Fractions of an inch** ("one thirty-second of an inch") are lengths, never times.
 - An imperative with only a location ("fry in deep fat") is now a loop.
+
+## State 2026-11-02 (end of day)
+- Book store: 3,545 harvested/seed loops (4 Gutenberg books); gold set v1 (300 sentences) is **agent-graded, pending human review**.
+- **tech.ui** added (provisional, unreviewed): 81 canonical UI-action loops + 36,445 instance loops + 63,487 web SourceRefs; nothing promoted.
+  Ingest: `python -m nych3.harvest.tech_ui`. Store total 40,071 loops (40,069 candidate, 2 canonical seed). No cross-domain links involve tech.ui.
+- Secondary pass not built; Gestalt cells blank (stage 10 not run). Full list: `REVIEW/LIMITATIONS.md`.

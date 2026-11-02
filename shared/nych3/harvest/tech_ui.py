@@ -8,7 +8,8 @@
   (spot check 21/40 correct). Nothing is promoted; canonical status still requires a named authority.
 Usage: python -m nych3.harvest.tech_ui [--db PATH] [--export DIR] [--replace]"""
 from __future__ import annotations
-import argparse, gzip, hashlib, json, re
+import argparse, gzip, hashlib, json, os, re
+import kuzu
 from pathlib import Path
 from ..config import SHARED
 from ..store.tote_db import ToteDB, DEFAULT_DB
@@ -28,14 +29,24 @@ def norm_obj(s: str) -> str:
 
 
 def ensure_schema(db: ToteDB):
+    """Migrate an older store in place (nych-3-pro stores predate these): SourceRef.sentence_text/flags, DOMAIN_LINK, INSTANCE_OF."""
     tables = {r["name"] for r in db.q("CALL show_tables() RETURN name")}
+    cols = {r["name"] for r in db.q("CALL table_info('SourceRef') RETURN name")}
+    if "sentence_text" not in cols:
+        db.c.execute("ALTER TABLE SourceRef ADD sentence_text STRING DEFAULT ''")
+    if "flags" not in cols:
+        db.c.execute("ALTER TABLE SourceRef ADD flags STRING[]")
+    if "DOMAIN_LINK" not in tables:
+        db.c.execute("CREATE REL TABLE DOMAIN_LINK(FROM Domain TO Domain, kind STRING, shared_loops INT64, evidence STRING, provenance STRING)")
     if "INSTANCE_OF" not in tables:
         db.c.execute(INSTANCE_DDL)
 
 
 def clear(db: ToteDB):
-    db.c.execute("MATCH (l:TOTELoop)-[:SOURCED_FROM]->(s:SourceRef) WHERE l.domain=$d DETACH DELETE s", {"d": DOMAIN})
-    db.c.execute("MATCH (l:TOTELoop) WHERE l.domain=$d DETACH DELETE l", {"d": DOMAIN})
+    while db.q("MATCH (s:SourceRef) WHERE s.ref_id STARTS WITH 'UI:' RETURN count(s) AS n")[0]["n"]:   # batched: bounded memory
+        db.c.execute("MATCH (s:SourceRef) WHERE s.ref_id STARTS WITH 'UI:' WITH s LIMIT 5000 DETACH DELETE s")
+    while db.q("MATCH (l:TOTELoop) WHERE l.domain=$d RETURN count(l) AS n", {"d": DOMAIN})[0]["n"]:
+        db.c.execute("MATCH (l:TOTELoop) WHERE l.domain=$d WITH l LIMIT 5000 DETACH DELETE l", {"d": DOMAIN})
     db.c.execute("MATCH (g:Gate) WHERE g.file_id='nych3.tech_ui.exit' DETACH DELETE g")
 
 
@@ -47,10 +58,23 @@ def modality(verb: str, canon: str) -> tuple[str, list]:
     return f"{verb},🙌 ; verify,👀²", [("OP-KE", f"{verb}|operate"), ("OP-VE", "verify|test")]
 
 
+BUFFER_POOL = int(os.environ.get("NYCH3_KUZU_BUFFER_POOL", str(2 << 30)))   # default 2 GiB; Kuzu's default (80% RAM) OOM-killed a 15.6 GB box
+
+
+def open_limited(db_path) -> ToteDB:
+    """Open the store with a bounded Kuzu buffer pool (creating + seeding it first if it does not exist)."""
+    p = Path(db_path)
+    if not p.exists():
+        ToteDB(p).close()
+    d = kuzu.Database(str(p), buffer_pool_size=BUFFER_POOL); db = ToteDB.__new__(ToteDB)
+    db.path, db.db, db.c = p, d, kuzu.Connection(d)
+    return db
+
+
 def ingest(db_path=DEFAULT_DB, export: Path = EXPORT, replace=False):
     export = Path(export)
     canon = json.loads((export / "canonical_actions.json").read_text(encoding="utf-8"))["actions"]
-    db = ToteDB(db_path)
+    db = open_limited(db_path)
     ensure_schema(db)
     if db.q("MATCH (l:TOTELoop) WHERE l.domain=$d RETURN count(l) AS n", {"d": DOMAIN})[0]["n"]:
         if not replace:
@@ -117,8 +141,9 @@ def ingest(db_path=DEFAULT_DB, export: Path = EXPORT, replace=False):
             db.c.execute("MATCH (l:TOTELoop {loop_id:$l}),(s:SourceRef {ref_id:$r}) CREATE (l)-[:SOURCED_FROM]->(s)", {"l": lid, "r": rid})
             st["source_refs"] += 1
         st["instance_loops"] += 1; st["instance_of"] += 1; st["modality_links"] += len(links); n += 1
-        if n % 2000 == 0:
-            db.c.execute("COMMIT"); db.c.execute("BEGIN TRANSACTION"); print("…", n, flush=True)
+        if n % 500 == 0:
+            db.c.execute("COMMIT"); db.c.close(); db.c = kuzu.Connection(db.db)   # fresh connection per batch bounds memory
+            db.c.execute("BEGIN TRANSACTION"); print("…", n, flush=True)
     db.c.execute("COMMIT")
     st["domain_links"] = db.refresh_domain_links()
     st["store_loops"] = db.count(); st["store_by_status"] = {s: db.count(s) for s in ("candidate", "canonical")}

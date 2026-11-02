@@ -71,3 +71,17 @@ every test run (non-failing; xfails only if a field collapses below a floor).
 - Source records: `SourceRef` (isbn, isbn_status, page, page_kind, page_method, fallback_gutenberg_id, sentence_text, flags), `SOURCED_FROM`, `HarvestSentence` ledger.
 - Symbol-only pattern store (schema only): `SymbolPattern`, `INSTANTIATES`, `PATTERN_OPERATOR`, `PATTERN_GESTALT`.
 - Ontology map: `stages/03-ontology/output/ONTOLOGY.md` · QSON hash chain: `stages/04-kg-run/qson_ledger.py`.
+
+## tech.ui domain (2026-11-02, PROVISIONAL / UNREVIEWED)
+Canonical UI actions harvested from 2,887 tech help-center articles (Microsoft 1,500, YouTube 436, Claude 367, Android 222, Chrome 197,
+Gemini 136, Apple 29) by the nych-ui-actions pipeline (copy in `REVIEW/tech_ui_pipeline/`).
+`shared/data/tech_ui/` holds the compact export (81 canonical actions + 63,487 mapped actions: URL, retrieval date, section/step,
+quote <= 25 words; no article text). Top-10/25/50/100 canonical actions cover 55.9/79.7/93.1/96.3% of 65,929 extracted actions.
+Ingest: `cd shared && python -m nych3.harvest.tech_ui [--replace]` -> 81 `TL-UI-<ACTION>` canonical-action loops (🙌 operate / 👀² verify,
+g8son gate `G-UI-<ACTION>`), 36,445 `TL-UI-I-*` instance loops (deduped by canonical+verb+object, `repeat_count`), 63,487 web `SourceRef`s,
+`INSTANCE_OF` instance->canonical. All rows `status=candidate`, `epistemic_status=PROVISIONAL`, `review_status=provisional_unreviewed`
+(spot check 21/40 correct, agent-graded). `tote.kuzu` stays gitignored.
+
+## Evaluation caveat
+The 300-sentence gold set (`tests/nych3/gold/`) is AGENT-GRADED, PENDING HUMAN REVIEW. See `REVIEW/LIMITATIONS.md` and
+`REVIEW/REVIEWER_BRIEF.md`; reproduce everything with `bash REVIEW/reproduce.sh`.
