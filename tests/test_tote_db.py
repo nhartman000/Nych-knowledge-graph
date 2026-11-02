@@ -24,7 +24,7 @@ def test_harvest_then_lookup(encode, db_path):
     db = ToteDB(db_path)
     row = db.get(st["tote"]["harvest_candidates"][0]["loop_id"])
     assert row["status"] == "candidate" and row["provenance"]["method"] == "HARVEST-NL-1"
-    del db
+    db.close()
     st2 = encode(name="t2")[0]
     inst = st2["tote"]["instances"][2]
     assert inst["template_id"].startswith("TL-H-NOTICE-WOLF-") and inst["template_status"] == "candidate"

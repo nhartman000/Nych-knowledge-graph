@@ -9,7 +9,7 @@ CREATE NODE TABLE Gate(gate_id STRING, file_id STRING, `order` INT64, type STRIN
 
 // ---- [kg] TOTELoop columns first, then NEW row-model cells (user TOTE DB model) ----
 // Each *_cell holds 'word,Gestalt' (Gestalt blank until stage 10). modality_cell holds every operator: 'loved,🫶 ; looking,👀¹'.
-CREATE NODE TABLE TOTELoop(loop_id STRING, name STRING, domain STRING, objective STRING, initial_test STRING, exit_predicate STRING, max_iterations INT64, epistemic_status STRING, modality_cell STRING, actor_cell STRING, action_cell STRING, object_cell STRING, perspective_cell STRING, exit_gate_id STRING, action_lemma STRING, object_lemma STRING, termination_triggers STRING, techniques STRING, status STRING, provenance STRING, version STRING, PRIMARY KEY(loop_id));
+CREATE NODE TABLE TOTELoop(loop_id STRING, name STRING, domain STRING, objective STRING, initial_test STRING, exit_predicate STRING, max_iterations INT64, epistemic_status STRING, modality_cell STRING, actor_cell STRING, action_cell STRING, object_cell STRING, perspective_cell STRING, exit_gate_id STRING, action_lemma STRING, object_lemma STRING, termination_triggers STRING, techniques STRING, status STRING, provenance STRING, version STRING, repeat_count INT64, structure_key STRING, PRIMARY KEY(loop_id));
 
 // ---- NEW: domain partition + commonality (5th dimension = a loop linked to >1 domain) ----
 CREATE NODE TABLE Domain(domain_id STRING, name STRING, PRIMARY KEY(domain_id));
@@ -24,3 +24,10 @@ CREATE NODE TABLE LexicalEntry(entry_id STRING, word_full STRING, lemma STRING, 
 CREATE NODE TABLE Occurrence(occ_id STRING, word_full STRING, doc_sha256 STRING, page_idx INT64, sent_idx INT64, char_start INT64, char_end INT64, PRIMARY KEY(occ_id));
 CREATE REL TABLE OCCURS_AS(FROM LexicalEntry TO Occurrence);
 CREATE REL TABLE MAPPED_TO(FROM LexicalEntry TO Gestalt, session STRING, status STRING, provenance STRING);
+
+// ---- NEW: batch harvester (shared/nych3/harvest) ----
+// Provenance per user: ISBN + page only at first. isbn may be null (never invented) -> gutenberg_id is a flagged fallback.
+CREATE NODE TABLE SourceRef(ref_id STRING, isbn STRING, isbn_status STRING, page STRING, page_kind STRING, page_method STRING, fallback_gutenberg_id STRING, sent_key STRING, PRIMARY KEY(ref_id));
+CREATE REL TABLE SOURCED_FROM(FROM TOTELoop TO SourceRef);
+// at-most-once ledger: every sentence key the harvester has processed, with its outcome
+CREATE NODE TABLE HarvestSentence(sent_key STRING, book_id STRING, sent_offset INT64, outcome STRING, PRIMARY KEY(sent_key));

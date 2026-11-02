@@ -14,7 +14,7 @@ SEED = SHARED / "data" / "tote_seed.json"
 DEFAULT_DB = SHARED / "data" / "tote.kuzu"
 COLS = ["loop_id", "name", "domain", "objective", "initial_test", "exit_predicate", "max_iterations", "epistemic_status",
         "modality_cell", "actor_cell", "action_cell", "object_cell", "perspective_cell", "exit_gate_id", "action_lemma",
-        "object_lemma", "termination_triggers", "techniques", "status", "provenance", "version"]
+        "object_lemma", "termination_triggers", "techniques", "status", "provenance", "version", "repeat_count", "structure_key"]
 JSON_COLS = {"termination_triggers", "techniques", "provenance"}
 STATUSES = ("candidate", "canonical")
 
@@ -41,6 +41,13 @@ class ToteDB:
                 self.c.execute(q)
             if seed:
                 self.load_seed()
+
+    def close(self):
+        """Release the Kuzu handle (required before reopening the same path in-process)."""
+        try:
+            self.c.close(); self.db.close()
+        except Exception:
+            pass
 
     def q(self, cypher, params=None):
         r = self.c.execute(cypher, params or {})
@@ -77,6 +84,7 @@ class ToteDB:
         rec = {k: row.get(k) for k in COLS}
         rec.update(status=status, provenance=provenance)
         rec["max_iterations"] = int(rec.get("max_iterations") or -1)
+        rec["repeat_count"] = int(rec.get("repeat_count") or 0)
         for k in JSON_COLS:
             rec[k] = json.dumps(rec[k] if rec[k] is not None else [], ensure_ascii=False)
         rec = {k: ("" if v is None else v) for k, v in rec.items()}
@@ -89,6 +97,27 @@ class ToteDB:
         if row.get("exit_gate_id"):
             self.c.execute("MATCH (g:Gate {gate_id:$g}),(l:TOTELoop {loop_id:$l}) CREATE (g)-[:GUARDS]->(l)",
                            dict(g=row["exit_gate_id"], l=row["loop_id"]))
+
+    def promote(self, loop_id: str, authority: str, note: str = ""):
+        """Candidate -> canonical. Requires a named authority. Never called automatically."""
+        if not authority or not authority.strip():
+            raise ValueError("promotion requires a named authority")
+        row = self.get(loop_id)
+        if row is None:
+            raise KeyError(loop_id)
+        prov_ = dict(row["provenance"] or {})
+        prov_.setdefault("promotions", []).append({"to": "canonical", "authority": authority, "note": note})
+        prov_["authority"] = authority
+        self.c.execute("MATCH (l:TOTELoop {loop_id:$l}) SET l.status='canonical', l.provenance=$p",
+                       {"l": loop_id, "p": json.dumps(prov_, ensure_ascii=False)})
+
+    def suggest_promotions(self, min_repeats: int = 5, min_sources: int = 2):
+        """SUGGESTION ONLY (not applied): candidates seen >= min_repeats times from >= min_sources distinct books."""
+        return self.q("MATCH (l:TOTELoop)-[:SOURCED_FROM]->(s:SourceRef) WHERE l.status='candidate' "
+                      "WITH l, count(DISTINCT s.fallback_gutenberg_id) AS books "
+                      "WHERE l.repeat_count >= $r AND books >= $b "
+                      "RETURN l.loop_id AS loop_id, l.name AS name, l.repeat_count AS repeats, books ORDER BY repeats DESC",
+                      {"r": min_repeats, "b": min_sources})
 
     def harvest(self, candidate: dict):
         """Persist a harvested candidate row (from natural language). Always status=candidate."""
