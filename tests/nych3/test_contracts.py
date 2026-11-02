@@ -2,7 +2,7 @@ import ast
 from pathlib import Path
 from nych3 import bonit
 
-PKG = Path(__file__).resolve().parents[1] / "shared" / "nych3"
+PKG = Path(__file__).resolve().parents[2] / "shared" / "nych3"
 FORBIDDEN = {"openai", "anthropic", "google", "requests", "httpx", "urllib", "socket", "http", "aiohttp"}
 
 

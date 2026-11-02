@@ -159,7 +159,7 @@ class Harvester:
         return "action", loops, None
 
     # ------------------------------------------------------------ persistence
-    def _write_loop(self, lp, book, para, ref_id, sent_key):
+    def _write_loop(self, lp, book, para, ref_id, sent_key, sentence_text=""):
         lid = lp["loop_id"]
         row = self.db.get(lid)
         prov_ref = {"isbn": book["isbn"], "isbn_status": book["isbn_status"], "page": para["page"], "page_kind": para["page_kind"],
@@ -195,9 +195,11 @@ class Harvester:
                 self.db.c.execute("MATCH (l:TOTELoop {loop_id:$l}),(d:Domain {domain_id:$d}) CREATE (l)-[:IN_DOMAIN {role:'cross_link',evidence:'same structure harvested in another domain',provenance:'harvester'}]->(d)",
                                   {"l": lid, "d": book["domain"]})
             new = False
-        self.db.c.execute("CREATE (:SourceRef {ref_id:$r,isbn:$i,isbn_status:$s,page:$p,page_kind:$k,page_method:$m,fallback_gutenberg_id:$g,sent_key:$sk})",
+        self.db.c.execute("CREATE (:SourceRef {ref_id:$r,isbn:$i,isbn_status:$s,page:$p,page_kind:$k,page_method:$m,fallback_gutenberg_id:$g,sent_key:$sk,sentence_text:$t,flags:$f})",
                           dict(r=ref_id, i=book["isbn"] or "", s=book["isbn_status"], p=para["page"], k=para["page_kind"],
-                               m=para["page_method"], g=str(book["gutenberg_id"]), sk=sent_key))
+                               m=para["page_method"], g=str(book["gutenberg_id"]), sk=sent_key, t=sentence_text,
+                               f=[x for x in (("isbn_null_gutenberg_fallback" if not book["isbn"] else ""),
+                                              ("page_derived" if para["page_kind"] != "printed" else "")) if x]))
         self.db.c.execute("MATCH (l:TOTELoop {loop_id:$l}),(s:SourceRef {ref_id:$r}) CREATE (l)-[:SOURCED_FROM]->(s)", {"l": lid, "r": ref_id})
         return new
 
@@ -247,7 +249,7 @@ class Harvester:
                         for n, lp in enumerate(loops):
                             self.stats["action_clauses"] += 1
                             self.stats["modality_unresolved"] += lp["modality_unresolved"]
-                            new = self._write_loop(lp, book, para, f"{key}#{n}", key)
+                            new = self._write_loop(lp, book, para, f"{key}#{n}", key, s["text"])
                             k = "loops_new" if new else "loops_repeat"
                             self.stats[k] += 1; pb[k] += 1
                             if new and len(self.stats["samples_new"]) < 40:
@@ -278,6 +280,7 @@ class Harvester:
                 continue
             if not self.run_book(b, max_sentences, deadline):
                 break
+        self.stats["domain_links"] = self.db.refresh_domain_links()
         self.stats["finished"] = datetime.now().isoformat(timespec="seconds")
         self.stats["stopped_by"] = "signal" if self.stop else ("limit" if (max_sentences or max_seconds) else "complete")
         self.save_stats()

@@ -1,6 +1,6 @@
 # TOTE batch harvester ("training" = populating the TOTE loop DB)
 
-Code: `shared/nych3/harvest/` (`source.py` fetch/pages, `harvester.py` extraction + persistence, `cli.py`). Sources: `_config/registries/harvest_sources.json`. Schema additions: `SourceRef`, `SOURCED_FROM`, `HarvestSentence`, and `TOTELoop.repeat_count` / `structure_key`, all in `shared/schemas/tote_kuzu.cypher`.
+Code: `shared/nych3/harvest/` (`source.py` fetch/pages, `harvester.py` extraction + persistence, `cli.py`). Sources: `_config/registries/harvest_sources.json`. Schema additions: `SourceRef`, `SOURCED_FROM`, `HarvestSentence`, and `TOTELoop.repeat_count` / `structure_key`, all in `stages/02-schema/output/schema.cypher`.
 
 ## Sources (public domain, verified 2026-11-01)
 Rights were checked from each Gutenberg HTML file's `<meta name="dc.rights">` (which reads "Public domain in the USA.") and from gutendex `copyright=false`.

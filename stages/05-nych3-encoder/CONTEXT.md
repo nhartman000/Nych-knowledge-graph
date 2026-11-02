@@ -4,7 +4,7 @@ Source spec: "NYCH Narrative Extraction and Dynamic TOTE Database" handoff (11-s
 
 ## User decisions (authoritative, 2026-11-01)
 1. Encoding is deterministic and runs before any LLM. Parsing/coreference is pluggable: rule-based default (offline), spaCy small optional (`--parser spacy|auto`).
-2. Storage: Kuzu 0.11.3, in the knowledge-graph schema style (`shared/schemas/tote_kuzu.cypher`).
+2. Storage: Kuzu 0.11.3, in the knowledge-graph schema style (`stages/02-schema/output/schema.cypher`).
 3. The .gst stays compatible with mg8-engine's `.gst` (verified with mg8-engine's own loaders and validator in `tests/test_mg8_compat.py`).
 4. TOTE loops are harvested from natural language until binding is a lookup. Rows carry provenance and status `candidate | canonical`. No nearest match; explicit `NO_MATCH` fallback.
 5. Page marking is UNDECIDED (open choice). Accepted now: form-feed, or a line `--- page N ---`; default single page. `expected_pages` and `completed_pages` are recorded.

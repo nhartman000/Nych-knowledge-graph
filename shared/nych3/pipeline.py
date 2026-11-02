@@ -3,7 +3,7 @@ writes its own; stage 09 writes <name>.gst and <name>.bonit."""
 from __future__ import annotations
 import json
 from pathlib import Path
-from .config import REPO
+from .config import NYCH3_STAGES
 from .stages import STAGES, sha
 from . import gst as gstmod, bonit
 
@@ -27,7 +27,7 @@ def s09_gst(state, out_dir: Path, name: str):
 
 
 def run(prompt: str, story: str, *, name: str = "run", root: Path | None = None, write_stage_outputs: bool = True, **opts):
-    root = Path(root) if root else REPO
+    root = Path(root) if root else NYCH3_STAGES
     state = {"input": {"prompt": prompt, "story": story, "name": name, **opts}}
     for stage, fn in STAGES:
         state = fn(state)
@@ -39,7 +39,7 @@ def run(prompt: str, story: str, *, name: str = "run", root: Path | None = None,
 
 def run_stage(stage_name: str, root: Path | None = None):
     """Run a single stage from its predecessor's output (ICM: read only previous output)."""
-    root = Path(root) if root else REPO
+    root = Path(root) if root else NYCH3_STAGES
     names = [s for s, _ in STAGES]
     if stage_name == "09_gst_pretext":
         state = json.loads((root / names[-1] / "output" / "state.json").read_text(encoding="utf-8"))

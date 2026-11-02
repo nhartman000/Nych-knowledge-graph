@@ -8,6 +8,9 @@ CONFIG = REPO / "_config"
 REGISTRIES = CONFIG / "registries"
 SHARED = REPO / "shared"
 SCHEMAS = SHARED / "schemas"
+STAGES = REPO / "stages"
+NYCH3_STAGES = STAGES / "05-nych3-encoder"   # ICM: nych3 stages 01-12 live here
+KG_SCHEMA = STAGES / "02-schema" / "output" / "schema.cypher"   # single source of DDL
 
 
 @functools.lru_cache(maxsize=None)

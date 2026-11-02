@@ -1,4 +1,5 @@
 // knowledge-graph schema — SINGLE SOURCE OF TRUTH. poc.py loads this file; do not duplicate DDL elsewhere.
+// [nych3] = NYCH 3.0 Pro encoder + harvester (shared/nych3); merged here, the former shared/schemas/tote_kuzu.cypher is retired.
 // Field provenance: [poc] nych-kg-poc/T.O.T.E-loops/nych registry; [g8son] g8son/schema/g8son.schema.json;
 // [mg8-runtime] mg8-runtime/src/mg8_runtime/runtime.py permit dict; [gst] gst/spec/gst_v1.md; [qson] qson/schema/qson.schema.json.
 // NEW = proposed here, not present in any source repo. One statement per line-group, terminated by ';'.
@@ -8,7 +9,10 @@ CREATE NODE TABLE Gestalt(gestalt_id STRING, glyph STRING, lexical_form STRING, 
 CREATE NODE TABLE Sense(sense_id STRING, gestalt STRING, surface_forms STRING[], cue_words STRING[], PRIMARY KEY(sense_id));
 CREATE NODE TABLE Span(span_id STRING, phrases STRING[], gestalt STRING, canonical_expression STRING, protected_invariants STRING[], PRIMARY KEY(span_id));
 CREATE NODE TABLE Operator(operator_id STRING, symbol STRING, canonical_name STRING, evidence_channel STRING, may_assert_action BOOLEAN, PRIMARY KEY(operator_id));
-CREATE NODE TABLE TOTELoop(loop_id STRING, name STRING, domain STRING, objective STRING, initial_test STRING, exit_predicate STRING, max_iterations INT64, epistemic_status STRING, PRIMARY KEY(loop_id));
+// TOTELoop: [poc] columns first (legacy rows fill only these), then [nych3] row-model cells.
+// *_cell = 'word,Gestalt' (Gestalt blank until stage 10); modality_cell lists every operator, e.g. 'loved,🫶 ; looking,👀¹'.
+// status: candidate | canonical (canonical needs a named authority in provenance). Legacy rows: status '' and epistemic_status CANONICAL/DRAFT.
+CREATE NODE TABLE TOTELoop(loop_id STRING, name STRING, domain STRING, objective STRING, initial_test STRING, exit_predicate STRING, max_iterations INT64, epistemic_status STRING, modality_cell STRING, actor_cell STRING, action_cell STRING, object_cell STRING, perspective_cell STRING, exit_gate_id STRING, action_lemma STRING, object_lemma STRING, termination_triggers STRING, techniques STRING, status STRING, provenance STRING, version STRING, repeat_count INT64, structure_key STRING, PRIMARY KEY(loop_id));
 CREATE NODE TABLE Step(step_key STRING, step_index INT64, phase STRING, plain_text STRING, nych_text STRING, proposition_kind STRING, provenance STRING, PRIMARY KEY(step_key));
 CREATE NODE TABLE Utterance(utt_id STRING, text STRING, PRIMARY KEY(utt_id));
 
@@ -43,3 +47,38 @@ CREATE REL TABLE OUTPUT_STATE(FROM QSONTrace TO GSTState);   // NEW edge; field 
 CREATE REL TABLE RECORDS(FROM QSONTrace TO Gate);            // NEW
 CREATE REL TABLE TRACE_OF(FROM QSONTrace TO Utterance);
 CREATE REL TABLE PRECEDES(FROM QSONTrace TO QSONTrace);
+
+// ======================= [nych3] additions (NEW) =======================
+// Modality operators (🫶 🙌 👀¹²³ 👁️ 👂 👂👂 💭 👁️‍🗨️ 👃 👅) are rows of the existing Operator table (ids OP-*), not a new table.
+CREATE REL TABLE USES_MODALITY(FROM TOTELoop TO Operator, word STRING);
+// Cell -> existing Gestalt / Sense tables (filled when stage 10 resolves a cell's Gestalt); no duplicate gestalt table.
+CREATE REL TABLE CELL_GESTALT(FROM TOTELoop TO Gestalt, cell STRING, word STRING, session STRING, provenance STRING);
+CREATE REL TABLE CELL_SENSE(FROM TOTELoop TO Sense, cell STRING, word STRING, provenance STRING);
+
+// ---- domain partitions + cross-domain links (commonality: one loop IN_DOMAIN of >1 domain) ----
+CREATE NODE TABLE Domain(domain_id STRING, name STRING, PRIMARY KEY(domain_id));
+CREATE REL TABLE IN_DOMAIN(FROM TOTELoop TO Domain, role STRING, evidence STRING, provenance STRING);
+CREATE REL TABLE DOMAIN_LINK(FROM Domain TO Domain, kind STRING, shared_loops INT64, evidence STRING, provenance STRING);
+
+// ---- measures invariants (_config/invariants/measures.json; weights are ordered classes, weight_source assumed_prior, never calibrated) ----
+CREATE NODE TABLE Measure(word STRING, kind STRING, sense_weight STRING, weight_source STRING, PRIMARY KEY(word));
+CREATE NODE TABLE MeasureRule(rule_id STRING, rank INT64, pattern STRING, effect STRING, PRIMARY KEY(rule_id));
+CREATE REL TABLE MEASURE_WEIGHT_IN(FROM Measure TO Domain, sense_weight STRING, weight_source STRING);
+
+// ---- lexical store (full words always kept; skeleton is an attribute, never a key) ----
+CREATE NODE TABLE LexicalEntry(entry_id STRING, word_full STRING, lemma STRING, skeleton STRING, protected BOOLEAN, PRIMARY KEY(entry_id));
+CREATE NODE TABLE Occurrence(occ_id STRING, word_full STRING, doc_sha256 STRING, page_idx INT64, sent_idx INT64, char_start INT64, char_end INT64, PRIMARY KEY(occ_id));
+CREATE REL TABLE OCCURS_AS(FROM LexicalEntry TO Occurrence);
+CREATE REL TABLE MAPPED_TO(FROM LexicalEntry TO Gestalt, session STRING, status STRING, provenance STRING);
+
+// ---- source records: ISBN + page; isbn may be '' (never invented) -> gutenberg id is a flagged fallback.
+// sentence_text is kept per row so quality can be judged exactly. flags e.g. isbn_null_gutenberg_fallback, page_derived.
+CREATE NODE TABLE SourceRef(ref_id STRING, isbn STRING, isbn_status STRING, page STRING, page_kind STRING, page_method STRING, fallback_gutenberg_id STRING, sent_key STRING, sentence_text STRING, flags STRING[], PRIMARY KEY(ref_id));
+CREATE REL TABLE SOURCED_FROM(FROM TOTELoop TO SourceRef);
+CREATE NODE TABLE HarvestSentence(sent_key STRING, book_id STRING, sent_offset INT64, outcome STRING, PRIMARY KEY(sent_key));
+
+// ---- symbol-only pattern store (SCHEMA ONLY; not populated yet). A pattern carries symbols/slots, never words. ----
+CREATE NODE TABLE SymbolPattern(pattern_id STRING, symbols STRING[], slots STRING[], structure_key STRING, arity INT64, provenance STRING, PRIMARY KEY(pattern_id));
+CREATE REL TABLE INSTANTIATES(FROM TOTELoop TO SymbolPattern, bindings STRING);
+CREATE REL TABLE PATTERN_OPERATOR(FROM SymbolPattern TO Operator, slot STRING);
+CREATE REL TABLE PATTERN_GESTALT(FROM SymbolPattern TO Gestalt, slot STRING);

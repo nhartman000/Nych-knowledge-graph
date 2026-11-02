@@ -1,7 +1,7 @@
 """Stage 10: build request -> provider (mock by default) -> validate (NYCH3 + mg8) -> proposed mappings.
 Persisting to Kuzu requires --approve (GATE.md)."""
 import sys, json, pathlib, argparse
-ROOT = pathlib.Path(__file__).resolve().parents[1]
+ROOT = pathlib.Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "shared"))
 from nych3.llm.gestalt_call import build_request, MockProvider, validate_plan, validate_with_mg8, fill_cells, persist
 from nych3.store.tote_db import ToteDB, DEFAULT_DB

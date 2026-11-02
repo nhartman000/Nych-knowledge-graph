@@ -7,9 +7,9 @@ from __future__ import annotations
 import json, re, shutil
 from pathlib import Path
 import kuzu
-from ..config import SCHEMAS, SHARED
+from ..config import CONFIG, KG_SCHEMA, SHARED
 
-SCHEMA = SCHEMAS / "tote_kuzu.cypher"
+SCHEMA = KG_SCHEMA
 SEED = SHARED / "data" / "tote_seed.json"
 DEFAULT_DB = SHARED / "data" / "tote.kuzu"
 COLS = ["loop_id", "name", "domain", "objective", "initial_test", "exit_predicate", "max_iterations", "epistemic_status",
@@ -25,7 +25,28 @@ def schema_statements(path: Path = SCHEMA):
     return [x.strip() for x in s.split(";") if x.strip()]
 
 
+_ATTACHED: dict = {}
+
+
 class ToteDB:
+    @classmethod
+    def on_connection(cls, conn, path=None):
+        """Wrap an already-open Kuzu connection (the shared knowledge-graph store). Registered by path so
+        encoder stages reuse it instead of opening a second Database on the same file (Kuzu forbids that)."""
+        self = cls.__new__(cls)
+        self.path, self.db, self.c = (Path(path) if path else None), None, conn
+        if path:
+            _ATTACHED[str(Path(path))] = self
+        return self
+
+    @classmethod
+    def open(cls, path):
+        return _ATTACHED.get(str(Path(path))) or cls(path)
+
+    @staticmethod
+    def detach(path):
+        _ATTACHED.pop(str(Path(path)), None)
+
     def __init__(self, path: str | Path = DEFAULT_DB, rebuild: bool = False, seed: bool = True, read_only: bool = False):
         self.path = Path(path)
         if rebuild:
@@ -44,6 +65,8 @@ class ToteDB:
 
     def close(self):
         """Release the Kuzu handle (required before reopening the same path in-process)."""
+        if self.db is None:      # borrowed connection: owner closes it
+            return
         try:
             self.c.close(); self.db.close()
         except Exception:
@@ -69,6 +92,32 @@ class ToteDB:
             self.add_gate(g)
         for row in d["loops"]:
             self.add_loop(row, status=row["status"], provenance=row["provenance"])
+        self.load_measures()
+
+    def load_measures(self, path: Path = CONFIG / "invariants" / "measures.json"):
+        """Master measures list -> Measure / MeasureRule / MEASURE_WEIGHT_IN(Domain). Weights stay ordered classes (assumed_prior)."""
+        m = json.loads(path.read_text(encoding="utf-8"))
+        src = m["weight_source"]
+        for rank, r in enumerate(m["context_rules"]):
+            self.c.execute("CREATE (:MeasureRule {rule_id:$i,rank:$r,pattern:$p,effect:$e})", dict(i=r["rule_id"], r=rank, p=r["pattern"], e=r["effect"]))
+        rev = {v: k for k, v in m.get("domain_aliases", {}).items()}
+        for w, e in m["entries"].items():
+            self.c.execute("CREATE (:Measure {word:$w,kind:$k,sense_weight:$s,weight_source:$src})", dict(w=w, k=e["kind"], s=e["sense_weight"], src=src))
+            for alias, wt in (e.get("domains") or {}).items():
+                dom = rev.get(alias, alias)
+                if not self.q("MATCH (d:Domain {domain_id:$d}) RETURN d.domain_id AS d", {"d": dom}):
+                    self.c.execute("CREATE (:Domain {domain_id:$a,name:$a})", {"a": dom})
+                self.c.execute("MATCH (x:Measure {word:$w}),(d:Domain {domain_id:$d}) CREATE (x)-[:MEASURE_WEIGHT_IN {sense_weight:$s,weight_source:$src}]->(d)",
+                               dict(w=w, d=dom, s=wt, src=src))
+
+    def refresh_domain_links(self):
+        """Derive DOMAIN_LINK edges from loops that sit in >1 domain (cross-domain commonality). Idempotent."""
+        self.c.execute("MATCH (:Domain)-[r:DOMAIN_LINK]->(:Domain) DELETE r")
+        pairs = self.q("MATCH (a:Domain)<-[:IN_DOMAIN]-(l:TOTELoop)-[:IN_DOMAIN]->(b:Domain) WHERE a.domain_id < b.domain_id "
+                       "RETURN a.domain_id AS a, b.domain_id AS b, count(DISTINCT l) AS n")
+        for p in pairs:
+            self.c.execute("MATCH (a:Domain {domain_id:$a}),(b:Domain {domain_id:$b}) CREATE (a)-[:DOMAIN_LINK {kind:'shared_loops',shared_loops:$n,evidence:'loops IN_DOMAIN of both',provenance:'derived'}]->(b)", p)
+        return pairs
 
     def add_gate(self, g):
         self.c.execute("CREATE (:Gate {gate_id:$i,file_id:$f,`order`:$o,type:$t,conditions:$c,outcomes:$u})",

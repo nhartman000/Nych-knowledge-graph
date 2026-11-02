@@ -129,7 +129,7 @@ def _chain(props, leaf):
 
 
 def s07_tote_bind(state):
-    db = ToteDB(state["input"].get("db_path") or DEFAULT_DB)
+    db = ToteDB.open(state["input"].get("db_path") or DEFAULT_DB)
     modreg = registry("modality")
     events = {e["event_id"]: e for e in state["temporal"]["events"]}
     props = state["semantics"]["propositions"]

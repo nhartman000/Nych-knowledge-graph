@@ -1,6 +1,6 @@
 """Stage 11: candidate paths with ordered likelihood classes; appends to output/trace.jsonl."""
 import sys, json, pathlib
-ROOT = pathlib.Path(__file__).resolve().parents[1]
+ROOT = pathlib.Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "shared"))
 from nych3.paths import candidate_paths, write_trace
 

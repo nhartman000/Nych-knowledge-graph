@@ -1,24 +1,24 @@
 # NYCH 3.0 Pro (first working version, 3.0.0-pre1)
 
-A fresh rebuild of the NYCH narrative encoder. Deterministic stages 01-09 run before any LLM and produce an mg8-engine-compatible `.gst` plus a `.bonit`. Not a retrofit of `nhartman000/nych`. Local repo only. Nothing has been pushed.
+A fresh rebuild of the NYCH narrative encoder. Deterministic stages 01-09 run before any LLM and produce an mg8-engine-compatible `.gst` plus a `.bonit`. Not a retrofit of `nhartman000/nych`. Merged into nhartman000/knowledge-graph (stage 05); the KG store is the shared store.
 
 Start with `CLAUDE.md` (routing) and `CONTEXT.md` (spec summary, user decisions, row model, modality table).
 
 ## Quick start
 ```bash
 python -m venv .venv && . .venv/bin/activate
-pip install -e '.[test]'            # kuzu==0.11.3, pyyaml, pytest, pydantic
+pip install -r requirements.txt -r requirements-dev.txt   (repo root)
 python -m nych3.store.tote_db       # build the seed TOTE DB (shared/data/tote.kuzu)
-nych3 encode --prompt "Encode this story with NYCH." --story tests/golden/peter/story.txt --name peter
-python 10_gestalt_llm/run.py 09_gst_pretext/output/peter.gst      # mock provider + validators (GATE 10 pending)
-python 11_paths/run.py 09_gst_pretext/output/peter.gst            # ordered likelihood classes, trace.jsonl
+nych3 encode --prompt "Encode this story with NYCH." --story tests/nych3/golden/peter/story.txt --name peter
+python stages/05-nych3-encoder/10_gestalt_llm/run.py stages/05-nych3-encoder/09_gst_pretext/output/peter.gst      # mock provider + validators (GATE 10 pending)
+python stages/05-nych3-encoder/11_paths/run.py stages/05-nych3-encoder/09_gst_pretext/output/peter.gst            # ordered likelihood classes, trace.jsonl
 pytest -q
 ```
 Optional: `pip install spacy && python -m spacy download en_core_web_sm`, then `--parser spacy` (or `auto`).
 mg8 compatibility tests need mg8-engine importable: `pip install --no-deps -e <mg8-engine>` plus its pinned deps `nych@57b81e9` and `TCTA@f2882c1` (installed with `--no-deps`). Without it, `tests/test_mg8_compat.py` is skipped and does not fail.
 
 ## Layout (ICM)
-`_config/` (nych3.bonit, schema_versions.yaml, registries/) · `shared/nych3/` (library) · `shared/schemas/tote_kuzu.cypher` · `shared/data/tote_seed.json` · `01_boot` … `12_mg8_handoff` (each with CONTEXT.md; `run.py` for 01-11; GATE.md at 10 and 11) · `tests/`.
+`_config/` (nych3.bonit, schema_versions.yaml, registries/) · `shared/nych3/` (library) · `stages/02-schema/output/schema.cypher` · `shared/data/tote_seed.json` · `01_boot` … `12_mg8_handoff` (each with CONTEXT.md; `run.py` for 01-11; GATE.md at 10 and 11) · `tests/nych3/`.
 
 ## Status
 | Stage | State |

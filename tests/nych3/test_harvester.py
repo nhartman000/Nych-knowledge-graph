@@ -60,6 +60,9 @@ def test_harvest_extracts_skips_and_dedupes(H):
     refs = h.db.q("MATCH (l:TOTELoop {loop_id:$l})-[:SOURCED_FROM]->(s:SourceRef) RETURN s.isbn AS i, s.isbn_status AS st, s.page AS p, "
                   "s.page_kind AS k, s.fallback_gutenberg_id AS g ORDER BY p", {"l": plane["id"]})
     assert [(x["i"], x["p"], x["k"], x["g"]) for x in refs] == [("", "12", "printed", "1"), ("", "13", "printed", "1")]
+    txt = h.db.q("MATCH (l:TOTELoop {loop_id:$l})-[:SOURCED_FROM]->(s:SourceRef) RETURN s.sentence_text AS t, s.flags AS f", {"l": plane["id"]})
+    assert all("plane" in x["t"].lower() for x in txt)                       # sentence text kept per row
+    assert all("isbn_null_gutenberg_fallback" in x["f"] for x in txt)
     stats = json.loads(next((h.out / "runs").glob("*.json")).read_text())
     assert stats["loops_new"] == st["loops_new"] and "no_match" in stats and "errors" in stats
 
