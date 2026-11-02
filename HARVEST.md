@@ -37,3 +37,14 @@ $VENV/python -m nych3.harvest.cli suggest --min-repeats 5 --min-sources 2
 $VENV/python -m nych3.harvest.cli promote TL-H-xxxxxxxxxxxx --authority "N Hartman"
 ```
 **Scheduled job:** because every run resumes from the checkpoint and ledger, a cron entry such as `0 2 * * * cd /workspace/nych-3-pro && flock -n /tmp/nych3-harvest.lock /workspace/nych3pro-venv/bin/python -m nych3.harvest.cli run --max-seconds 3300 >> shared/data/harvest/harvest.log 2>&1` (or a systemd timer, or a Grok Bot routine running that command) adds work each night. `flock` matters because Kuzu allows only one writer. When all books are `done`, add more books to `harvest_sources.json`.
+
+## Quality layer (v3.1)
+- **Parser:** spaCy en_core_web_sm is the default (`--parser auto`). Imperatives get a "you " prefix injected; mood carries over through conj/ccomp.
+- **Apparatus filter:** drops ALL-CAPS captions, Fig./Plate lines, transcriber's notes and page notes. Descriptive, stative and agentless-descriptive passive sentences are rejected, with the reasons recorded in run stats.
+- **Measures:** `_config/invariants/measures.json` is the MASTER list of measurements and quantity modifiers, shared across domains, with per-domain overrides.
+  - Every sense_weight is an ordered class (high/medium/low) and a hand-set **assumed_prior**. None are calibrated.
+  - Context rules, applied in order, override the weight: MEAS-WORTH (always an amount), MEAS-NUM-BEFORE, MEAS-A-X-OF, MEAS-WITH-TOOL, MEAS-DEFINITE-REFERENCE.
+- **Exits:** the provenance tier `implied_by_text` ranks explicit > implied_by_text > inferred.
+  - Explicit exits: "until X", "for N minutes".
+  - Implied by text: destinations (ride to the store gives actor_location == store), into/onto placements, result states, bare durations.
+- **'with' resolution:** an instrument-class noun becomes the tool; an ingredient-class noun becomes a co-object with role with_ingredient; anything else stays unresolved, marked "(?)".
