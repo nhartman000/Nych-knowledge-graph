@@ -1,7 +1,7 @@
 name: ci
 on:
   push:
-    branches: [main, nych3-integration]
+    branches: [main, master, nych3-integration]
   pull_request:
 jobs:
   test:
