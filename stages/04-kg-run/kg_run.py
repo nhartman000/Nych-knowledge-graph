@@ -1,12 +1,15 @@
-"""knowledge-graph runner: NYCH grounding -> TOTE loop -> KG gate -> Permit/GST/trace (Kuzu embedded).
+"""knowledge-graph runner (replaces the retired POC runner poc.py):
+NYCH 3.0 encoder (shared/nych3, stages/05-nych3-encoder) -> TOTE loop in the shared KG store -> KG gate
+-> Permit/GST/QSON hash-chain trace (Kuzu embedded). If the nych3 encoder finds no TOTE row, the legacy
+vendored-nych grounding adapter is tried for the legacy loop set (match_method says which one fired).
 
 Usage:
-  python poc.py "repair the failing unit test bug"
-  python poc.py --file sentences.txt        # one sentence per line
-  echo "sentence" | python poc.py -         # stdin
-  python poc.py ... --rebuild               # drop and reload the persistent store
-  python poc.py ... --force-demo            # run before stage 03 is APPROVED; writes to demo_pre_approval/
-  python poc.py verify path/to/run.qson [...] # check QSON hash chain / tampering
+  python kg_run.py "repair the failing unit test bug"
+  python kg_run.py --file sentences.txt        # one sentence per line
+  echo "sentence" | python kg_run.py -         # stdin
+  python kg_run.py ... --rebuild               # drop and reload the persistent store
+  python kg_run.py ... --force-demo            # run before stage 03 is APPROVED; writes to demo_pre_approval/
+  python kg_run.py verify path/to/run.qson [...] # check QSON hash chain / tampering
 DDL is loaded from stages/02-schema/output/schema.cypher (single source).
 """
 from __future__ import annotations
@@ -24,6 +27,12 @@ sys.path.insert(0, str(SH / 'vendor' / 'nych'))
 from nych.gestalt_handoff import build_handoff  # noqa: E402
 sys.path.insert(0, str(HERE))
 import qson_ledger  # noqa: E402
+sys.path.insert(0, str(SH))
+from nych3.store.tote_db import ToteDB  # noqa: E402
+from nych3.pipeline import run as nych3_run  # noqa: E402
+import tempfile  # noqa: E402
+
+_DB_PATH: dict = {}   # id(connection) -> store path (lets nych3 stages reuse the open connection)
 
 STAGE03_GATE = ROOT / 'stages' / '03-ontology' / 'output' / 'GATE.md'
 DEMO_DIR = HERE / 'demo_pre_approval'
@@ -79,7 +88,26 @@ def open_db(db_path: Path, rebuild: bool = False):
         for q in schema_statements():
             c.execute(q)
         load_base(c)
+        ToteDB.on_connection(c).load_seed()   # nych3 operators, domains, gates, seed loops, measures
+    ToteDB.on_connection(c, db_path)
+    _DB_PATH[id(c)] = str(db_path)
     return c
+
+
+def nych3_encode(c, text: str):
+    """Run the NYCH 3.0 encoder (stages 01-09) against the shared store. Returns the first bound TOTE
+    instance as (loop_id, method, grounded_words, status) or None."""
+    path = _DB_PATH.get(id(c))
+    if not path:
+        return None
+    with tempfile.TemporaryDirectory() as td:
+        _, g, _, _ = nych3_run('Encode this sentence with NYCH.', text, name='kg', root=Path(td), write_stage_outputs=False, db_path=path)
+    for inst in g['nych3']['tote']['instances']:
+        if inst.get('template_id') and inst['template_id'] != 'NO_MATCH':
+            key = [k for k in inst['retrieval']['key'] if k and k != '*']
+            st = c.execute('MATCH (l:TOTELoop{loop_id:$l}) RETURN l.status', dict(l=inst['template_id'])).get_next()[0]
+            return inst['template_id'], 'nych3:' + inst['retrieval']['method'], key, st
+    return None
 
 
 def load_base(c):
@@ -152,7 +180,12 @@ def gestalt_ids_for(c, words):
 
 
 def run_sentence(c, text: str) -> dict:
+    n3 = nych3_encode(c, text)
+    if n3:
+        return _run_nych3(c, text, *n3)
     h = build_handoff(text, db_path=str(TOTE)); t = h.get('tote') or {}
+    if t.get('match_method'):
+        t['match_method'] = 'legacy:' + t['match_method']
     loop_id = (t.get('loop') or {}).get('loop_id')
     uid = 'UTT-' + sha(text)[:12]
     run_id = 'RUN-' + uid + '-' + uuid.uuid4().hex[:12]  # unique per execution (QSON §2)
@@ -167,8 +200,25 @@ def run_sentence(c, text: str) -> dict:
         status = c.execute('MATCH (l:TOTELoop{loop_id:$l}) RETURN l.epistemic_status', dict(l=loop_id)).get_next()[0]
         ids = [g for g, _ in grounded]
         in_loop = c.execute('MATCH (l:TOTELoop{loop_id:$l})-[:USES_GESTALT]->(g:Gestalt) WHERE g.gestalt_id IN $ids RETURN count(DISTINCT g)', dict(l=loop_id, ids=ids)).get_next()[0]
-    result = evaluate_gate(status, len(grounded), in_loop)
-    evaluation = {'gate_id': GATE_ID, 'loop_id': loop_id, 'epistemic_status': status, 'grounded': [g for g, _ in grounded], 'in_loop': in_loop, 'result': result}
+    return _finish(c, text, uid, run_id, loop_id, t.get('match_method'), t.get('matched_words'), status, [g for g, _ in grounded], in_loop)
+
+
+def _run_nych3(c, text, loop_id, method, words, status):
+    """nych3 path: grounding = the structured lookup key (action_lemma, object_lemma); in_loop = key parts equal to
+    the loop's own lemmas. CANONICAL only for status=canonical rows (named authority), else CANDIDATE -> INTERMEDIATE."""
+    uid = 'UTT-' + sha(text)[:12]
+    run_id = 'RUN-' + uid + '-' + uuid.uuid4().hex[:12]
+    c.execute('MERGE (:Utterance{utt_id:$u,text:$t})', dict(u=uid, t=text))
+    c.execute('MATCH (u:Utterance{utt_id:$u}),(l:TOTELoop{loop_id:$l}) MERGE (u)-[:SELECTED_LOOP{match_method:$m}]->(l)', dict(u=uid, l=loop_id, m=method))
+    c.execute('MATCH (g:Gate{gate_id:$g}),(l:TOTELoop{loop_id:$l}) MERGE (g)-[:GUARDS]->(l)', dict(g=GATE_ID, l=loop_id))
+    a, o = c.execute('MATCH (l:TOTELoop{loop_id:$l}) RETURN l.action_lemma, l.object_lemma', dict(l=loop_id)).get_next()
+    in_loop = sum(1 for w in words if w in (a, o))
+    return _finish(c, text, uid, run_id, loop_id, method, words, 'CANONICAL' if status == 'canonical' else 'CANDIDATE', words, in_loop)
+
+
+def _finish(c, text, uid, run_id, loop_id, match_method, matched_words, status, grounded_ids, in_loop):
+    result = evaluate_gate(status, len(grounded_ids), in_loop)
+    evaluation = {'gate_id': GATE_ID, 'loop_id': loop_id, 'epistemic_status': status, 'grounded': grounded_ids, 'in_loop': in_loop, 'result': result}
     in_state = {'state_id': f'gst:{run_id}:in', 'gst_version': '1.0', 'internal': canon({'current': {'mode': 'utterance_received'}}),
                 'external': canon({'current': {'utterance': text}}), 'continuity': canon({}), 'intent': text,
                 'outcome_expectation': 'select one CANONICAL TOTE loop consistent with grounding', 'constraints': canon({'gate': GATE_ID})}
@@ -186,7 +236,7 @@ def run_sentence(c, text: str) -> dict:
                   dict(p=permit_id, r=run_id, u=uid, e=exp, d=sha(canon(evaluation)), l=loop_id))
         c.execute('MATCH (g:Gate{gate_id:$g}),(p:Permit{permit_id:$p}) CREATE (g)-[:ISSUES]->(p)', dict(g=GATE_ID, p=permit_id))
         c.execute('MATCH (p:Permit{permit_id:$p}),(l:TOTELoop{loop_id:$l}) CREATE (p)-[:AUTHORIZES]->(l)', dict(p=permit_id, l=loop_id))
-    return dict(text=text, utt_id=uid, run_id=run_id, loop_id=loop_id, match_method=t.get('match_method'), matched_words=t.get('matched_words'),
+    return dict(text=text, utt_id=uid, run_id=run_id, loop_id=loop_id, match_method=match_method, matched_words=matched_words,
                 evaluation=evaluation, result=result, input_state_id=in_state['state_id'], output_state_id=out_state_id, permit_id=permit_id)
 
 
@@ -250,7 +300,7 @@ def main(argv=None):
     if st != 'APPROVED': print(f'WARNING: stage 03 gate is {st}; PRE-APPROVAL DEMO run -> {base}', file=sys.stderr)
     args.db = args.db or str(base / 'kg.kuzu'); args.trace_dir = args.trace_dir or str(base / 'traces')
     c = open_db(Path(args.db), rebuild=args.rebuild)
-    print('LOADED', {t: count(c, t) for t in 'Gestalt Sense Span Operator TOTELoop Step Gate'.split()})
+    print('LOADED', {t: count(c, t) for t in 'Gestalt Sense Span Operator TOTELoop Step Gate Domain Measure MeasureRule'.split()})
     for text in sentences:
         run = run_sentence(c, text); qp = record_trace(c, run, Path(args.trace_dir))
         print(json.dumps({**{k: run[k] for k in ('text', 'loop_id', 'matched_words', 'result', 'permit_id')}, 'qson': str(qp)}, ensure_ascii=False))

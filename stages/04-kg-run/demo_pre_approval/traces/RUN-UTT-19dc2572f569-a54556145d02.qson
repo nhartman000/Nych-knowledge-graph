@@ -1,0 +1,112 @@
+{
+  "events": [
+    {
+      "action": "continue",
+      "actor": {
+        "id": "knowledge-graph/poc.py",
+        "type": "runtime"
+      },
+      "event_hash": "30c518584ae394d85d764118beff8a4548373ea1eb740bca52bb674ed6f1d311",
+      "event_type": "external_input",
+      "evidence": {
+        "match_method": "gestalt-lexical",
+        "matched_words": [
+          "test",
+          "pass"
+        ],
+        "utterance": "the test passes"
+      },
+      "input_state_id": "gst:RUN-UTT-19dc2572f569-a54556145d02:in",
+      "previous_event_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "run_id": "RUN-UTT-19dc2572f569-a54556145d02",
+      "sequence": 1,
+      "timestamp": "2026-11-01T21:42:32Z",
+      "trace_id": "trace-RUN-UTT-19dc2572f569-a54556145d02-000001"
+    },
+    {
+      "action": "continue",
+      "actor": {
+        "id": "knowledge-graph/poc.py",
+        "type": "runtime"
+      },
+      "event_hash": "a22f95ed393d8106ed27a34f000c95af5aaf7b7f89b8cfd0698c0ef7ee603c1a",
+      "event_type": "gate_attempt",
+      "evidence": {
+        "epistemic_status": "CANONICAL",
+        "gate_id": "kg.grounding.consistent",
+        "grounded": [
+          "pass",
+          "test"
+        ],
+        "in_loop": 2,
+        "loop_id": "ai.model_evaluation",
+        "result": "PASS"
+      },
+      "file_id": "knowledge-graph.kg-gates.001",
+      "gate_id": "kg.grounding.consistent",
+      "input_state_id": "gst:RUN-UTT-19dc2572f569-a54556145d02:in",
+      "operation": "ai.model_evaluation",
+      "output_state_id": "gst:RUN-UTT-19dc2572f569-a54556145d02:out",
+      "previous_event_hash": "30c518584ae394d85d764118beff8a4548373ea1eb740bca52bb674ed6f1d311",
+      "references": [
+        "trace-RUN-UTT-19dc2572f569-a54556145d02-000001"
+      ],
+      "result": "PASS",
+      "run_id": "RUN-UTT-19dc2572f569-a54556145d02",
+      "sequence": 2,
+      "timestamp": "2026-11-01T21:42:32Z",
+      "trace_id": "trace-RUN-UTT-19dc2572f569-a54556145d02-000002"
+    },
+    {
+      "action": "permit_issued",
+      "actor": {
+        "id": "knowledge-graph/poc.py",
+        "type": "runtime"
+      },
+      "event_hash": "85c221e5efcda34c57d55a1d23609325db22964e51208d900d5c3d8d3dd092d8",
+      "event_type": "review",
+      "evidence": {
+        "permit_id": "PERMIT-6b31aaf1ab00e228"
+      },
+      "gate_id": "kg.grounding.consistent",
+      "previous_event_hash": "a22f95ed393d8106ed27a34f000c95af5aaf7b7f89b8cfd0698c0ef7ee603c1a",
+      "references": [
+        "trace-RUN-UTT-19dc2572f569-a54556145d02-000002"
+      ],
+      "run_id": "RUN-UTT-19dc2572f569-a54556145d02",
+      "sequence": 3,
+      "timestamp": "2026-11-01T21:42:32Z",
+      "trace_id": "trace-RUN-UTT-19dc2572f569-a54556145d02-000003"
+    },
+    {
+      "action": "continue",
+      "actor": {
+        "id": "knowledge-graph/poc.py",
+        "type": "runtime"
+      },
+      "event_hash": "eec49889daaddf7e09fe6b9d97c841c5a792928c88610dfac1e2df764a6588b1",
+      "event_type": "state_commit",
+      "evidence": {
+        "permit_id": "PERMIT-6b31aaf1ab00e228"
+      },
+      "input_state_id": "gst:RUN-UTT-19dc2572f569-a54556145d02:in",
+      "operation": "ai.model_evaluation",
+      "output_state_id": "gst:RUN-UTT-19dc2572f569-a54556145d02:out",
+      "previous_event_hash": "85c221e5efcda34c57d55a1d23609325db22964e51208d900d5c3d8d3dd092d8",
+      "references": [
+        "trace-RUN-UTT-19dc2572f569-a54556145d02-000003"
+      ],
+      "run_id": "RUN-UTT-19dc2572f569-a54556145d02",
+      "sequence": 4,
+      "timestamp": "2026-11-01T21:42:32Z",
+      "trace_id": "trace-RUN-UTT-19dc2572f569-a54556145d02-000004"
+    }
+  ],
+  "metadata": {
+    "hash_profile": "kg-sha256-chain-v1",
+    "text": "the test passes",
+    "utt_id": "UTT-19dc2572f569"
+  },
+  "qson_version": "1.0",
+  "run_id": "RUN-UTT-19dc2572f569-a54556145d02"
+}

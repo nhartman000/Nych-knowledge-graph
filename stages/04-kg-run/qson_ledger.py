@@ -14,7 +14,7 @@ SCHEMA = Path(__file__).resolve().parents[2] / 'shared' / 'qson' / 'qson.schema.
 QSON_VERSION = '1.0'
 PROFILE = 'kg-sha256-chain-v1'
 GENESIS = '0' * 64
-ACTOR = {'type': 'runtime', 'id': 'knowledge-graph/poc.py'}
+ACTOR = {'type': 'runtime', 'id': 'knowledge-graph/kg_run.py'}
 
 
 def canonical(o) -> str:

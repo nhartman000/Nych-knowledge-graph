@@ -1,8 +1,10 @@
 import copy, json, subprocess, sys
 import pytest
 import kuzu
-import poc, qson_ledger
-from conftest import ROOT
+import qson_ledger
+import kg_run as poc
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def one(c, q, **p):
@@ -12,9 +14,12 @@ def one(c, q, **p):
 def test_schema_is_single_source_and_loads(conn):
     stmts = poc.schema_statements()
     assert len(stmts) >= 25
-    assert 'CREATE NODE TABLE' not in (ROOT / 'stages/04-poc-run/poc.py').read_text().replace("'CREATE NODE TABLE'", '')
-    for t, n in {'Gestalt': 32, 'Sense': 14, 'Span': 11, 'Operator': 4, 'TOTELoop': 22, 'Step': 132, 'Gate': 1}.items():
+    assert 'CREATE NODE TABLE' not in (ROOT / 'stages/04-kg-run/kg_run.py').read_text().replace("'CREATE NODE TABLE'", '')
+    # unified store: legacy POC set + NYCH 3.0 seed (10 modality operators, 2 loops, 2 exit gates)
+    for t, n in {'Gestalt': 32, 'Sense': 14, 'Span': 11, 'Operator': 14, 'TOTELoop': 24, 'Step': 132, 'Gate': 3}.items():
         assert poc.count(conn, t) == n, t
+    assert one(conn, "MATCH (l:TOTELoop) WHERE l.action_lemma IS NULL RETURN count(l)") == 22      # legacy rows
+    assert one(conn, "MATCH (o:Operator) WHERE o.operator_id STARTS WITH 'OP-' RETURN count(o)") == 10
 
 
 def test_every_sense_and_span_linked_to_gestalt(conn):
@@ -86,7 +91,7 @@ def test_tamper_detected(ledger, tamper):
 def test_verify_cli_detects_tamper(ledger, tmp_path):
     good = qson_ledger.write(ledger, tmp_path / 'g.qson')
     bad = tmp_path / 'b.qson'; bad.write_text(good.read_text().replace('"PASS"', '"FAIL"'))
-    py = [sys.executable, str(ROOT / 'stages/04-poc-run/poc.py'), 'verify']
+    py = [sys.executable, str(ROOT / 'stages/04-kg-run/kg_run.py'), 'verify']
     assert subprocess.run(py + [str(good)]).returncode == 0
     assert subprocess.run(py + [str(bad)]).returncode == 1
 
@@ -112,7 +117,7 @@ def test_stage_gate_enforced(tmp_path):
 
 def test_cli_refuses_then_force_demo_stdin(tmp_path):
     g = tmp_path / 'GATE.md'; g.write_text('status: PENDING\n')
-    py = [sys.executable, str(ROOT / 'stages/04-poc-run/poc.py')]
+    py = [sys.executable, str(ROOT / 'stages/04-kg-run/kg_run.py')]
     r = subprocess.run(py + ['x', '--gate-file', str(g)], capture_output=True, text=True)
     assert r.returncode == 2 and 'REFUSED' in r.stderr
     r = subprocess.run(py + ['-', '--force-demo', '--gate-file', str(g), '--db', str(tmp_path / 'kg.kuzu'), '--trace-dir', str(tmp_path / 'tr')],
