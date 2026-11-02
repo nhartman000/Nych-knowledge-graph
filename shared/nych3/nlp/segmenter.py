@@ -9,9 +9,9 @@ expected_pages may be supplied by the caller; completed_pages is what was built.
 from __future__ import annotations
 import re
 
-TOKEN_RE = re.compile(r"[A-Za-z]+(?:['’][A-Za-z]+)*|\d+(?:\.\d+)?|\.\.\.|…|[^\sA-Za-z\d]")
+TOKEN_RE = re.compile(r"[A-Za-z]+(?:['’-][A-Za-z]+)*|\d+(?:\.\d+)?|\.\.\.|…|[^\sA-Za-z\d]")
 PAGE_MARK_RE = re.compile(r"^[ \t]*-{3}[ \t]*page[ \t]+(\d+)[ \t]*-{3}[ \t]*$", re.I | re.M)
-ABBREV = {"mr", "mrs", "ms", "dr", "st", "jr", "sr", "prof", "mt", "vs", "etc"}
+ABBREV = {"mr", "mrs", "ms", "dr", "st", "jr", "sr", "prof", "mt", "vs", "etc", "fig", "figs", "no", "nos", "vol", "ch", "pp", "p", "e.g", "i.e", "approx", "oz", "lb", "lbs", "tbsp", "tsp", "pt", "qt", "ft", "doz"}
 TERMINATORS = {".", "!", "?", "...", "…"}
 CLOSERS = {'"', "”", "’", "'", ")"}
 QUOTES_OPEN = {'"', "“"}

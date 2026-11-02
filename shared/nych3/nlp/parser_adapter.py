@@ -46,6 +46,10 @@ def verb_lemma(word: str):
                 if c in verbs:
                     return c, tag, "LEM-LEXICON"
             if suf in ("ed", "ing"):
+                D = dictionary()
+                for c in ([stem[:-1]] if len(stem) > 2 and stem[-1] == stem[-2] else []) + [stem + "e", stem]:
+                    if c in D and len(c) > 2:
+                        return c, tag, "LEM-DICTIONARY"
                 # unknown verb: rule guess. English stems never end in v/c(not ck)/z/u -> restore 'e'
                 if suf == "ed" and len(stem) > 2 and stem.endswith("i") and stem[-2] not in "aeiou":
                     return stem[:-1] + "y", tag, "LEM-RULE-IED"
@@ -88,6 +92,8 @@ class RuleParser:
             r = dict(t, lemma=lw, tag=None, morph={}, rule="POS-DEFAULT")
             if not w[:1].isalnum():
                 r.update(pos="PUNCT")
+            elif w[:1].isdigit():
+                r.update(pos="NUM", rule="POS-DIGIT")
             elif lw in poss and not (lw == "her" and (not nxt or nxt in preps or not nxt[:1].isalpha())):
                 r.update(pos="POSS", morph=poss[lw], rule="POS-CLOSED")
             elif lw in prons:
@@ -102,6 +108,8 @@ class RuleParser:
                 r.update(pos="PART", rule="POS-TO-INF")
             elif lw in preps:
                 r.update(pos="ADP", rule="POS-CLOSED")
+            elif lw in set(L.get("function_words", [])):
+                r.update(pos="SCONJ", rule="POS-CLOSED")
             elif lw in conj:
                 r.update(pos="CCONJ", rule="POS-CLOSED")
             elif lw in advs:
@@ -110,6 +118,9 @@ class RuleParser:
                 r.update(pos="PROPN", lemma=w, rule="POS-CAP-MIDSENT")
             elif lw in adjs:
                 r.update(pos="ADJ", rule="POS-ADJ-LIST")
+            elif (i == first_word or (prev is not None and prev["text"] in (";", ":"))) and lw in verbs and lw not in set(L.get("not_imperative_initial", [])) and (i + 1 >= len(words) or words[i + 1].lower() not in prons):
+                # sentence-initial base verb = imperative candidate (beats irregular homographs: 'Saw the board')
+                r.update(pos="VERB", lemma=lw, tag="VB", rule="POS-INITIAL-BASE-VERB")
             else:
                 vl = verb_lemma(w)
                 prev_pos = prev["pos"] if prev else None
@@ -120,21 +131,30 @@ class RuleParser:
                         tag = "VBN"
                     if tag == "VB" and prev and prev["pos"] in ("PRON", "PROPN", "NOUN") and lw == lemma:
                         tag = "VBP"
-                    if tag == "VBZ" and after_det:
+                    if tag in ("VBD", "VBN") and after_det:
+                        r.update(pos="ADJ", rule="POS-PARTICIPLE-AFTER-DET")
+                    elif tag == "VBZ" and after_det:
                         r.update(pos="NOUN", lemma=noun_lemma(w), rule="POS-NOUN-AFTER-DET")
                     else:
                         r.update(pos="VERB", lemma=lemma, tag=tag, rule=rule)
+                elif lw.endswith("ly") and len(lw) > 4:
+                    r.update(pos="ADV", rule="POS-LY")
                 else:
                     r.update(pos="NOUN", lemma=noun_lemma(w), rule="POS-NOUN-DEFAULT")
             if r["pos"] == "NOUN" and r["lemma"] in timen:
                 r["morph"] = {"time_noun": True}
             out.append(r)
+        # 'Chisel boards are ...': an initial base verb followed by NOUN + finite verb is a noun-phrase subject.
+        for i in range(len(out) - 2):
+            if out[i]["rule"] == "POS-INITIAL-BASE-VERB" and out[i + 1]["pos"] == "NOUN" and \
+                    (out[i + 2]["pos"] == "AUX" or out[i + 2].get("tag") in ("VBZ", "VBD", "VBP")):
+                out[i].update(pos="NOUN", tag=None, lemma=noun_lemma(out[i]["text"]), rule="POS-INITIAL-NOUN-COMPOUND-SUBJECT")
         # Sentence-initial capitalized word: name heuristic (fixes 'Peter unprotected').
         if out and out[first_word]["pos"] not in ("PUNCT",):
             f = out[first_word]
             lw = f["text"].lower()
             nxt = out[first_word + 1] if first_word + 1 < len(out) else None
-            if f["text"][:1].isupper() and lw not in openers and f["pos"] in ("NOUN", "VERB", "ADJ"):
+            if f["text"][:1].isupper() and lw not in openers and f["pos"] in ("NOUN", "VERB", "ADJ") and f["rule"] != "POS-INITIAL-BASE-VERB":
                 undefined = lw not in dictionary()
                 followed_by_verb = nxt is not None and (nxt["pos"] in ("VERB", "AUX"))
                 plural_common = lw.endswith("s") and noun_lemma(lw) in dictionary()

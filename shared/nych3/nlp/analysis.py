@@ -37,7 +37,8 @@ def clauses(sent):
     for i, t in enumerate(T):
         if t["text"] == ";":
             cuts.append((start, i)); start = i + 1
-        elif t["pos"] == "CCONJ" and i + 2 < len(T) and T[i + 1]["pos"] in ("PRON", "PROPN") and T[i + 2]["pos"] in ("VERB", "AUX"):
+        elif t["pos"] == "CCONJ" and ((i + 2 < len(T) and T[i + 1]["pos"] in ("PRON", "PROPN") and T[i + 2]["pos"] in ("VERB", "AUX"))
+                                      or (i + 1 < len(T) and T[i + 1]["pos"] == "VERB" and T[i + 1].get("tag") == "VB")):
             end = i - 1 if i > 0 and T[i - 1]["text"] == "," else i
             cuts.append((start, end)); start = i + 1
     cuts.append((start, len(T)))
@@ -148,15 +149,24 @@ def temporal(structure, tagged):
                 body = k + 1 + (1 if k + 1 < b and T[k + 1]["text"] == "," else 0)
             else:
                 body = a
+            subord = None
+            if body < b and T[body]["text"].lower() in set(L.get("subordinators", [])):
+                comma = next((x for x in range(body, b) if T[x]["text"] == ","), None)
+                if comma is not None:
+                    subord = (body, comma - 1); body = comma + 1
+            lead = body
+            while lead < b and (T[lead]["pos"] in ("ADV", "CCONJ") or T[lead]["text"] in (",", ":")):
+                lead += 1
             # verb group
             v = next((i for i in range(body, b) if T[i]["pos"] in ("VERB", "AUX")), None)
             if v is None:
                 clause_recs.append({"clause_id": cid, "span": ref(s, a, b - 1), "events": []})
                 continue
             auxes, i = [], v
-            while i < b and T[i]["pos"] == "AUX":
-                auxes.append(T[i]); i += 1
-            if i < b and T[i]["pos"] == "ADV" and T[i]["text"].lower() in ("not", "never"):
+            while i < b and (T[i]["pos"] == "AUX" or (auxes and T[i]["text"].lower() in ("not", "never") and i + 1 < b
+                                                       and T[i + 1]["pos"] in ("AUX", "VERB"))):
+                if T[i]["pos"] == "AUX":
+                    auxes.append(T[i])
                 i += 1
             main = i if i < b and T[i]["pos"] == "VERB" else (v + len(auxes) - 1)
             mt = T[main]
@@ -180,8 +190,16 @@ def temporal(structure, tagged):
                 aspect = "simple"
             habit_q = any(T[x]["text"].lower() in ("every", "each") for x in range(a, b)) or \
                 any(T[x]["text"].lower() in ("always", "often", "usually", "sometimes") for x in range(a, b))
+            voice = "passive" if (auxes and auxes[-1]["lemma"] == "be" and mt.get("tag") in ("VBN", "VBD") and main != v) else "active"
+            if voice == "passive" and mt.get("tag") == "VBD":
+                mt["tag"] = "VBN"
+            mood = "indicative"
+            if v == lead and not auxes and mt.get("tag") == "VB":
+                mood, tense = "imperative", "none_imperative"
+            elif v == lead and auxes and auxes[0]["lemma"] == "do" and mt.get("tag") == "VB":
+                mood, tense = "imperative", "none_imperative"
             eid = f"ev{len(events)}"
-            matrix = {"event_id": eid, "clause_id": cid, "predicate": mt["text"], "lemma": mt["lemma"], "tok": main,
+            matrix = {"mood": mood, "voice": voice, "subordinate_lead": ref(s, *subord) if subord else None,"event_id": eid, "clause_id": cid, "predicate": mt["text"], "lemma": mt["lemma"], "tok": main,
                       "span": ref(s, v, main), "tense": tense, "aspect": aspect, "finite": True, "parent_event": None,
                       "verb_form": mt.get("tag") if not auxes else "+".join([x["text"].lower() for x in auxes] + [mt.get("tag") or "?"]),
                       "time_anchor": None, **prov("TENSE-FINITE-VERB-GROUP", "explicit")}
@@ -250,6 +268,8 @@ def _np(T, j, b):
         while k + 1 < b and T[k + 1]["pos"] in ("NOUN", "PROPN") and T[k]["pos"] != "PRON":
             k += 1
         return {"start": j, "head": k, "end": k, "det": det, "possessor_tok": possessor}
+    if k > j and T[k - 1]["pos"] == "NUM":
+        return {"start": j, "head": k - 1, "end": k - 1, "det": det, "possessor_tok": possessor, "quantity_only": True}
     return None
 
 
@@ -292,6 +312,19 @@ def semantics(structure, tagged, scope, temp):
         # subject = NP before the verb group
         subj_np = _np(T, a, matrix["span"]["tok_start"])
         actor = arg(s, subj_np) if subj_np else None
+        if matrix.get("voice") == "passive":
+            obj_from_subject = actor
+            by = next((x for x in range(matrix["end_tok"], b) if T[x]["text"].lower() == "by"), None)
+            agent_np = _np(T, by + 1, b) if by is not None else None
+            actor = arg(s, agent_np) if agent_np else {"text": "you", "head": "you", "head_lemma": "you", "implied": True,
+                                                        "entity_id": None, "span": None, "det": None, "quantifier": None,
+                                                        "rule": "SEM-AGENTLESS-PASSIVE-IMPLIED-AGENT"}
+        else:
+            obj_from_subject = None
+        if actor is None and matrix.get("mood") == "imperative":
+            actor = {"text": "you", "head": "you", "head_lemma": "you", "implied": True, "entity_id": None,
+                     "span": None, "det": None, "quantifier": None, "rule": "SEM-IMPERATIVE-IMPLIED-YOU"}
+        exit_cond = None
         neg = any(T[x]["text"].lower() in ("not", "never", "n't") for x in range(a, b))
         modal = next((T[x]["text"].lower() for x in range(a, matrix["tok"]) if T[x]["pos"] == "AUX" and T[x]["text"].lower() in MODALS), None)
         leaf = evs[-1]
@@ -305,13 +338,24 @@ def semantics(structure, tagged, scope, temp):
             np_ = _np(T, j, b)
             if np_:
                 obj = arg(s, np_); j = np_["end"] + 1
+        if obj_from_subject is not None:
+            obj = dict(obj_from_subject, via="passive_subject")
         while j < b:
             if T[j]["pos"] == "ADP":
                 np_ = _np(T, j + 1, b)
                 if not np_:
                     j += 1; continue
+                if T[j]["text"].lower() == "for" and T[np_["head"]]["morph"].get("time_noun") and \
+                        any(T[x]["pos"] == "NUM" for x in range(np_["start"], np_["head"])) and exit_cond is None:
+                    exit_cond = {"kind": "duration", "text": " ".join(T[x]["text"] for x in range(j, np_["end"] + 1)),
+                                 "span": ref(s, j, np_["end"]), **prov("EXIT-DURATION", "explicit")}
+                    j = np_["end"] + 1; continue
                 pps.append({"prep": T[j]["text"].lower(), "prep_tok": j, "np": arg(s, np_)})
                 j = np_["end"] + 1
+            elif T[j]["text"].lower() in ("until", "till") and exit_cond is None:
+                exit_cond = {"kind": "until", "text": " ".join(T[x]["text"] for x in range(j, b)), "span": ref(s, j, b - 1),
+                             **prov("EXIT-UNTIL-CLAUSE", "explicit")}
+                break
             elif T[j]["text"].lower() in ("because", "so", "if", "when"):
                 causal.append({"marker": T[j]["text"].lower(), "span": ref(s, j), "from_event": matrix["event_id"], "to": "unresolved",
                                **prov("CAUSAL-MARKER", "explicit")})
@@ -346,7 +390,8 @@ def semantics(structure, tagged, scope, temp):
                 "complement_event": evs[evs.index(e) + 1]["event_id"] if e is not leaf else None,
                 "locations": locations if e is leaf else [], "polarity": "negative" if neg and not nested else "positive",
                 "grammatical_modality": modal if not nested else None, "channel": chan, "channel_provenance": chan_prov,
-                "channel_alternatives": alts, "span": e["span"],
+                "channel_alternatives": alts, "span": e["span"], "mood": matrix.get("mood"),
+                "exit_condition": exit_cond if e is leaf else None,
                 **prov("SEM-CONTROL" if nested else "SEM-CLAUSE-ROLES", "inferred" if nested else "explicit",
                        status="narrator_asserted")})
     return {"propositions": props, "spatial_relations": spatial_rels, "causal_links": causal}
