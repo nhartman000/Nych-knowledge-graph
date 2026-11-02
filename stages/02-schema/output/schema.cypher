@@ -82,3 +82,6 @@ CREATE NODE TABLE SymbolPattern(pattern_id STRING, symbols STRING[], slots STRIN
 CREATE REL TABLE INSTANTIATES(FROM TOTELoop TO SymbolPattern, bindings STRING);
 CREATE REL TABLE PATTERN_OPERATOR(FROM SymbolPattern TO Operator, slot STRING);
 CREATE REL TABLE PATTERN_GESTALT(FROM SymbolPattern TO Gestalt, slot STRING);
+
+// ---- tech.ui (2026-11-02): instance loop -> canonical-action loop (both provisional candidates) ----
+CREATE REL TABLE INSTANCE_OF(FROM TOTELoop TO TOTELoop, method STRING, provenance STRING);
