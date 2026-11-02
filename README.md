@@ -85,3 +85,9 @@ g8son gate `G-UI-<ACTION>`), 36,445 `TL-UI-I-*` instance loops (deduped by canon
 ## Evaluation caveat
 The 300-sentence gold set (`tests/nych3/gold/`) is AGENT-GRADED, PENDING HUMAN REVIEW. See `REVIEW/LIMITATIONS.md` and
 `REVIEW/REVIEWER_BRIEF.md`; reproduce everything with `bash REVIEW/reproduce.sh`.
+
+## How to cite
+See `CITATION.cff` (also in `REVIEW/`; GitHub shows a "Cite this repository" button). Suggested:
+Hartman, N. C. (American Milestone Inc). *NYCH 3.0 TOTE-Loop Knowledge Graph (MG8 family)*, version nych3-2026.11.02, released 2026-11-02.
+https://github.com/nhartman000/knowledge-graph
+No LICENSE file is present yet; citation does not grant a license.

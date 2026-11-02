@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this software or its data, please cite it as below."
+type: software
+title: "NYCH 3.0 TOTE-Loop Knowledge Graph (MG8 family): deterministic encoding of instructional text into auditable T.O.T.E. loops"
+abstract: >-
+  A Kuzu knowledge graph that is the shared store for the NYCH 3.0 encoder and T.O.T.E. (Test-Operate-Test-Exit) task loops.
+  Sentences are encoded with modality operators, actor, action, object and location, bound to TOTE loops by exact structured
+  lookup, checked by g8son gates, and recorded in tamper-evident QSON audit files. Includes a deterministic batch harvester for
+  public-domain instructional books (with page provenance), a provisional tech.ui domain of canonical UI actions harvested from
+  tech help centers, an agent-graded gold set pending human review, and a one-command reproduction package (REVIEW/).
+authors:
+  - given-names: Nicholas C.
+    family-names: Hartman
+    affiliation: American Milestone Inc
+repository-code: "https://github.com/nhartman000/knowledge-graph"
+version: nych3-2026.11.02
+date-released: 2026-11-02
+keywords:
+  - deterministic AI
+  - TOTE loops
+  - NYCH
+  - Gestalt
+  - knowledge graph
+  - Kuzu
+  - high-assurance AI
