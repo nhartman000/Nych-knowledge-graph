@@ -1,0 +1,24 @@
+{
+  "_doc": "Public-domain instructional books for the TOTE harvester. Rights verified 2026-11-01 from each Project Gutenberg HTML file's <meta name=dc.rights> ('Public domain in the USA.') and gutendex copyright=false. ISBN: none of these files contains an ISBN, and all predate ISBN (1970); isbn=null is a finding, not a gap to fill. Reprints carry their own ISBNs but different editions/pagination, so they are NOT used.",
+  "politeness": {"min_seconds_between_requests": 5, "user_agent": "nych3-tote-harvester/0.1 (research; low volume; cached)",
+                 "note": "Each book is fetched once and cached under shared/data/corpus/ (gitignored). Gutenberg asks bulk users to use mirrors; for >5 books use a mirror/rsync instead."},
+  "books": [
+    {"book_id": "pg71855", "gutenberg_id": 71855, "title": "Essentials of Woodworking: A Textbook for Schools", "author": "Ira Samuel Griffith",
+     "year": 1908, "publisher": "Manual Arts Press, Peoria", "rights": "Public domain in the USA.", "domain": "craft.woodworking",
+     "isbn": null, "isbn_status": "none_exists_pre_isbn_1908", "page_mode": "printed", "page_marker": "span.pagenum",
+     "url": "https://www.gutenberg.org/cache/epub/71855/pg71855-images.html"},
+    {"book_id": "pg65061", "gutenberg_id": 65061, "title": "The Boston Cooking-School Cook Book", "author": "Fannie Merritt Farmer",
+     "year": 1896, "publisher": "Little, Brown (copyright 1896-1906 per title verso)", "rights": "Public domain in the USA.", "domain": "cooking",
+     "isbn": null, "isbn_status": "none_exists_pre_isbn", "page_mode": "printed", "page_marker": "span.pageno",
+     "url": "https://www.gutenberg.org/cache/epub/65061/pg65061-images.html"},
+    {"book_id": "pg29558", "gutenberg_id": 29558, "title": "Boy Scouts Handbook: The First Edition, 1911", "author": "Boy Scouts of America",
+     "year": 1911, "publisher": "Boy Scouts of America", "rights": "Public domain in the USA.", "domain": "scouting.first_aid.outdoor",
+     "isbn": null, "isbn_status": "none_exists_pre_isbn_1911", "page_mode": "derived", "page_marker": null,
+     "url": "https://www.gutenberg.org/cache/epub/29558/pg29558-images.html"},
+    {"book_id": "pg26113", "gutenberg_id": 26113, "title": "Handbook of Wool Knitting and Crochet", "author": "Anonymous",
+     "year": null, "publisher": null, "rights": "Public domain in the USA.", "domain": "craft.knitting",
+     "isbn": null, "isbn_status": "none_found_in_source", "page_mode": "derived", "page_marker": null,
+     "url": "https://www.gutenberg.org/cache/epub/26113/pg26113-images.html"}
+  ],
+  "derived_page_method": "page = floor(char_offset_in_extracted_body_text / 2000) + 1, flagged page_kind=derived. 2000 chars approximates one printed page of 1900s prose; it does NOT correspond to any printed edition."
+}

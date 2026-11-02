@@ -7,3 +7,5 @@ shared/data/tote.kuzu*
 */output/*
 !*/output/.gitkeep
 *.egg-info/
+shared/data/corpus/
+shared/data/harvest/
