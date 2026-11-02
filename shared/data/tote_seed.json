@@ -1,52 +1,337 @@
 {
-  "_doc": "Seed TOTE rows (user TOTE DB model). Status: canonical | candidate. Canonical requires a named authority in provenance. Never auto-promoted.",
-  "operators": [
-    ["OP-KI", "🫶", "internal_kinesthetic", "actor_internal", false],
-    ["OP-KE", "🙌", "external_kinesthetic", "actor_external", true],
-    ["OP-VE", "👀", "external_visual", "actor_external", true],
-    ["OP-VI", "👁️", "internal_visual", "actor_internal", false],
-    ["OP-AI", "👂", "internal_auditory", "actor_internal", false],
-    ["OP-AE", "👂👂", "external_auditory", "actor_external", true],
-    ["OP-MEM", "💭", "memory", "actor_internal", false],
-    ["OP-IMG", "👁️‍🗨️", "imagine", "actor_internal", false],
-    ["OP-OLF", "👃", "smell", "actor_external", true],
-    ["OP-GUS", "👅", "taste", "actor_external", true]
+ "_doc": "Seed TOTE rows (user TOTE DB model). Status: canonical | candidate. Canonical requires a named authority in provenance. Never auto-promoted.",
+ "operators": [
+  [
+   "OP-KI",
+   "🫶",
+   "internal_kinesthetic",
+   "actor_internal",
+   false
   ],
-  "domains": ["human_action.perception", "human_action.locomotion", "astronomy.observation"],
-  "gates": [
-    {"gate_id": "G-EXIT-LOOK-AT-STARS-001", "file_id": "nych3.tote.exit", "order": 1, "type": "condition",
-     "conditions": ["object_visually_available == false OR activity_continues == false"],
-     "outcomes": {"PASS": "exit", "FAIL": "repeat"}},
-    {"gate_id": "G-EXIT-APPROACH-001", "file_id": "nych3.tote.exit", "order": 1, "type": "condition",
-     "conditions": ["actor_position == target_position"],
-     "outcomes": {"PASS": "exit", "FAIL": "repeat"}}
+  [
+   "OP-KE",
+   "🙌",
+   "external_kinesthetic",
+   "actor_external",
+   true
   ],
-  "loops": [
-    {"loop_id": "TL-LOOK-AT-STARS-001", "name": "look at stars", "domain": "human_action.perception",
-     "objective": "keep visual attention on the stars while they remain visible and the activity continues",
-     "initial_test": "object_visually_available == true", "exit_predicate": "G-EXIT-LOOK-AT-STARS-001", "max_iterations": -1,
-     "epistemic_status": "ACT", "modality_cell": "looking,👀¹", "actor_cell": "<actor>,", "action_cell": "look,",
-     "object_cell": "stars,", "perspective_cell": "<vantage>,", "exit_gate_id": "G-EXIT-LOOK-AT-STARS-001",
-     "action_lemma": "look", "object_lemma": "star",
-     "termination_triggers": [{"trigger": "daylight", "effect": "object_visually_available=false", "provenance": "inferred"},
-                              {"trigger": "falls_asleep", "effect": "activity_continues=false", "provenance": "inferred"}],
-     "techniques": [], "status": "canonical",
-     "provenance": {"source": "user golden case (N Hartman, 2026-11-01) + handoff spec section 4", "authority": "user", "method": "manual_seed"},
-     "version": "1",
-     "in_domain": [["human_action.perception", "primary", "golden case"],
-                   ["astronomy.observation", "cross_link", "naked-eye stargazing reuses the same look/retest loop"]]},
-    {"loop_id": "TL-APPROACH-LOCATION-001", "name": "approach a location", "domain": "human_action.locomotion",
-     "objective": "move until the actor is at the target position",
-     "initial_test": "actor_position != target_position", "exit_predicate": "G-EXIT-APPROACH-001", "max_iterations": -1,
-     "epistemic_status": "ACT", "modality_cell": "approach,🙌", "actor_cell": "<actor>,", "action_cell": "approach,",
-     "object_cell": "<location>,", "perspective_cell": "<start: unresolved>,", "exit_gate_id": "G-EXIT-APPROACH-001",
-     "action_lemma": "approach", "object_lemma": "*",
-     "termination_triggers": [{"trigger": "target_reached", "effect": "actor_position=target_position", "provenance": "inferred"}],
-     "techniques": [{"technique": "walking", "likelihood_class": "high", "provenance": "assumed_default", "source": "spec section 4 worked pattern"},
-                    {"technique": "biking", "likelihood_class": "latent", "provenance": "assumed_default", "source": "spec section 4/6 worked pattern"}],
-     "status": "candidate",
-     "provenance": {"source": "handoff spec section 4 worked pattern (hill-approach)", "authority": null, "method": "manual_seed"},
-     "version": "1",
-     "in_domain": [["human_action.locomotion", "primary", "spec worked pattern"]]}
+  [
+   "OP-VE",
+   "👀",
+   "external_visual",
+   "actor_external",
+   true
+  ],
+  [
+   "OP-VI",
+   "👁️",
+   "internal_visual",
+   "actor_internal",
+   false
+  ],
+  [
+   "OP-AI",
+   "👂",
+   "internal_auditory",
+   "actor_internal",
+   false
+  ],
+  [
+   "OP-AE",
+   "👂👂",
+   "external_auditory",
+   "actor_external",
+   true
+  ],
+  [
+   "OP-MEM",
+   "💭",
+   "memory",
+   "actor_internal",
+   false
+  ],
+  [
+   "OP-IMG",
+   "👁️‍🗨️",
+   "imagine",
+   "actor_internal",
+   false
+  ],
+  [
+   "OP-OLF",
+   "👃",
+   "smell",
+   "actor_external",
+   true
+  ],
+  [
+   "OP-GUS",
+   "👅",
+   "taste",
+   "actor_external",
+   true
   ]
+ ],
+ "domains": [
+  "human_action.perception",
+  "human_action.locomotion",
+  "astronomy.observation",
+  "cooking"
+ ],
+ "gates": [
+  {
+   "gate_id": "G-EXIT-LOOK-AT-STARS-001",
+   "file_id": "nych3.tote.exit",
+   "order": 1,
+   "type": "condition",
+   "conditions": [
+    "object_visually_available == false OR activity_continues == false"
+   ],
+   "outcomes": {
+    "PASS": "exit",
+    "FAIL": "repeat"
+   }
+  },
+  {
+   "gate_id": "G-EXIT-APPROACH-001",
+   "file_id": "nych3.tote.exit",
+   "order": 1,
+   "type": "condition",
+   "conditions": [
+    "actor_position == target_position"
+   ],
+   "outcomes": {
+    "PASS": "exit",
+    "FAIL": "repeat"
+   }
+  },
+  {
+   "gate_id": "G-EXIT-STIR-SAUCE-001",
+   "file_id": "nych3.tote.exit",
+   "order": 1,
+   "type": "condition",
+   "conditions": [
+    "👀 sauce_agitated_or_in_motion == true [explicit; user prior knowledge]"
+   ],
+   "outcomes": {
+    "PASS": "exit",
+    "FAIL": "repeat"
+   }
+  }
+ ],
+ "loops": [
+  {
+   "loop_id": "TL-LOOK-AT-STARS-001",
+   "name": "look at stars",
+   "domain": "human_action.perception",
+   "objective": "keep visual attention on the stars while they remain visible and the activity continues",
+   "initial_test": "object_visually_available == true",
+   "exit_predicate": "G-EXIT-LOOK-AT-STARS-001",
+   "max_iterations": -1,
+   "epistemic_status": "ACT",
+   "modality_cell": "looking,👀¹",
+   "actor_cell": "<actor>,",
+   "action_cell": "look,",
+   "object_cell": "stars,",
+   "perspective_cell": "<vantage>,",
+   "exit_gate_id": "G-EXIT-LOOK-AT-STARS-001",
+   "action_lemma": "look",
+   "object_lemma": "star",
+   "termination_triggers": [
+    {
+     "trigger": "daylight",
+     "effect": "object_visually_available=false",
+     "provenance": "inferred"
+    },
+    {
+     "trigger": "falls_asleep",
+     "effect": "activity_continues=false",
+     "provenance": "inferred"
+    }
+   ],
+   "techniques": [],
+   "status": "canonical",
+   "provenance": {
+    "source": "user golden case (N Hartman, 2026-11-01) + handoff spec section 4",
+    "authority": "user",
+    "method": "manual_seed"
+   },
+   "version": "1",
+   "in_domain": [
+    [
+     "human_action.perception",
+     "primary",
+     "golden case"
+    ],
+    [
+     "astronomy.observation",
+     "cross_link",
+     "naked-eye stargazing reuses the same look/retest loop"
+    ]
+   ],
+   "modality_links": [
+    {
+     "channel": "external_visual",
+     "word": "looking|action"
+    }
+   ]
+  },
+  {
+   "loop_id": "TL-APPROACH-LOCATION-001",
+   "name": "approach a location",
+   "domain": "human_action.locomotion",
+   "objective": "move until the actor is at the target position",
+   "initial_test": "actor_position != target_position",
+   "exit_predicate": "G-EXIT-APPROACH-001",
+   "max_iterations": -1,
+   "epistemic_status": "ACT",
+   "modality_cell": "approach,🙌",
+   "actor_cell": "<actor>,",
+   "action_cell": "approach,",
+   "object_cell": "<location>,",
+   "perspective_cell": "<start: unresolved>,",
+   "exit_gate_id": "G-EXIT-APPROACH-001",
+   "action_lemma": "approach",
+   "object_lemma": "*",
+   "termination_triggers": [
+    {
+     "trigger": "target_reached",
+     "effect": "actor_position=target_position",
+     "provenance": "inferred"
+    }
+   ],
+   "techniques": [
+    {
+     "technique": "walking",
+     "likelihood_class": "high",
+     "provenance": "assumed_default",
+     "source": "spec section 4 worked pattern"
+    },
+    {
+     "technique": "biking",
+     "likelihood_class": "latent",
+     "provenance": "assumed_default",
+     "source": "spec section 4/6 worked pattern"
+    }
+   ],
+   "status": "candidate",
+   "provenance": {
+    "source": "handoff spec section 4 worked pattern (hill-approach)",
+    "authority": null,
+    "method": "manual_seed"
+   },
+   "version": "1",
+   "in_domain": [
+    [
+     "human_action.locomotion",
+     "primary",
+     "spec worked pattern"
+    ]
+   ],
+   "modality_links": [
+    {
+     "channel": "external_kinesthetic",
+     "word": "approach|action"
+    }
+   ]
+  },
+  {
+   "loop_id": "TL-STIR-SAUCE-001",
+   "name": "stir sauce",
+   "domain": "cooking",
+   "objective": "keep the sauce agitated / in motion with a spoon in a (round) saucepan",
+   "initial_test": "🫶 feel sauce resistance",
+   "exit_predicate": "G-EXIT-STIR-SAUCE-001",
+   "max_iterations": -1,
+   "epistemic_status": "ACT",
+   "modality_cell": "hold,🙌 ; feel,🫶 ; stir,🙌 ; verify,👀²",
+   "actor_cell": "you(implied),",
+   "action_cell": "stir,",
+   "object_cell": "sauce, ; tool: spoon,",
+   "perspective_cell": "in saucepan,",
+   "exit_gate_id": "G-EXIT-STIR-SAUCE-001",
+   "action_lemma": "stir",
+   "object_lemma": "sauce",
+   "termination_triggers": [
+    {
+     "trigger": "sauce agitated or in motion",
+     "condition": "👀 sauce_agitated_or_in_motion == true",
+     "provenance": "explicit",
+     "rule": "USER-SEED"
+    }
+   ],
+   "techniques": [
+    {
+     "step": 1,
+     "op": "🙌",
+     "channel": "external_kinesthetic",
+     "text": "hold spoon in sauce",
+     "role": "operate"
+    },
+    {
+     "step": 2,
+     "op": "🫶",
+     "channel": "internal_kinesthetic",
+     "text": "feel sauce resistance",
+     "role": "test"
+    },
+    {
+     "step": 3,
+     "op": "🙌",
+     "channel": "external_kinesthetic",
+     "text": "stir in circular motion (saucepans are round)",
+     "role": "operate"
+    },
+    {
+     "step": 4,
+     "op": "👀",
+     "channel": "external_visual",
+     "text": "verify sauce is agitated or in motion; if true, exit",
+     "role": "exit"
+    }
+   ],
+   "tool": "spoon",
+   "tool_location": "saucepan",
+   "status": "canonical",
+   "provenance": {
+    "source": "user prior knowledge and experience (N Hartman, 2026-11-02); hand-written seed loop, not from a book",
+    "authority": "N Hartman",
+    "method": "manual_seed",
+    "source_kind": "user_prior_knowledge",
+    "isbn": null,
+    "page": null,
+    "deferred_secondary_loops": [
+     "check bottom of saucepan for burning sauce",
+     "check heat"
+    ]
+   },
+   "version": "1",
+   "repeat_count": 0,
+   "in_domain": [
+    [
+     "cooking",
+     "primary",
+     "user seed loop (canonical reference)"
+    ]
+   ],
+   "modality_links": [
+    {
+     "channel": "external_kinesthetic",
+     "word": "hold|step1"
+    },
+    {
+     "channel": "internal_kinesthetic",
+     "word": "feel|step2"
+    },
+    {
+     "channel": "external_kinesthetic",
+     "word": "stir|step3"
+    },
+    {
+     "channel": "external_visual",
+     "word": "verify|step4"
+    }
+   ]
+  }
+ ]
 }

@@ -188,17 +188,90 @@ def parse(text: str):
     return nlp()(text), False, 0
 
 
-def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None):
-    """-> (outcome, loops, reason)."""
+_ENUM = re.compile(r"^\s*(?:\(?\d{1,3}[.)]|\(?[a-z][.)]|[A-Z][A-Za-z -]{0,30}:)\s+(?=[A-Z])")
+PRONOUN_OBJ = {"it", "them", "this", "that", "these", "those", "one", "ones", "him", "her", "us", "me", "you", "itself", "themselves",
+               "each", "all", "both", "some", "any", "other", "others", "same", "which", "what", "former", "latter", "rest"}
+
+
+def strip_enumerator(text: str) -> str:
+    """'8. Slip 1, purl 1' -> 'Slip 1, purl 1'; 'Left front: Cast on 65' -> 'Cast on 65'."""
+    return _ENUM.sub("", text, count=1)
+
+
+def bad_object(n) -> str | None:
+    """Fix 2: pronouns and bare numbers are never objects."""
+    if n.pos_ == "PRON" or n.lower_ in PRONOUN_OBJ:
+        return "pronoun_object"
+    if n.pos_ == "NUM" or n.like_num or n.lower_ in inv()["number_words"] or re.fullmatch(r"[\d/.,½¼¾-]+(st|nd|rd|th|d)?", n.text):
+        return "bare_number_object"
+    return None
+
+
+def non_location(p: str, pobj) -> bool:
+    """Fix 3: 'in place of X' / 'instead of' / 'in order to' are not locations."""
+    nl = inv()["non_location_prep_objects"]
+    lst = nl.get(p)
+    if lst is None:
+        return False
+    return "*" in lst or _lemma(pobj) in lst
+
+
+def sense_mentions(doc):
+    """-> [(token_index, channel, cue_word, step_text)] for every sense word in the sentence."""
+    out = []
+    cues = {k: v for k, v in inv()["sense_cues"].items() if not k.startswith("_")}
+    for t in doc:
+        w = t.lower_
+        if t.dep_ in ("amod", "compound", "nmod") and t.head.pos_ in ("NOUN", "PROPN"):
+            continue   # attributive ('boiling water', 'cold milk', 'soft-shelled clams'): describes an ingredient, not a sense test
+        for ch, spec in cues.items():
+            if w in spec["words"] or _lemma(t) in spec["cue_verbs"]:
+                if _lemma(t) in spec["cue_verbs"] or w in spec["cue_verbs"]:
+                    step = spec["step"]
+                elif w in spec.get("color_words", ()):
+                    step = f"{spec['step']} color {w}"
+                else:
+                    step = f"{spec['step']} {w}"
+                out.append((t.i, ch, w, step))
+                break
+    return out
+
+
+def channel_for(lem: str, modreg: dict):
+    """Fix 4: -> (channel, provenance). Every action verb gets one; unknown verbs get the default (🙌)."""
+    ch = modreg["lemma_channels"].get(lem)
+    if ch:
+        return ch, "explicit"
+    inf = modreg.get("lemma_channels_inferred", {}).get(lem)
+    if inf and inf.get("channel") not in (None, "unresolved"):
+        return inf["channel"], "inferred"
+    d = modreg.get("default_action_channel") or {"channel": "external_kinesthetic"}
+    return d["channel"], "default"
+
+
+def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None, stats: dict | None = None):
+    """-> (outcome, loops, reason). `stats` (optional) collects sense_attached / sense_unattached counts."""
     _DOMAIN[0] = domain
     app = is_apparatus(text)
     if app:
         return "skipped_apparatus", [], app
     I = inv()
+    text = strip_enumerator(text)
+    low = text.lower()
+    if any(m in low for m in I["instruction_gate"]["figurative_markers"]):
+        return "non_action", [], "figurative"
     doc, injected, off = parse(text)
+    senses = sense_mentions(doc)
+
+    def _ret(outcome, loops, reason):
+        if stats is not None:
+            att = sum(len(lp.get("sense_tests", [])) for lp in loops)
+            stats["sense_attached"] = stats.get("sense_attached", 0) + att
+            stats["sense_unattached"] = stats.get("sense_unattached", 0) + (len(senses) - att)
+        return outcome, loops, reason
     root = next((t for t in doc if t.dep_ == "ROOT"), None)
     if root is None:
-        return "non_action", [], "no_root"
+        return _ret("non_action", [], "no_root")
 
     def verbish(t):
         return t.pos_ in ("VERB",) or (t.lower_ in lexverbs and t.pos_ in ("NOUN", "ADJ", "PROPN") and not any(c.dep_ == "det" for c in t.children))
@@ -209,11 +282,11 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None):
     while stack:
         v = stack.pop()
         for c in v.children:
-            if (c.dep_ == "conj" or (c.dep_ == "ccomp" and injected and any(g.dep_ == "nsubj" and g.i == 0 for g in c.children))) \
+            if (c.dep_ == "conj" or (c.dep_ == "parataxis" and injected) or (c.dep_ == "ccomp" and injected and any(g.dep_ == "nsubj" and g.i == 0 for g in c.children))) \
                     and verbish(c) and c not in cands:
                 cands.append(c); stack.append(c)
     if not cands:
-        return "non_action", [], "no_action_verb"
+        return _ret("non_action", [], "no_action_verb")
     cands.sort(key=lambda t: t.i)
     loops, reasons, state = [], [], {}
     for v in cands:
@@ -236,7 +309,7 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None):
             else:
                 actor_kind, actor_text = ("you" if subj.lower_ == "you" else "agent"), subj.text
         elif parent is not None:
-            if parent["mood"] == "imperative" and v.tag_ in ("VB", "VBP", "NN", "JJ"):
+            if parent["mood"] == "imperative" and (v.tag_ in ("VB", "VBP", "NN", "JJ") or (injected and lem in lexverbs and not auxes)):
                 mood, actor_kind, actor_text = "imperative", "implied_you", "you(implied)"
             elif parent["passive"] and v.tag_ == "VBN":
                 mood, actor_kind, actor_text, passive = "indicative", parent["actor_kind"], parent["actor_text"], True
@@ -245,7 +318,7 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None):
                 mood, actor_kind, actor_text = "indicative", parent["actor_kind"], parent["actor_text"]
             else:
                 mood, actor_kind, actor_text = "unresolved", "unresolved", "UNRESOLVED"
-        elif (v.tag_ == "VB" or (injected and v.tag_ == "VBP")) and not passive and not auxes:   # base-form verb with no subject = imperative
+        elif (v.tag_ == "VB" or (injected and (v.tag_ == "VBP" or (lem in lexverbs and v.tag_ in ("VBZ", "VBD", "NN"))))) and not passive and not auxes:   # base-form verb with no subject = imperative
             mood, actor_kind, actor_text = "imperative", "implied_you", "you(implied)"
         else:
             mood, actor_kind, actor_text = "unresolved", "unresolved", "UNRESOLVED"
@@ -253,7 +326,23 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None):
         if lem in STATIVE_EXTRA or lem in I["_verbs"]["stative_or_descriptive"]:
             reasons.append("stative_or_nonaction_verb"); continue
         manip = modreg["lemma_channels"].get(lem) == "external_kinesthetic"
-        if mood != "imperative":
+        G = I["instruction_gate"]
+        if mood == "imperative":
+            dob = next((c for c in v.children if c.dep_ in ("dobj", "obj", "prep")), None)
+            pair_objs = {_lemma(c) for c in v.children if c.dep_ in ("dobj", "obj")} | \
+                        {_lemma(g) for c in v.children if c.dep_ == "prep" for g in c.children if g.dep_ == "pobj"}
+            if any(lem == a and b in pair_objs for a, b in G["figurative_imperatives"]):
+                reasons.append("figurative_imperative"); continue
+        else:
+            if any(a.lower_ in G["narrative_aux"] for a in auxes) or (v.tag_ == "VBD" and not passive):
+                reasons.append("narrative_past"); continue
+            subj_l = subj.lower_ if subj is not None else ""
+            strong = any(a.lower_ in G["procedural_modals"] for a in auxes)
+            procedural = (strong and (passive or subj_l in G["procedural_subjects"])) or \
+                         (passive and not modal and manip and actor_kind == "implied_agent_passive") or \
+                         (not passive and subj_l in G["procedural_subjects"] and v.tag_ in ("VBP", "VB") and manip)
+            if not procedural:
+                reasons.append("not_instruction"); continue
             if passive and not modal and not manip:
                 reasons.append("descriptive_passive"); continue
             if not passive and v.tag_ in ("VBZ", "VBP") and actor_kind == "agent" and subj is not None \
@@ -284,8 +373,10 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None):
                         exitc = {"kind": "duration", "text": f"{q} {_lemma(n)}", "condition": f"elapsed >= {q} {_lemma(n)}",
                                  "provenance": "implied_by_text", "rule": "EXIT-BARE-DURATION"}
                     continue
+                if bad_object(n):
+                    reasons.append(bad_object(n)); continue
                 r = resolve_np(n)
-                if r:
+                if r and not (r.get("object_is_unit") and r["lemma"] != "amount" and not r.get("quantity")) and r["lemma"] not in PRONOUN_OBJ:
                     objs.append(r)
         for c in leaf.children:
             if c.dep_ == "npadvmod" and _is_time(c) and _quantity(c) and exitc is None:
@@ -305,6 +396,12 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None):
                 continue
             if pobj is None or prep.dep_ == "agent":
                 continue
+            if non_location(p, pobj):
+                continue
+            if (leaf_lem, p) in (("cast", "on"), ("bind", "off"), ("pick", "up")) and not objs and not bad_object(pobj):
+                objs.append(resolve_np(pobj)); continue
+            if bad_object(pobj):
+                continue
             if p == "for" and _is_time(pobj) and _quantity(pobj):
                 q = _quantity(pobj)
                 exitc = {"kind": "duration", "text": f"for {q} {_lemma(pobj)}", "condition": f"elapsed >= {q} {_lemma(pobj)}",
@@ -316,6 +413,8 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None):
                     nl = _lemma(n)
                     if (nl in I["_classes"]["instrument"] or measure_decision(n, _DOMAIN[0])[1] == "MEAS-WITH-TOOL") and tool is None:
                         tool = {"head": n.text, "lemma": nl, "rule": "WITH-INSTRUMENT-CLASS"}
+                    elif bad_object(n):
+                        continue
                     elif nl in I["_classes"]["ingredient"] or _is_unit(n):
                         r = resolve_np(n); r["role"] = "with_ingredient"; co_objs.append(r)
                     else:
@@ -342,19 +441,48 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None):
             if u is not None:
                 exitc = {"kind": "until", "text": _clause_text_from(u), "condition": _clause_text_from(u),
                          "provenance": "explicit", "rule": "EXIT-UNTIL-SPAN"}
-        if not (objs or co_objs or tool or exitc):
-            reasons.append("no_object_tool_or_exit"); continue
+        if not objs and _DOMAIN[0] in I["implied_count_noun"] and leaf_lem in I["implied_count_noun"][_DOMAIN[0]]["verbs"]:
+            n = next((c for c in leaf.children if c.dep_ in ("dobj", "obj", "npadvmod", "nummod", "attr") and bad_object(c) == "bare_number_object"), None)
+            if n is not None:
+                spec = I["implied_count_noun"][_DOMAIN[0]]
+                objs.append({"head": f"{spec['noun']}(implied)", "lemma": spec["noun"], "quantity": _num(n), "rule": "INV-IMPLIED-COUNT-NOUN"})
         # modality cells over the chain
-        ops = []
+        ops, links = [], []
         for t in chain:
             tl = _lemma(t) if t.pos_ == "VERB" else t.lower_
-            ch = modreg["lemma_channels"].get(tl); prov_ = "explicit"
-            if ch is None and tl in modreg["lemma_channels_inferred"]:
-                ch, prov_ = modreg["lemma_channels_inferred"][tl]["channel"], "inferred"
+            if tl in STATIVE_EXTRA or tl in I["_verbs"]["stative_or_descriptive"]:
+                continue
+            ch, prov_ = channel_for(tl, modreg)
+            links.append({"channel": ch, "word": tl, "provenance": prov_, "role": "action"})
             c = operator_cell({"channel": ch, "channel_provenance": prov_}, {"predicate": (text.split()[0].strip(",.;:") if injected and t.i == off else t.text), "verb_form": _verb_form(t)}, modreg)
             if c:
-                ops.append(c)
+                ops.append(c.replace(" [inferred]", "") + ("" if prov_ == "explicit" else f" [{prov_}]"))
         chans = sorted({modreg["lemma_channels"].get(_lemma(t)) for t in chain} - {None})
+        # sense mentions -> TEST/EXIT steps of THIS loop (never stored alone)
+        nxt_v = min([c.i for c in cands if c.i > v.i] or [len(doc)])
+        prev_v = max([c.i for c in cands if c.i < v.i] or [-1])
+        mine = [m for m in senses if (prev_v < m[0] < nxt_v or (m[0] == v.i)) and m[0] not in state.setdefault("_used", set())]
+        sense_tests = []
+        for (ti, ch, w, step) in mine:
+            if ti in {x.i for x in chain}:
+                continue   # the action verb itself is a sense verb (look, feel): already its modality
+            state["_used"].add(ti)
+            in_exit = bool(exitc) and w in (exitc.get("text") or "").lower()
+            sense_tests.append({"op": modreg["operators"][ch], "channel": ch, "word": w, "step": f"{modreg['operators'][ch]} {step}",
+                                "role": "exit" if in_exit else "test"})
+            links.append({"channel": ch, "word": w, "provenance": "sense_mention", "role": "exit" if in_exit else "test"})
+        if exitc is None and sense_tests:
+            st0 = sense_tests[0]
+            st0["role"] = "exit"
+            exitc = {"kind": "sense_test", "text": st0["step"], "condition": f"{st0['channel']}: {st0['step']}",
+                     "provenance": "implied_by_text", "rule": "EXIT-SENSE-TEST"}
+        if not (objs or co_objs or tool or exitc):
+            for (ti, ch, w, step) in mine:
+                state["_used"].discard(ti)
+            reasons.append("no_object_tool_or_exit"); continue
+        for ti in {x.i for x in chain}:
+            if any(m[0] == ti for m in senses):
+                state.setdefault("_used", set()).add(ti)
         allobjs = objs + co_objs
         ol = sorted(o["lemma"] for o in allobjs)
         key = json.dumps([leaf_lem, ol, tool["lemma"] if tool else "", actor_kind, chans, exitc["kind"] if exitc else "inferred_completion"],
@@ -366,7 +494,7 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None):
         loops.append({
             "key": key, "negated": neg, "lemma": leaf_lem, "object_lemma": ol[0] if ol else (tool["lemma"] if tool else ""),
             "objects": allobjs, "tool": tool, "exit": exitc, "mood": mood, "passive": passive,
-            "modality_unresolved": not ops,
+            "modality_unresolved": not ops, "modality_links": links, "sense_tests": sense_tests,
             "row": {"modality": " ; ".join(ops) or "UNRESOLVED,", "actor": f"{actor_text},",
                     "action": f"{leaf_lem},",
                     "object": " ; ".join([ocell(o) for o in allobjs] + ([f"tool: {tool['head']},"] if tool else [])) or "UNRESOLVED,",
@@ -374,6 +502,11 @@ def extract(text: str, modreg: dict, lexverbs: set, domain: str | None = None):
                     "exit": (f"{exitc['condition']} [{exitc['provenance']}]" if exitc else f"{leaf_lem}_complete == true [inferred]")},
             "sentence": text})
     if not loops:
-        return ("non_action" if all(r in ("stative_or_nonaction_verb", "descriptive_passive", "descriptive_present", "unresolved_mood") for r in reasons)
-                else "no_match"), [], (reasons[0] if reasons else "unknown")
+        return _ret("non_action" if all(r in ("stative_or_nonaction_verb", "descriptive_passive", "descriptive_present", "unresolved_mood",
+                                               "not_instruction", "narrative_past", "figurative_imperative") for r in reasons)
+                    else "no_match", [], (reasons[0] if reasons else "unknown"))
+    if stats is not None:
+        used = state.get("_used", set())
+        stats["sense_attached"] = stats.get("sense_attached", 0) + sum(1 for m in senses if m[0] in used)
+        stats["sense_unattached"] = stats.get("sense_unattached", 0) + sum(1 for m in senses if m[0] not in used)
     return "action", loops, None

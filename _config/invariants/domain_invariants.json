@@ -302,5 +302,358 @@
   "typographical error",
   "^\\s*\\d+\\s*\\.?\\s*$"
  ],
- "apparatus_all_caps_min_letters": 6
+ "apparatus_all_caps_min_letters": 6,
+ "instruction_gate": {
+  "_doc": "Fix 1: only instruction sentences become loops. Imperative mood, or a procedural pattern: modal + you/one/passive ('should be cut', 'you must stir'), or a present agentless passive of a hands-on verb ('the board is then planed'). Past-tense narrative and non-you active indicatives are rejected; imperatives that are idioms/figurative are rejected.",
+  "narrative_aux": [
+   "was",
+   "were",
+   "had",
+   "did"
+  ],
+  "procedural_subjects": [
+   "you",
+   "one"
+  ],
+  "figurative_imperatives": [
+   [
+    "take",
+    "care"
+   ],
+   [
+    "take",
+    "heart"
+   ],
+   [
+    "take",
+    "time"
+   ],
+   [
+    "take",
+    "pain"
+   ],
+   [
+    "take",
+    "pleasure"
+   ],
+   [
+    "take",
+    "interest"
+   ],
+   [
+    "bear",
+    "mind"
+   ],
+   [
+    "keep",
+    "mind"
+   ],
+   [
+    "make",
+    "sure"
+   ],
+   [
+    "make",
+    "mistake"
+   ],
+   [
+    "make",
+    "point"
+   ],
+   [
+    "take",
+    "advantage"
+   ],
+   [
+    "take",
+    "account"
+   ],
+   [
+    "let",
+    "go"
+   ],
+   [
+    "give",
+    "way"
+   ],
+   [
+    "take",
+    "place"
+   ],
+   [
+    "pay",
+    "attention"
+   ],
+   [
+    "take",
+    "step"
+   ],
+   [
+    "turn",
+    "attention"
+   ],
+   [
+    "draw",
+    "conclusion"
+   ],
+   [
+    "draw",
+    "attention"
+   ],
+   [
+    "draw",
+    "line"
+   ]
+  ],
+  "figurative_markers": [
+   "as it were",
+   "so to speak",
+   "figuratively",
+   "metaphor",
+   "in a sense",
+   "in other words"
+  ],
+  "procedural_modals": [
+   "should",
+   "must",
+   "shall",
+   "ought"
+  ],
+  "_doc_modals": "'may/can/might be used' is optional/descriptive, not an instruction; only should/must/shall/ought count."
+ },
+ "non_location_prep_objects": {
+  "_doc": "Fix 3: 'in place of X', 'in case of', 'in order to', 'in addition to', 'in the same way' etc. are not locations.",
+  "in": [
+   "place",
+   "case",
+   "order",
+   "addition",
+   "lieu",
+   "way",
+   "manner",
+   "spite",
+   "fact",
+   "turn",
+   "time",
+   "general",
+   "short",
+   "particular",
+   "proportion",
+   "regard",
+   "respect",
+   "front_of_time"
+  ],
+  "instead": [
+   "*"
+  ],
+  "by": [
+   "way",
+   "means",
+   "hand"
+  ],
+  "on": [
+   "account",
+   "top_of_that"
+  ]
+ },
+ "sense_cues": {
+  "_doc": "Sense mentions (user rule 2026-11-02): never stored alone. Each is attached as a TEST/EXIT step of the action loop it belongs to (e.g. 'fry until golden' -> 👀 verify color golden in the fry loop). Unattached mentions are only counted.",
+  "external_visual": {
+   "step": "verify",
+   "words": [
+    "golden",
+    "brown",
+    "browned",
+    "white",
+    "yellow",
+    "red",
+    "pink",
+    "clear",
+    "transparent",
+    "opaque",
+    "colored",
+    "coloured",
+    "black",
+    "green",
+    "dark",
+    "light-brown",
+    "creamy",
+    "glossy",
+    "bubbling",
+    "bubbles",
+    "boiling",
+    "foamy",
+    "frothy",
+    "smoking",
+    "level",
+    "square",
+    "plumb",
+    "straight",
+    "even",
+    "flush",
+    "true",
+    "visible",
+    "see",
+    "look",
+    "watch",
+    "observe"
+   ],
+   "cue_verbs": [
+    "see",
+    "look",
+    "watch",
+    "observe",
+    "appear",
+    "notice"
+   ],
+   "color_words": [
+    "golden",
+    "brown",
+    "browned",
+    "white",
+    "yellow",
+    "red",
+    "pink",
+    "black",
+    "green",
+    "dark",
+    "light-brown",
+    "creamy",
+    "colored",
+    "coloured"
+   ]
+  },
+  "internal_kinesthetic": {
+   "step": "feel",
+   "words": [
+    "soft",
+    "tender",
+    "firm",
+    "stiff",
+    "thick",
+    "thin",
+    "smooth",
+    "rough",
+    "elastic",
+    "crisp",
+    "dry",
+    "moist",
+    "wet",
+    "sticky",
+    "tight",
+    "taut",
+    "loose",
+    "snug",
+    "hard",
+    "resistance",
+    "springy",
+    "warm",
+    "hot",
+    "cold",
+    "cool",
+    "lukewarm",
+    "feel",
+    "feels",
+    "feeling"
+   ],
+   "cue_verbs": [
+    "feel"
+   ]
+  },
+  "external_auditory": {
+   "step": "listen for",
+   "words": [
+    "sizzle",
+    "sizzling",
+    "crackle",
+    "crackling",
+    "hiss",
+    "hissing",
+    "sound",
+    "hear",
+    "ring",
+    "click"
+   ],
+   "cue_verbs": [
+    "hear",
+    "listen",
+    "sound"
+   ]
+  },
+  "smell": {
+   "step": "smell",
+   "words": [
+    "fragrant",
+    "smell",
+    "odor",
+    "odour",
+    "aroma",
+    "scorched",
+    "scorch"
+   ],
+   "cue_verbs": [
+    "smell"
+   ]
+  },
+  "taste": {
+   "step": "taste",
+   "words": [
+    "taste",
+    "tasting",
+    "sweet",
+    "salty",
+    "sour",
+    "bitter",
+    "seasoned",
+    "palatable"
+   ],
+   "cue_verbs": [
+    "taste"
+   ]
+  },
+  "memory": {
+   "step": "recall",
+   "words": [
+    "remember",
+    "recall"
+   ],
+   "cue_verbs": [
+    "remember",
+    "recall"
+   ]
+  },
+  "imagine": {
+   "step": "imagine",
+   "words": [
+    "imagine",
+    "picture"
+   ],
+   "cue_verbs": [
+    "imagine"
+   ]
+  }
+ },
+ "implied_count_noun": {
+  "_doc": "Fix 2 (knitting): a bare number is never an object. In knitting, 'knit 2' counts stitches (canonical measure for the domain), so the object is 'stitch(implied)' with quantity 2, rule INV-IMPLIED-COUNT-NOUN.",
+  "craft.knitting": {
+   "noun": "stitch",
+   "verbs": [
+    "knit",
+    "purl",
+    "slip",
+    "cast",
+    "bind",
+    "narrow",
+    "decrease",
+    "increase",
+    "crochet",
+    "work",
+    "miss",
+    "skip",
+    "pick",
+    "take",
+    "make"
+   ]
+  }
+ }
 }

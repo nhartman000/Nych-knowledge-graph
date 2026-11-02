@@ -36,9 +36,10 @@ def loop_id_for(key: str) -> str:
 
 class Harvester:
     def __init__(self, db_path=DEFAULT_DB, out_dir: Path = HARVEST_DIR, parser="auto", fetcher=fetch):
-        self.db = ToteDB(db_path)
+        self.db = ToteDB(db_path) if db_path is not None else None   # None = extraction-only worker (parallel mode)
         self.out = Path(out_dir); (self.out / "runs").mkdir(parents=True, exist_ok=True)
         self.ckpt_path = self.out / "checkpoint.json"
+        self._ops = None
         self.ckpt = json.loads(self.ckpt_path.read_text()) if self.ckpt_path.exists() else {}
         self.use_spacy = False
         if parser in ("spacy", "auto"):
@@ -57,11 +58,32 @@ class Harvester:
         self.stats = {"run_id": self.run_id, "started": datetime.now().isoformat(timespec="seconds"), "parser": "spacy-en_core_web_sm+nych3" if self.use_spacy else self.parser.version,
                       "sentences_seen": 0, "skipped_already_processed": 0, "skipped_dialogue": 0, "skipped_question": 0,
                       "skipped_too_long": 0, "skipped_apparatus": 0, "non_action": 0, "non_action_reasons": {}, "action_sentences": 0, "action_clauses": 0, "loops_new": 0,
-                      "loops_repeat": 0, "no_match": 0, "no_match_reasons": {}, "modality_unresolved": 0, "errors": 0,
+                      "loops_repeat": 0, "sense_attached": 0, "sense_unattached": 0, "modality_links": 0, "no_match": 0, "no_match_reasons": {}, "modality_unresolved": 0, "errors": 0,
                       "error_samples": [], "per_book": {}, "samples_new": []}
 
     def close(self):
-        self.db.close()
+        if self.db is not None:
+            self.db.close()
+
+    def _op_ids(self):
+        if self._ops is None:
+            self._ops = {r["c"]: r["i"] for r in self.db.q("MATCH (o:Operator) RETURN o.canonical_name AS c, o.operator_id AS i")}
+        return self._ops
+
+    def _link_modalities(self, lid, links):
+        """USES_MODALITY: loop -> Operator for every action channel and every attached sense test (never a bare sense)."""
+        ops = self._op_ids()
+        have = {(r["o"], r["w"]) for r in self.db.q("MATCH (l:TOTELoop {loop_id:$l})-[u:USES_MODALITY]->(o:Operator) RETURN o.operator_id AS o, u.word AS w", {"l": lid})}
+        n = 0
+        for ln in links or []:
+            oid = ops.get(ln["channel"])
+            w = f"{ln['word']}|{ln.get('role', 'action')}|{ln.get('provenance', '')}"
+            if oid and (oid, w) not in have:
+                self.db.c.execute("MATCH (l:TOTELoop {loop_id:$l}),(o:Operator {operator_id:$o}) CREATE (l)-[:USES_MODALITY {word:$w}]->(o)",
+                                  {"l": lid, "o": oid, "w": w})
+                have.add((oid, w)); n += 1
+        self.stats["modality_links"] += n
+        return n
 
     # ------------------------------------------------------------ helpers
     def _seen(self, key):
@@ -105,7 +127,7 @@ class Harvester:
             return "skipped_too_long", [], None
         if self.use_spacy:
             from .spacy_extract import extract as sx
-            o, loops, r = sx(sent["text"], self.modreg, self.lexverbs, domain)
+            o, loops, r = sx(sent["text"], self.modreg, self.lexverbs, domain, self.stats)
             for lp in loops:
                 lp["loop_id"] = loop_id_for(lp["key"])
             return o, loops, r
@@ -170,14 +192,15 @@ class Harvester:
             self.db.add_gate(gate)
             self.db.add_loop({
                 "loop_id": lid, "name": f"{lp['lemma']} {lp['object_lemma']}".strip(), "domain": book["domain"],
-                "objective": "UNRESOLVED", "initial_test": "UNRESOLVED", "exit_predicate": gate["gate_id"], "max_iterations": -1,
+                "objective": "UNRESOLVED",
+                "initial_test": " ; ".join(t["step"] for t in lp.get("sense_tests", []) if t["role"] == "test") or "UNRESOLVED", "exit_predicate": gate["gate_id"], "max_iterations": -1,
                 "epistemic_status": "ACT", "modality_cell": lp["row"]["modality"], "actor_cell": lp["row"]["actor"],
                 "action_cell": lp["row"]["action"], "object_cell": lp["row"]["object"], "perspective_cell": lp["row"]["perspective_location"],
                 "exit_gate_id": gate["gate_id"], "action_lemma": lp["lemma"], "object_lemma": lp["object_lemma"],
                 "termination_triggers": ([{"trigger": lp["exit"]["text"], "condition": lp["exit"].get("condition", lp["exit"]["text"]),
                                            "provenance": lp["exit"].get("provenance", "explicit"), "rule": lp["exit"].get("rule")}] if lp["exit"] else
                                          [{"trigger": f"{lp['lemma']}_complete", "provenance": "inferred"}]),
-                "techniques": [], "version": "1", "repeat_count": 1, "structure_key": lp["key"],
+                "techniques": [dict(t, kind="sense_test") for t in lp.get("sense_tests", [])], "version": "1", "repeat_count": 1, "structure_key": lp["key"],
                 "in_domain": [[book["domain"], "primary", "harvested"]]},
                 status="candidate", provenance={"source": "nych3 batch harvester", "method": "HARVEST-BATCH-1", "authority": None,
                                                 "first_ref": prov_ref})
@@ -195,6 +218,7 @@ class Harvester:
                 self.db.c.execute("MATCH (l:TOTELoop {loop_id:$l}),(d:Domain {domain_id:$d}) CREATE (l)-[:IN_DOMAIN {role:'cross_link',evidence:'same structure harvested in another domain',provenance:'harvester'}]->(d)",
                                   {"l": lid, "d": book["domain"]})
             new = False
+        self._link_modalities(lid, lp.get("modality_links"))
         self.db.c.execute("CREATE (:SourceRef {ref_id:$r,isbn:$i,isbn_status:$s,page:$p,page_kind:$k,page_method:$m,fallback_gutenberg_id:$g,sent_key:$sk,sentence_text:$t,flags:$f})",
                           dict(r=ref_id, i=book["isbn"] or "", s=book["isbn_status"], p=para["page"], k=para["page_kind"],
                                m=para["page_method"], g=str(book["gutenberg_id"]), sk=sent_key, t=sentence_text,

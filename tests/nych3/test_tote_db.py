@@ -4,7 +4,7 @@ from nych3.store.tote_db import ToteDB
 
 def test_seed_and_commonality(db_path):
     db = ToteDB(db_path)
-    assert db.count() == 2 and db.count("canonical") == 1 and db.count("candidate") == 1
+    assert db.count() == 3 and db.count("canonical") == 2 and db.count("candidate") == 1   # +TL-STIR-SAUCE-001 user seed
     assert db.commonality() == [{"loop_id": "TL-LOOK-AT-STARS-001", "domains": ["astronomy.observation", "human_action.perception"]}] or \
         db.commonality()[0]["loop_id"] == "TL-LOOK-AT-STARS-001"
     g = db.gate("G-EXIT-LOOK-AT-STARS-001")

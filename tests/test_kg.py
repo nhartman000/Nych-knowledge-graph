@@ -15,8 +15,8 @@ def test_schema_is_single_source_and_loads(conn):
     stmts = poc.schema_statements()
     assert len(stmts) >= 25
     assert 'CREATE NODE TABLE' not in (ROOT / 'stages/04-kg-run/kg_run.py').read_text().replace("'CREATE NODE TABLE'", '')
-    # unified store: legacy POC set + NYCH 3.0 seed (10 modality operators, 2 loops, 2 exit gates)
-    for t, n in {'Gestalt': 32, 'Sense': 14, 'Span': 11, 'Operator': 14, 'TOTELoop': 24, 'Step': 132, 'Gate': 3}.items():
+    # unified store: legacy POC set + NYCH 3.0 seed (10 modality operators, 3 loops incl. user stir-sauce seed, 3 exit gates)
+    for t, n in {'Gestalt': 32, 'Sense': 14, 'Span': 11, 'Operator': 14, 'TOTELoop': 25, 'Step': 132, 'Gate': 4}.items():
         assert poc.count(conn, t) == n, t
     assert one(conn, "MATCH (l:TOTELoop) WHERE l.action_lemma IS NULL RETURN count(l)") == 22      # legacy rows
     assert one(conn, "MATCH (o:Operator) WHERE o.operator_id STARTS WITH 'OP-' RETURN count(o)") == 10

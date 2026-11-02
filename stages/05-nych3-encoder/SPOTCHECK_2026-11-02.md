@@ -1,0 +1,44 @@
+# Spot check, 2026-11-02 (40 random harvested loops, seed 40402, after the fixes)
+
+correct 17, partly correct 16, wrong 7. Graded by hand against the source sentence.
+
+- #1 `TL-H-7873f3e89c1c` (cooking) **partly correct** - Put in a stone jar or tumblers.
+- #2 `TL-H-969e11fa5619` (cooking) **wrong** - See directions for freezing, page 434.
+- #3 `TL-H-bc634f4fc804` (cooking) **correct** - Remove scales which have not been taken off.
+- #4 `TL-H-4325e6ee0429` (cooking) **correct** - Chop suet, and work with the hands until creamy, then add figs. Soak bread crumbs in milk, add eggs well beaten, sugar, and salt.
+- #5 `TL-H-e176432165db` (cooking) **partly correct** - Add gradually the milk, season, and bind.
+- #6 `TL-H-ce64a3b1a114` (cooking) **correct** - Wipe, quarter, core, and pare eight sour apples.
+- #7 `TL-H-235f7f657bdb` (cooking) **correct** - Citron is first cut in thin slices, then in strips, floured, and put in between layers of cake mixtures.
+- #8 `TL-H-e48f0dbb2f98` (cooking) **correct** - Place in a hot oven, and when flour is well browned, reduce the heat, then baste.
+- #9 `TL-H-3b20a2ea3310` (cooking) **correct** - Heat gradually, stir occasionally, and cook slowly two hours; then add brandy and spices.
+- #10 `TL-H-ef9835d4afed` (craft.woodworking) **partly correct** - Take twice this distance upon the blade of the bevel and adjust so that a right triangle is formed in which the length of the longest side shall be twice that o
+- #11 `TL-H-fb3617dd0bf5` (cooking) **correct** - Cook over hot water until mixture thickens, add butter and strained gelatine.
+- #12 `TL-H-f73184d3f92b` (cooking) **correct** - Freeze fruit juice and wine; boil sugar and water, pour on slowly to beaten whites of eggs, set in pan of salted ice-water, and stir until cold.
+- #13 `TL-H-0541bae4bc8c` (cooking) **partly correct** - Add one-half cup cracker crumbs, hot stock to moisten, salt, pepper, celery salt, cayenne, lemon juice, and one egg slightly beaten.
+- #14 `TL-H-507a94b8d2da` (cooking) **wrong** - Put on a sheet and bake until the cheese melts.
+- #15 `TL-H-b7f1e0579e36` (cooking) **partly correct** - Then add milk, stir lightly with a fork, cover, and steam until rice is soft.
+- #16 `TL-H-83172dd5b785` (cooking) **correct** - Cut fat and membranes from gizzard.
+- #17 `TL-H-e7f29aee6d6a` (cooking) **partly correct** - Never put cogs of a Dover Egg-beater in water.
+- #18 `TL-H-52e253b4b529` (cooking) **partly correct** - Cover three cups potato with White Stock, cook until soft, and drain.
+- #19 `TL-H-1a1b845e981b` (craft.woodworking) **partly correct** - Where one plane is made to serve the purpose of smooth, jack and fore-plane, it should be ground straight across.
+- #20 `TL-H-8f2355d45d66` (craft.knitting) **wrong** - These slippers are very easily knitted, extremely pretty and may be made to fit any size of sole.
+- #21 `TL-H-a95ba26fd0e6` (cooking) **correct** - Arrange buttered scallop shells in a dripping-pan, half fill with mixture, cover with buttered crumbs, and bake twelve to fifteen minutes in a hot oven.
+- #22 `TL-H-0a956039f5c7` (cooking) **partly correct** - Remove pork last half-hour of cooking.
+- #23 `TL-H-12a77c6c3384` (cooking) **correct** - Add Kornlet, egg slightly beaten, and Worcestershire Sauce.
+- #24 `TL-H-35689d60bb71` (cooking) **correct** - Put Macaroni with White Sauce in buttered baking dish, cover with buttered crumbs, and bake until crumbs are brown.
+- #25 `TL-H-2ed1460783b7` (cooking) **correct** - Remove rind and use the part of pork which lies between rind and vein.
+- #26 `TL-H-bd80e143959d` (cooking) **wrong** - Canned peas are often drained, rinsed, and reheated in this way.
+- #27 `TL-H-41fc2f510340` (craft.ropework) **correct** - Then take strands H and J, cut out half the yarns in each, make an overhand knot in them and tuck the ends under the next lays as in a short splice.
+- #28 `TL-H-5add08d541f3` (cooking) **wrong** - Vinegar, to which salt is added, and sometimes sugar and spices, is scalded; and cucumbers, onions, and various kinds of fruit are allowed to remain in it.
+- #29 `TL-H-b8928f3c2f4f` (craft.ropework) **wrong** - This is particularly well adapted to heavy rope or where a shortening must be made quickly.
+- #30 `TL-H-f956971a55b7` (cooking) **partly correct** - Add one-fourth cup rice, boiled, one-half teaspoon chopped parsley, and salt and pepper to taste.
+- #31 `TL-H-50b07cce8527` (cooking) **partly correct** - Beat yolk one egg, add one and one-half tablespoons cream, one-fourth teaspoon salt, one-eighth teaspoon paprika, one-fourth teaspoon Worcestershire Sauce, and 
+- #32 `TL-H-3587316e1a01` (craft.woodworking) **wrong** - Bore these holes so that they connect one with another. (6) Place the piece on a chiseling board and, taking thin cuts about half way thru, work from the middle
+- #33 `TL-H-192ed9c0556f` (cooking) **correct** - Heat palms of hands in hot water, and chill in cold water.
+- #34 `TL-H-76340c66e1ba` (cooking) **partly correct** - Beat whites until stiff, add gradually two-thirds of sugar, and continue beating until mixture will hold its shape; fold in remaining sugar, and add flavoring.
+- #35 `TL-H-24ca6fcc6c87` (cooking) **correct** - To do this, put on covers, close front and back dampers, and open oven-damper; turn grate, and ashes will fall into the ash receiver.
+- #36 `TL-H-f6da70e69344` (cooking) **partly correct** - Spread saltines with mixture and bake until delicately browned.
+- #37 `TL-H-4a07e5acae17` (cooking) **partly correct** - Cool, and freeze to a mush.
+- #38 `TL-H-fbeb1ffcdb27` (craft.knitting) **partly correct** - Use No. 16 steel needles, with Spanish knitting-yarn or worsted.
+- #39 `TL-H-96b834d74d7d` (cooking) **correct** - Pour remaining sauce over all.
+- #40 `TL-H-e01152596140` (cooking) **partly correct** - Cook butter with onion five minutes; remove onion, add flour and gradually clam water.

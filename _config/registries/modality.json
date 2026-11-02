@@ -193,7 +193,12 @@
   "whisk": "external_kinesthetic",
   "scald": "external_kinesthetic",
   "sear": "external_kinesthetic",
-  "toss": "external_kinesthetic"
+  "toss": "external_kinesthetic",
+  "splice": "external_kinesthetic",
+  "verify": "external_visual",
+  "inspect": "external_visual",
+  "examine": "external_visual",
+  "sight": "external_visual"
  },
  "lemma_channels_inferred": {
   "_doc": "Channel assigned with provenance=inferred and alternatives kept (the verb does not fix the sense).",
@@ -237,9 +242,17 @@
    ]
   },
   "boil": {
-   "channel": "unresolved",
-   "alternatives": []
+   "channel": "external_kinesthetic",
+   "alternatives": [
+    "external_visual"
+   ],
+   "note": "default: actor operates heat/pan"
   }
  },
- "_doc_instructional": "Manipulation verbs from instructional text map to external kinesthetic (hands acting outward). Process verbs (boil, bake, simmer...) are deliberately left unmapped: the actor does not perceive/act through a channel the verb fixes."
+ "_doc_instructional": "Manipulation verbs from instructional text map to external kinesthetic (hands acting outward). Process verbs (boil, bake, simmer...) are deliberately left unmapped: the actor does not perceive/act through a channel the verb fixes.",
+ "default_action_channel": {
+  "_doc": "Fix 4: every action verb gets a default modality. Verbs not in lemma_channels/lemma_channels_inferred default to external_kinesthetic (hands acting on the world), marked [default]. Valence (good/bad feeling) belongs to the Gestalt, never to the modality.",
+  "channel": "external_kinesthetic",
+  "provenance": "default"
+ }
 }

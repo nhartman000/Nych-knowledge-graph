@@ -90,8 +90,12 @@ class ToteDB:
             self.c.execute("CREATE (:Domain {domain_id:$a,name:$a})", {"a": dom})
         for g in d["gates"]:
             self.add_gate(g)
+        ops = {op[2]: op[0] for op in d["operators"]}
         for row in d["loops"]:
             self.add_loop(row, status=row["status"], provenance=row["provenance"])
+            for ln in row.get("modality_links", []):
+                self.c.execute("MATCH (l:TOTELoop {loop_id:$l}),(o:Operator {operator_id:$o}) CREATE (l)-[:USES_MODALITY {word:$w}]->(o)",
+                               {"l": row["loop_id"], "o": ops[ln["channel"]], "w": ln["word"]})
         self.load_measures()
 
     def load_measures(self, path: Path = CONFIG / "invariants" / "measures.json"):

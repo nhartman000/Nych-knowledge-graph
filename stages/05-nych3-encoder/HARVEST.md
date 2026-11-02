@@ -8,7 +8,7 @@ Rights were checked from each Gutenberg HTML file's `<meta name="dc.rights">` (w
 |---|---|---|---|---|
 | pg71855 | Griffith, *Essentials of Woodworking* | 1908 | step-by-step tool procedures | printed (`span.pagenum`) |
 | pg65061 | Farmer, *Boston Cooking-School Cook Book* | 1896– | thousands of imperative recipe steps with explicit exits ("until soft", "for 10 minutes") | printed (`span.pageno`) |
-| pg29558 | *Boy Scouts Handbook*, 1st ed. | 1911 | first aid, knots, camping, signalling | derived |
+| pg13510 | Verrill, *Knots, Splices and Rope Work* | 1917 | step-by-step knots, splices, seizings (replaced the Boy Scouts Handbook pg29558 on 2026-11-02) | derived |
 | pg26113 | *Handbook of Wool Knitting and Crochet* | n.d. | very fine-grained stitch instructions | derived |
 
 ## Provenance (user decision: ISBN + page only, at first)
@@ -48,3 +48,16 @@ $VENV/python -m nych3.harvest.cli promote TL-H-xxxxxxxxxxxx --authority "N Hartm
   - Explicit exits: "until X", "for N minutes".
   - Implied by text: destinations (ride to the store gives actor_location == store), into/onto placements, result states, bare durations.
 - **'with' resolution:** an instrument-class noun becomes the tool; an ingredient-class noun becomes a co-object with role with_ingredient; anything else stays unresolved, marked "(?)".
+## 2026-11-02 quality pass (fixes 1–7)
+1. **Instruction gate** (`domain_invariants.json → instruction_gate`): a clause becomes a loop only if it is imperative, or a procedural pattern: `should/must/shall/ought` + passive or `you/one` ("should be planed"), a present agentless passive of a hands-on verb ("is then cut"), or `you` + present hands-on verb. Rejected: past-tense narrative (`narrative_past`), other indicatives (`not_instruction`), `may/can be used` (optional/descriptive), idiomatic imperatives (`take care`, `make sure`... → `figurative_imperative`) and figurative markers. Leading enumerators/labels (`8. `, `Left front: `) are stripped first.
+2. **Pronouns and bare numbers are never objects** (`bad_object`). In knitting, a bare count after a stitch verb becomes `stitch(implied) [N]` (`INV-IMPLIED-COUNT-NOUN`), because the stitch is the domain's canonical counted measure.
+3. **Non-locations:** `in place of`, `instead of`, `in order`, `in case`, `in the same way` ... (`non_location_prep_objects`) are never perspective/location.
+4. **Default modality:** every action verb gets a channel: `lemma_channels` (explicit), `lemma_channels_inferred`, else `default_action_channel` = 🙌 external kinesthetic, marked `[default]`. Each loop links to `Operator` rows through `USES_MODALITY {word: "<word>|<role>|<provenance>"}`. Valence (good or bad) belongs to the Gestalt and never to the modality.
+   **Sense-mention rule (user, 2026-11-02):** a sense word (sight, feel, hearing, smell, taste, memory, imagining; `sense_cues`) is never stored alone. It is attached to the action loop whose clause contains it, as a TEST step (`initial_test`, `techniques[kind=sense_test]`) or as the EXIT step when it sits in the exit clause. Example: "Fry until golden" gives the fry loop the exit test `👀 verify color golden`. If the loop has no other exit, the sense test becomes its exit (`EXIT-SENSE-TEST`, implied_by_text). Attributive uses ("boiling water", "cold milk") describe an ingredient and are not tests. Mentions in sentences that yield no loop are only counted (`sense_unattached`).
+5. **User seed loop** `TL-STIR-SAUCE-001` (canonical, authority N Hartman, `source_kind=user_prior_knowledge`, no ISBN or page): cooking / stir / sauce / tool spoon / in saucepan. Steps: 🙌 hold spoon in sauce; 🫶 feel sauce resistance (test); 🙌 stir in a circular motion (saucepans are round); 👀 verify the sauce is agitated or in motion, and if true, exit.
+   **Secondary pass (NOT built):** implicit checks the text never states, such as *check the bottom of the saucepan for burning sauce* and *check the heat*, are separate loops. They will be extracted in a later secondary pass, after the fully described loops are parsed (listed in the seed's `provenance.deferred_secondary_loops`).
+6. **Sources:** the Boy Scouts Handbook (pg29558) was replaced by Verrill, *Knots, Splices and Rope Work* (1917, pg13510, derived pages, `craft.ropework`). Knitting now yields loops: before, it was never reached, and its numbered rows and bare counts failed.
+7. **Parallel harvest** (`harvest/parallel.py`, `nych3-harvest prun --workers N`): shards are (book, 60-paragraph range). N worker processes run the pure extractor and write `harvest/shards/<book>@<lo>-<hi>.jsonl` (tmp file plus atomic rename, so a file that exists is complete). Then ONE writer merges them into Kuzu, one transaction per shard, skipping ledger keys (at most once), and records `_merged_shards` in `checkpoint.json`. Re-running resumes both stages. Sentence keys are `<book>:p<para>:s<n>`. Use `--extract-only` or `--merge-only` to run the stages separately.
+```bash
+$VENV/python -m nych3.harvest.cli prun --workers 6
+```
