@@ -1,0 +1,588 @@
+{
+ "kept": [
+  {
+   "id": "FILE_OPEN",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "FILE_CREATE_FOLDER",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "FILE_DELETE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "FILE_EMPTY_TRASH",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "FILE_MOVE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "FILE_COPY",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "FILE_PASTE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "FILE_CUT",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "FILE_UPLOAD",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "FILE_SHARE_LINK",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "FILE_SAVE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "FILE_PRINT",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "SCREENSHOT",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "TEXT_UNDO",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "TEXT_REDO",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "TEXT_FIND",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "TEXT_FONT_SIZE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "TEXT_SPELLCHECK",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "TEXT_INSERT_LINK",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "TEXT_INSERT_IMAGE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "TEXT_COMMENT",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "TEXT_DICTATE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "BR_NEW_TAB",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "BR_CLOSE_TAB",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "BR_BOOKMARK",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "BR_PRIVATE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "BR_CLEAR_DATA",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "BR_HISTORY",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "BR_DEFAULT_BROWSER",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "BR_EXTENSION_ADD",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "BR_SAVE_PASSWORD",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "SET_OPEN",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "SET_WIFI",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "SET_BLUETOOTH",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "SET_AIRPLANE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "SET_DARK_MODE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "SET_BRIGHTNESS",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "SET_VOLUME",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "SET_NOTIFICATIONS",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "SET_DND",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "SET_LANGUAGE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "SET_DATE_TIME",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "SET_UPDATE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "SET_RESTART",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "SET_APP_INSTALL",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "SET_APP_UNINSTALL",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "SET_APP_FORCE_STOP",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "SET_BACKUP",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "SET_BATTERY_SAVER",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "ACC_SIGN_IN",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "ACC_SIGN_OUT",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "ACC_CHANGE_PASSWORD",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "ACC_RESET_PASSWORD",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "ACC_2SV_ON",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "ACC_ENTER_CODE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "ACC_CREATE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "ACC_SWITCH",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "ACC_DELETE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "MAIL_COMPOSE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "MAIL_SEND",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "MAIL_REPLY",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "MAIL_FORWARD",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "MAIL_ATTACH",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "MAIL_ARCHIVE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "MAIL_DELETE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "MAIL_LABEL",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "MAIL_SIGNATURE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "MAIL_VACATION",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "MAIL_BLOCK",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "MSG_UNSEND",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "CONTACT_ADD",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "AI_NEW_CHAT",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "AI_SEND_PROMPT",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "AI_ATTACH_FILE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "AI_EDIT_PROMPT",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "AI_FEEDBACK",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "AI_RENAME_CHAT",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "AI_DELETE_CHAT",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "AI_SHARE_CHAT",
+   "n_sources": 3,
+   "problems": []
+  },
+  {
+   "id": "AI_SEARCH_CHATS",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "AI_VOICE_INPUT",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "AI_MODEL_SELECT",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "AI_PROJECT",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "AI_CUSTOM_INSTRUCTIONS",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "AI_MEMORY_TOGGLE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "AI_EXPORT_DATA",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "AI_GENERATE_IMAGE",
+   "n_sources": 2,
+   "problems": []
+  },
+  {
+   "id": "AI_UPLOAD_SCREENSHOT",
+   "n_sources": 2,
+   "problems": []
+  }
+ ],
+ "dropped": [
+  {
+   "id": "FILE_RENAME",
+   "stage": "second-pass review",
+   "reason": "no cached official quote under a rename-a-file heading (only list/recording/tab renames)"
+  },
+  {
+   "id": "FILE_RESTORE_TRASH",
+   "stage": "second-pass review",
+   "reason": "only one on-function quote (Samsung OneDrive Gallery); others truncated or troubleshooting context"
+  },
+  {
+   "id": "FILE_DOWNLOAD",
+   "stage": "second-pass review",
+   "reason": "second source was only an icon legend (': Download the file or folder'); no second direct step"
+  },
+  {
+   "id": "FILE_SEARCH",
+   "stage": "second-pass review",
+   "reason": "cached quotes are about search settings/indexing, not the search operation itself"
+  },
+  {
+   "id": "FILE_ZIP",
+   "stage": "mechanical verification",
+   "reason": "fewer than 2 verified official sources",
+   "problems": []
+  },
+  {
+   "id": "FILE_EXPORT_PDF",
+   "stage": "second-pass review",
+   "reason": "second source was a rename-extension workaround, not an export function"
+  },
+  {
+   "id": "TEXT_SELECT_ALL",
+   "stage": "second-pass review",
+   "reason": "no Ctrl+A / Select All quote for text; matches were 'select all conversations' or update lists"
+  },
+  {
+   "id": "TEXT_REPLACE",
+   "stage": "second-pass review",
+   "reason": "single source (Word Ctrl+H dialog behavior), no second official step"
+  },
+  {
+   "id": "TEXT_BOLD",
+   "stage": "second-pass review",
+   "reason": "only descriptive/truncated mentions of bold, no operation step in 2 sources"
+  },
+  {
+   "id": "TEXT_TRACK_CHANGES",
+   "stage": "second-pass review",
+   "reason": "no cached source"
+  },
+  {
+   "id": "TEXT_VERSION_HISTORY",
+   "stage": "mechanical verification",
+   "reason": "fewer than 2 verified official sources",
+   "problems": [
+    "quote not resolved/verified: 'Check your version history for your offline edits.'"
+   ]
+  },
+  {
+   "id": "BR_OPEN_URL",
+   "stage": "second-pass review",
+   "reason": "no cached step 'type URL in address bar and press Enter'; quotes are about address-bar settings"
+  },
+  {
+   "id": "BR_REOPEN_TAB",
+   "stage": "second-pass review",
+   "reason": "no cached source for reopening a closed tab"
+  },
+  {
+   "id": "BR_RELOAD",
+   "stage": "second-pass review",
+   "reason": "only Internet-Explorer-mode reload and 'preload pages'; not the basic reload function"
+  },
+  {
+   "id": "BR_BACK",
+   "stage": "second-pass review",
+   "reason": "no browser Back quote; matches were Windows rollback / settings back arrows"
+  },
+  {
+   "id": "BR_ZOOM",
+   "stage": "mechanical verification",
+   "reason": "fewer than 2 verified official sources",
+   "problems": [
+    "quote not resolved/verified: 'Next to “Default zoom,” move the slider'"
+   ]
+  },
+  {
+   "id": "SET_PERMISSION",
+   "stage": "second-pass review",
+   "reason": "both sources only navigate to the permission page; the allow/deny step itself is not quoted"
+  },
+  {
+   "id": "SET_STORAGE_CHECK",
+   "stage": "second-pass review",
+   "reason": "second source was a heading-like sentence; no second direct step"
+  },
+  {
+   "id": "SET_LOCK_SCREEN",
+   "stage": "second-pass review",
+   "reason": "quotes are lock-screen personalization, not the lock operation"
+  },
+  {
+   "id": "ACC_PROFILE_PHOTO",
+   "stage": "second-pass review",
+   "reason": "second source was only a link title ('Change your user account picture')"
+  },
+  {
+   "id": "MAIL_MARK_SPAM",
+   "stage": "second-pass review",
+   "reason": "second source concerned Outlook meeting items, not the basic report-spam function"
+  },
+  {
+   "id": "MAIL_SEARCH",
+   "stage": "second-pass review",
+   "reason": "neither source is an operation step (both descriptive); weak"
+  },
+  {
+   "id": "CAL_EVENT",
+   "stage": "second-pass review",
+   "reason": "calendar help pages not in the extracted corpus; only one Gmail-context quote"
+  },
+  {
+   "id": "AI_STOP",
+   "stage": "mechanical verification",
+   "reason": "fewer than 2 verified official sources",
+   "problems": []
+  },
+  {
+   "id": "AI_REGENERATE",
+   "stage": "mechanical verification",
+   "reason": "fewer than 2 verified official sources",
+   "problems": []
+  },
+  {
+   "id": "AI_COPY_RESPONSE",
+   "stage": "mechanical verification",
+   "reason": "fewer than 2 verified official sources",
+   "problems": []
+  }
+ ],
+ "raw_cache": "/workspace/nych-ui-actions/data/raw",
+ "raw_cache_present": true
+}
