@@ -15,6 +15,7 @@ def test_ranges_and_markers():
     assert rules.modality("remember", "Remember your PIN", "")[0] == "💭"
     assert rules.modality("decide", "Decide which unit fits", "")[0] == "🧠🗯"          # internal sense default
     assert rules.modality("keep", "Keep in mind the fee", "")[0] == "🧠🗯"
+    assert rules.modality("make", "Make sure the lease is signed", "VERIFY_STATE", "sure the lease is signed")[0] == "🧠🗯"
     assert rules.modality("keep", "Keep your app updated", "")[0] == "🙌"
     assert rules.modality("check", "Check the lease", "")[0] == "👀²"
     q = rules.quote(" ".join(f"w{i}" for i in range(60)), "w30")

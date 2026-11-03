@@ -24,7 +24,18 @@ def is_step_line(x, acts):
     t = re.sub(r"^(\d+[.)]\s*|step \d+:?\s*|first,?\s*|then,?\s*|next,?\s*|finally,?\s*|also,?\s*)", "", x["text"], flags=re.I)
     return bool(acts) and t[:len(acts[0]["surface"])].lower() == acts[0]["surface"].lower()
 def main():
-    os.makedirs(OUT, exist_ok=True); rows = []; pages = collections.Counter(); pages_dom = collections.Counter(); stats = collections.Counter()
+    os.makedirs(OUT, exist_ok=True)
+    # pass 0: lines repeated on >= max(5, 3% of pages) of one site are site chrome/promos (e.g. "Follow ... on Google News"), not steps
+    rep = {}
+    for src in SOURCES:
+        pd = os.path.join(RAW, "_parsed", src["name"])
+        if not os.path.isdir(pd): continue
+        files = os.listdir(pd); cnt = collections.Counter()
+        for fn in files:
+            try: cnt.update({x["text"] for x in json.load(open(os.path.join(pd, fn)))[1]})
+            except Exception: pass
+        rep[src["name"]] = {t for t, k in cnt.items() if k >= max(5, 0.03 * len(files))}
+    rows = []; pages = collections.Counter(); pages_dom = collections.Counter(); stats = collections.Counter()
     for src in SOURCES:
         ix = os.path.join(RAW, src["name"], "_index.jsonl")
         if not os.path.exists(ix): continue
@@ -43,6 +54,7 @@ def main():
             pages[src["name"]] += 1; pages_dom[dom] += 1
             for li, x in enumerate(st):
                 if BOILER.search(x["text"]): stats["boiler"] += 1; continue
+                if x["text"] in rep.get(src["name"], ()): stats["site_repeated_line"] += 1; continue
                 acts = x["acts"]
                 if not acts or not is_step_line(x, acts): stats["non_step_line"] += 1; continue
                 if CTA.search(x["text"]) or (x["kind"] != "ol" and len(x["text"].split()) < 5) or x["text"].rstrip().endswith("?"):
@@ -53,7 +65,7 @@ def main():
                     c = canon({**a, "text": x["text"], "direction": "", "count": "", "duration": ""})
                     if c == "NON_ACTION" or a["verb"].split()[0] in NONACT or a["verb"].split()[0] in STOPV: stats["non_action"] += 1; continue
                     if not a["object"].strip() or re.match(r"^(simply|it all|the no\b|’s|'s)", a["object"]): stats["bare_verb_or_junk_object"] += 1; continue
-                    md, why = modality(a["verb"], x["text"], c)
+                    md, why = modality(a["verb"], x["text"], c, a["object"])
                     rid = hashlib.sha1(f"{e['url']}|{li}|{k}".encode()).hexdigest()[:16]
                     rows.append({"id": rid, "domain": dom, "platform": src["platform"], "platform_hints": "|".join(plats), "site": src["name"],
                                  "canonical": "" if c.startswith("UNMAPPED") else c, "verb": a["verb"], "object": a["object"], "obj_type": a["obj_type"],

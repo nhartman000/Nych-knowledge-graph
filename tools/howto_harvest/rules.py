@@ -20,11 +20,11 @@ RECALL = re.compile(r"\b(remember|recall|as before|as last time)\b", re.I)
 MENTAL = {"decide", "consider", "think", "determine", "evaluate", "plan", "figure", "imagine", "understand", "know", "weigh", "estimate", "budget", "prioritize", "trust", "assume", "expect", "beware", "be"}
 LOOK = {"check", "look", "verify", "review", "read", "watch", "inspect", "confirm", "compare", "monitor", "research", "scan", "see", "view", "examine", "notice", "browse", "search"}
 LISTEN = {"listen", "hear"}
-def modality(verb, text, canonical):
+def modality(verb, text, canonical, obj=""):
     v = verb.split()[0]
     if v in ("remember", "recall") or (v == "keep" and RECALL.search(text) and "mind" in text.lower()):
         return "💭", "explicit_recall_cue"
-    if v in MENTAL or verb in ("make sure", "keep in mind", "think about") or (v == "keep" and re.search(r"(?i)\bkeep\b[^.]{0,20}\bin mind\b", text)): return "🧠🗯", "internal_sense_default"
+    if (v == "make" and re.match(r"(?i)\s*(sure|certain)\b", obj or "")) or v in MENTAL or verb in ("make sure", "keep in mind", "think about") or (v == "keep" and re.search(r"(?i)\bkeep\b[^.]{0,20}\bin mind\b", text)): return "🧠🗯", "internal_sense_default"
     if v in LOOK or canonical in ("VERIFY_STATE", "REVIEW_CONTENT"): return "👀²", "look"
     if v in LISTEN: return "👂👂", "listen_external"
     return "🙌", "operate"
