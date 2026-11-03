@@ -6,6 +6,8 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "shared"))
+from nych3.tote_four_part import missing_parts  # noqa: E402
 PATH = ROOT / "shared/data/tech_ui/core_tote/core_loops.json"
 OFFICIAL = {"support.google.com", "support.microsoft.com", "support.claude.com", "www.samsung.com", "support.apple.com"}
 MAX_RETRIES_CAP = 2
@@ -24,6 +26,10 @@ def errors(doc: dict) -> list[str]:
         if a.get("kind") != "declared_function" or a.get("goal_seeking") is not False or a.get("may_chain") is not False \
                 or a.get("acts_on_behalf_of") is not None or "declared-function-only" not in a.get("authority", ""):
             e("actor/authority must declare a non-agentic declared function")
+        mp = missing_parts(L)
+        if mp: e(f"four-part TOTE rule: missing {', '.join(mp)}")
+        for k, st in L.get("tote", {}).items():
+            if isinstance(st, dict) and st.get("may_assert_action"): e(f"tote.{k}: modality operator may not assert the action")
         t = L.get("tote", {})
         for k in ("test_pre", "operate", "test_post", "exit"):
             if k not in t: e(f"missing tote.{k}")

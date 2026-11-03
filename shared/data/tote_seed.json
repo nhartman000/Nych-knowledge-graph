@@ -13,14 +13,14 @@
    "🙌",
    "external_kinesthetic",
    "actor_external",
-   true
+   false
   ],
   [
    "OP-VE",
    "👀",
    "external_visual",
    "actor_external",
-   true
+   false
   ],
   [
    "OP-VI",
@@ -41,7 +41,7 @@
    "👂👂",
    "external_auditory",
    "actor_external",
-   true
+   false
   ],
   [
    "OP-MEM",
@@ -62,14 +62,14 @@
    "👃",
    "smell",
    "actor_external",
-   true
+   false
   ],
   [
    "OP-GUS",
    "👅",
    "taste",
    "actor_external",
-   true
+   false
   ]
  ],
  "domains": [
@@ -339,5 +339,6 @@
     }
    ]
   }
- ]
+ ],
+ "_operators_doc": "operators rows: [operator_id, symbol, canonical_name, evidence_channel, may_assert_action]. may_assert_action is False for EVERY modality operator (owner rule, N Hartman 2026-11-03): exterior senses (👀 👂👂 🙌 touch 👃 👅) are input data, like a robot's sensor stream; a modality operator is a sub-action that is part of a TOTE loop and never asserts the loop's action by itself. The action is carried by action_cell/action_lemma. Every loop needs >=1 modality operator, an actor, an action and a tool or object (nych3.tote_four_part)."
 }

@@ -4,6 +4,9 @@ A small, high-accuracy set of Test-Operate-Test-Exit loops. Each loop describes 
 
 **Status of every loop:** `CANONICAL-CANDIDATE` with `verified_by_human: false`. The loops were authored and checked in two passes by an agent. They are not human-verified and are not ingested into the Kùzu store. This is a dataset. It is not a runtime executor, and nothing here enforces the bounds at run time.
 
+## Four-part rule
+Every loop must have at least one modality operator, an actor, an action, and a tool or object (`tool_or_object`). Modality operators (senses) are input/sub-action only and never assert the action. See `OPERATOR_MAPPING.md` (GAP-4, resolved).
+
 ## Files
 - `core_loops.json`: the loops (schema `nych3.core_tote/v1`)
 - `verify_report.json`: what was kept and dropped, and why

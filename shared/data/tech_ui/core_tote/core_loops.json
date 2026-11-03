@@ -8,6 +8,7 @@
    "name": "Open a file",
    "category": "files",
    "canonical_action": "OPEN_FILE",
+   "tool_or_object": "file",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -105,6 +106,7 @@
    "name": "Create a new folder",
    "category": "files",
    "canonical_action": "CREATE_ITEM",
+   "tool_or_object": "folder",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -205,6 +207,7 @@
    "name": "Delete a file or folder (to trash/recycle bin)",
    "category": "files",
    "canonical_action": "DELETE_ITEM",
+   "tool_or_object": "file or folder",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -305,6 +308,7 @@
    "name": "Empty Trash / Recycle Bin",
    "category": "files",
    "canonical_action": "DELETE_ITEM",
+   "tool_or_object": "Trash / Recycle Bin",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -402,6 +406,7 @@
    "name": "Move a file or folder to another folder",
    "category": "files",
    "canonical_action": "MOVE_ITEM",
+   "tool_or_object": "file or folder",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -499,6 +504,7 @@
    "name": "Copy selected item(s) to the clipboard",
    "category": "files",
    "canonical_action": "COPY",
+   "tool_or_object": "selected item(s) / clipboard",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -600,6 +606,7 @@
    "name": "Paste clipboard contents",
    "category": "files",
    "canonical_action": "PASTE",
+   "tool_or_object": "clipboard contents",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -701,6 +708,7 @@
    "name": "Cut a selection",
    "category": "text_editing",
    "canonical_action": "CUT",
+   "tool_or_object": "selection / clipboard",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -801,6 +809,7 @@
    "name": "Upload a file to cloud storage",
    "category": "files",
    "canonical_action": "UPLOAD_FILE",
+   "tool_or_object": "file / cloud storage",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -898,6 +907,7 @@
    "name": "Share a file with a person or by link",
    "category": "files",
    "canonical_action": "SHARE_SEND",
+   "tool_or_object": "file / share link",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -995,6 +1005,7 @@
    "name": "Save the current document",
    "category": "text_editing",
    "canonical_action": "SAVE",
+   "tool_or_object": "current document",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -1096,6 +1107,7 @@
    "name": "Print a document",
    "category": "files",
    "canonical_action": "PRINT",
+   "tool_or_object": "document / printer",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -1196,6 +1208,7 @@
    "name": "Take a screenshot",
    "category": "files",
    "canonical_action": "SCAN_CAPTURE",
+   "tool_or_object": "screen / screenshot image",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -1297,6 +1310,7 @@
    "name": "Undo the last action",
    "category": "text_editing",
    "canonical_action": "UNDO_REDO",
+   "tool_or_object": "last edit",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -1397,6 +1411,7 @@
    "name": "Redo an undone action",
    "category": "text_editing",
    "canonical_action": "UNDO_REDO",
+   "tool_or_object": "undone edit",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -1497,6 +1512,7 @@
    "name": "Find text in a document or page",
    "category": "text_editing",
    "canonical_action": "SEARCH",
+   "tool_or_object": "text in document or page",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -1597,6 +1613,7 @@
    "name": "Change font or text size",
    "category": "text_editing",
    "canonical_action": "SET_VALUE",
+   "tool_or_object": "selected text / font size control",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -1694,6 +1711,7 @@
    "name": "Accept a spelling suggestion",
    "category": "text_editing",
    "canonical_action": "USE_FEATURE",
+   "tool_or_object": "misspelled word / suggestion",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -1791,6 +1809,7 @@
    "name": "Insert a hyperlink",
    "category": "text_editing",
    "canonical_action": "ADD_ITEM",
+   "tool_or_object": "hyperlink / selected text",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -1891,6 +1910,7 @@
    "name": "Insert an image into a document",
    "category": "text_editing",
    "canonical_action": "ADD_ITEM",
+   "tool_or_object": "image / document",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -1988,6 +2008,7 @@
    "name": "Add a comment to a document",
    "category": "text_editing",
    "canonical_action": "ADD_ITEM",
+   "tool_or_object": "comment / document",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -2085,6 +2106,7 @@
    "name": "Dictate text with voice typing",
    "category": "text_editing",
    "canonical_action": "VOICE_COMMAND",
+   "tool_or_object": "voice typing control / microphone",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -2184,6 +2206,7 @@
    "name": "Open a new tab",
    "category": "browser",
    "canonical_action": "OPEN_TAB_PANEL",
+   "tool_or_object": "browser tab",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -2284,6 +2307,7 @@
    "name": "Close a tab",
    "category": "browser",
    "canonical_action": "CLOSE_ITEM",
+   "tool_or_object": "browser tab",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -2384,6 +2408,7 @@
    "name": "Bookmark the current page",
    "category": "browser",
    "canonical_action": "KEEP_REMEMBER",
+   "tool_or_object": "current page / bookmark",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -2484,6 +2509,7 @@
    "name": "Open a private (Incognito/InPrivate) window",
    "category": "browser",
    "canonical_action": "OPEN_TAB_PANEL",
+   "tool_or_object": "private browser window",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -2584,6 +2610,7 @@
    "name": "Clear browsing data (cache/cookies/history)",
    "category": "browser",
    "canonical_action": "DELETE_ITEM",
+   "tool_or_object": "browsing data (cache/cookies/history)",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -2683,6 +2710,7 @@
    "name": "View browsing history",
    "category": "browser",
    "canonical_action": "OPEN_ITEM",
+   "tool_or_object": "browsing history",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -2783,6 +2811,7 @@
    "name": "Set the default browser",
    "category": "browser",
    "canonical_action": "SET_VALUE",
+   "tool_or_object": "default browser setting",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -2880,6 +2909,7 @@
    "name": "Add a browser extension",
    "category": "browser",
    "canonical_action": "INSTALL_APP",
+   "tool_or_object": "browser extension",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -2977,6 +3007,7 @@
    "name": "Turn the browser's offer-to-save-passwords setting on or off",
    "category": "browser",
    "canonical_action": "TOGGLE",
+   "tool_or_object": "offer-to-save-passwords setting",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -3074,6 +3105,7 @@
    "name": "Open Settings",
    "category": "settings",
    "canonical_action": "OPEN_SETTINGS",
+   "tool_or_object": "Settings app",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -3175,6 +3207,7 @@
    "name": "Connect to a Wi-Fi network",
    "category": "settings",
    "canonical_action": "CONNECT_DEVICE",
+   "tool_or_object": "Wi-Fi network",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -3272,6 +3305,7 @@
    "name": "Pair a Bluetooth device",
    "category": "settings",
    "canonical_action": "CONNECT_DEVICE",
+   "tool_or_object": "Bluetooth device",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -3369,6 +3403,7 @@
    "name": "Toggle Airplane / Flight mode",
    "category": "settings",
    "canonical_action": "TOGGLE",
+   "tool_or_object": "Airplane mode setting",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -3466,6 +3501,7 @@
    "name": "Switch to dark mode / theme",
    "category": "settings",
    "canonical_action": "SET_VALUE",
+   "tool_or_object": "dark mode / theme setting",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -3563,6 +3599,7 @@
    "name": "Adjust screen brightness",
    "category": "settings",
    "canonical_action": "SET_VALUE",
+   "tool_or_object": "screen brightness control",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -3660,6 +3697,7 @@
    "name": "Adjust volume",
    "category": "settings",
    "canonical_action": "SET_VALUE",
+   "tool_or_object": "volume control",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -3757,6 +3795,7 @@
    "name": "Turn notifications off for an app",
    "category": "settings",
    "canonical_action": "TOGGLE_OFF",
+   "tool_or_object": "app notification setting",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -3854,6 +3893,7 @@
    "name": "Turn on Do Not Disturb / Focus",
    "category": "settings",
    "canonical_action": "TOGGLE_ON",
+   "tool_or_object": "Do Not Disturb / Focus setting",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -3951,6 +3991,7 @@
    "name": "Change display language",
    "category": "settings",
    "canonical_action": "SET_VALUE",
+   "tool_or_object": "display language setting",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -4048,6 +4089,7 @@
    "name": "Set date, time, or time zone",
    "category": "settings",
    "canonical_action": "SET_VALUE",
+   "tool_or_object": "date / time / time zone setting",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -4145,6 +4187,7 @@
    "name": "Check for and install system updates",
    "category": "settings",
    "canonical_action": "UPDATE_SOFTWARE",
+   "tool_or_object": "system update",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -4242,6 +4285,7 @@
    "name": "Restart the device",
    "category": "settings",
    "canonical_action": "RESTART_DEVICE",
+   "tool_or_object": "device",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -4339,6 +4383,7 @@
    "name": "Install an app from the official store",
    "category": "settings",
    "canonical_action": "INSTALL_APP",
+   "tool_or_object": "app / official app store",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -4436,6 +4481,7 @@
    "name": "Uninstall an app",
    "category": "settings",
    "canonical_action": "UNINSTALL_APP",
+   "tool_or_object": "app",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -4533,6 +4579,7 @@
    "name": "Close / force-stop an unresponsive app",
    "category": "settings",
    "canonical_action": "CLOSE_ITEM",
+   "tool_or_object": "unresponsive app",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -4630,6 +4677,7 @@
    "name": "Back up device or data",
    "category": "settings",
    "canonical_action": "BACKUP_RESTORE",
+   "tool_or_object": "device data / backup",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -4727,6 +4775,7 @@
    "name": "Turn on battery/power saver",
    "category": "settings",
    "canonical_action": "TOGGLE_ON",
+   "tool_or_object": "battery / power saver setting",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -4824,6 +4873,7 @@
    "name": "Sign in to an account",
    "category": "accounts",
    "canonical_action": "SIGN_IN",
+   "tool_or_object": "account / sign-in form",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -4921,6 +4971,7 @@
    "name": "Sign out of an account",
    "category": "accounts",
    "canonical_action": "SIGN_OUT",
+   "tool_or_object": "account / account menu",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -5018,6 +5069,7 @@
    "name": "Change account password",
    "category": "accounts",
    "canonical_action": "SET_VALUE",
+   "tool_or_object": "account password",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -5115,6 +5167,7 @@
    "name": "Recover / reset a forgotten password",
    "category": "accounts",
    "canonical_action": "RESET",
+   "tool_or_object": "forgotten password / recovery flow",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -5212,6 +5265,7 @@
    "name": "Turn on 2-Step Verification / two-factor authentication",
    "category": "accounts",
    "canonical_action": "TOGGLE_ON",
+   "tool_or_object": "2-Step Verification setting",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -5309,6 +5363,7 @@
    "name": "Enter a verification code",
    "category": "accounts",
    "canonical_action": "ENTER_CODE",
+   "tool_or_object": "verification code field",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -5406,6 +5461,7 @@
    "name": "Create an account",
    "category": "accounts",
    "canonical_action": "CREATE_ACCOUNT",
+   "tool_or_object": "new account",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -5503,6 +5559,7 @@
    "name": "Switch between signed-in accounts",
    "category": "accounts",
    "canonical_action": "SELECT_ITEM",
+   "tool_or_object": "signed-in accounts",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -5600,6 +5657,7 @@
    "name": "Delete an account",
    "category": "accounts",
    "canonical_action": "DELETE_ITEM",
+   "tool_or_object": "account",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -5697,6 +5755,7 @@
    "name": "Start a new email",
    "category": "messaging",
    "canonical_action": "CREATE_ITEM",
+   "tool_or_object": "new email draft",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -5794,6 +5853,7 @@
    "name": "Send a composed email or message",
    "category": "messaging",
    "canonical_action": "SHARE_SEND",
+   "tool_or_object": "composed email or message",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -5891,6 +5951,7 @@
    "name": "Reply to a message",
    "category": "messaging",
    "canonical_action": "SHARE_SEND",
+   "tool_or_object": "message / reply draft",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -5988,6 +6049,7 @@
    "name": "Forward a message",
    "category": "messaging",
    "canonical_action": "SHARE_SEND",
+   "tool_or_object": "message",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -6085,6 +6147,7 @@
    "name": "Attach a file to an email",
    "category": "messaging",
    "canonical_action": "UPLOAD_FILE",
+   "tool_or_object": "file / email",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -6182,6 +6245,7 @@
    "name": "Archive a message",
    "category": "messaging",
    "canonical_action": "MOVE_ITEM",
+   "tool_or_object": "message",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -6279,6 +6343,7 @@
    "name": "Delete a message",
    "category": "messaging",
    "canonical_action": "DELETE_ITEM",
+   "tool_or_object": "message",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -6376,6 +6441,7 @@
    "name": "Apply a label / move to a folder",
    "category": "messaging",
    "canonical_action": "SET_VALUE",
+   "tool_or_object": "message / label or folder",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -6473,6 +6539,7 @@
    "name": "Set an email signature",
    "category": "messaging",
    "canonical_action": "SET_VALUE",
+   "tool_or_object": "email signature",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -6570,6 +6637,7 @@
    "name": "Turn on automatic replies / vacation responder",
    "category": "messaging",
    "canonical_action": "TOGGLE_ON",
+   "tool_or_object": "automatic replies / vacation responder",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -6667,6 +6735,7 @@
    "name": "Block a sender / contact",
    "category": "messaging",
    "canonical_action": "SET_VALUE",
+   "tool_or_object": "sender / contact",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -6764,6 +6833,7 @@
    "name": "Undo send / unsend within the allowed window",
    "category": "messaging",
    "canonical_action": "CANCEL_ACTION",
+   "tool_or_object": "sent message",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -6861,6 +6931,7 @@
    "name": "Add a contact",
    "category": "messaging",
    "canonical_action": "ADD_ITEM",
+   "tool_or_object": "contact",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -6958,6 +7029,7 @@
    "name": "Start a new chat",
    "category": "ai_chat",
    "canonical_action": "CREATE_ITEM",
+   "tool_or_object": "chat",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -7055,6 +7127,7 @@
    "name": "Send a prompt",
    "category": "ai_chat",
    "canonical_action": "PROMPT_AI",
+   "tool_or_object": "prompt",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -7152,6 +7225,7 @@
    "name": "Attach a file to a prompt",
    "category": "ai_chat",
    "canonical_action": "UPLOAD_FILE",
+   "tool_or_object": "file / prompt",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -7249,6 +7323,7 @@
    "name": "Edit a previously sent prompt",
    "category": "ai_chat",
    "canonical_action": "EDIT_ITEM",
+   "tool_or_object": "sent prompt",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -7346,6 +7421,7 @@
    "name": "Rate a response (thumbs up/down)",
    "category": "ai_chat",
    "canonical_action": "SELECT_OPTION",
+   "tool_or_object": "response / thumbs up-down control",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -7443,6 +7519,7 @@
    "name": "Rename a chat",
    "category": "ai_chat",
    "canonical_action": "EDIT_ITEM",
+   "tool_or_object": "chat",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -7540,6 +7617,7 @@
    "name": "Delete a chat",
    "category": "ai_chat",
    "canonical_action": "DELETE_ITEM",
+   "tool_or_object": "chat",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -7637,6 +7715,7 @@
    "name": "Share a chat by link",
    "category": "ai_chat",
    "canonical_action": "SHARE_SEND",
+   "tool_or_object": "chat / share link",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -7746,6 +7825,7 @@
    "name": "Search past chats",
    "category": "ai_chat",
    "canonical_action": "SEARCH",
+   "tool_or_object": "past chats",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -7843,6 +7923,7 @@
    "name": "Speak a prompt with voice input",
    "category": "ai_chat",
    "canonical_action": "VOICE_COMMAND",
+   "tool_or_object": "voice input control / microphone",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -7940,6 +8021,7 @@
    "name": "Choose a model / mode",
    "category": "ai_chat",
    "canonical_action": "SELECT_OPTION",
+   "tool_or_object": "model / mode selector",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -8037,6 +8119,7 @@
    "name": "Create a project / workspace for chats",
    "category": "ai_chat",
    "canonical_action": "CREATE_ITEM",
+   "tool_or_object": "project / workspace",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -8134,6 +8217,7 @@
    "name": "Set custom instructions / personal preferences",
    "category": "ai_chat",
    "canonical_action": "SET_VALUE",
+   "tool_or_object": "custom instructions setting",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -8231,6 +8315,7 @@
    "name": "Turn chat memory / history saving on or off",
    "category": "ai_chat",
    "canonical_action": "TOGGLE",
+   "tool_or_object": "chat memory setting",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -8328,6 +8413,7 @@
    "name": "Export your chat data",
    "category": "ai_chat",
    "canonical_action": "EXPORT_IMPORT",
+   "tool_or_object": "chat data export",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -8425,6 +8511,7 @@
    "name": "Ask the assistant to create an image",
    "category": "ai_chat",
    "canonical_action": "PROMPT_AI",
+   "tool_or_object": "image / prompt",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -8522,6 +8609,7 @@
    "name": "Add a screenshot / photo with the camera",
    "category": "ai_chat",
    "canonical_action": "SCAN_CAPTURE",
+   "tool_or_object": "screenshot or photo / camera",
    "status": "CANONICAL-CANDIDATE",
    "verified_by_human": false,
    "actor": {
@@ -8614,5 +8702,6 @@
     "grader": "authoring agent (not human)"
    }
   }
- ]
+ ],
+ "four_part_rule": "every loop has >=1 modality operator (tote.*.modality_operator), an actor (actor), an action (canonical_action + tote.operate.function) and a tool_or_object; modality operators are input/sub-action only and never assert the action"
 }

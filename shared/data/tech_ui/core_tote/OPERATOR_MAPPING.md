@@ -30,7 +30,11 @@ The two sets classify different things, so the mapping cannot be one-to-one. To 
 
 ## Conflicting flags (unresolved)
 
-- **GAP-4 `may_assert_action`:** In `tote_seed.json`, every *external* modality operator carries `true` in the 5th field, including 👀, 👂👂, 👃 and 👅. In the 4-op seed, only `execute` has `may_assert_action=1`, and its README says "an action is never recorded as an observation". Either the 10-op field means something else (e.g. "can be asserted from external evidence"), or the two disagree. This needs an owner decision. Core loops follow the 4-op rule: only the operate step asserts an action.
+- **GAP-4 `may_assert_action`: RESOLVED (owner decision, N Hartman, 2026-11-03).** Exterior senses (👀, 👂👂, touch 🙌, 👃, 👅) are **input data**, like a robot's or autonomous system's sensor data. A sense does not equal an action by itself. "Look" is a **sub-action**: a modality operator that is *part of* a TOTE loop. So `may_assert_action` is now `false` for **every** operator in `tote_seed.json`: modality operators are input/sub-action only and never assert the loop's action. The loop's action lives in its own field (`action_cell`/`action_lemma` in the store; `canonical_action` + `tote.operate.function` in core loops). This matches the 4-op rule that an action is never recorded as an observation.
+
+## Four-part rule (all loops)
+
+Every TOTE loop needs **all four** of: (1) at least one modality operator, (2) an actor, (3) an action, (4) a tool or object. The check is `shared/nych3/tote_four_part.py` (`missing_parts` / `check`). `tools/core_tote/validate.py` enforces it on core loops. Core loops carry the tool/object in `tool_or_object` (authored in `tools/core_tote/objects.py`; agent-authored, not human-verified). It also rejects any step that sets `may_assert_action`.
 
 ## How CORE loops use this
 

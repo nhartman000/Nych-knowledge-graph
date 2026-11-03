@@ -11,6 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(Path(__file__).parent))
 import spec, curation  # noqa: E402
+from objects import O as OBJECTS  # noqa: E402
 from build import SITES  # noqa: E402
 
 RAW = Path(os.environ.get("NYCH_UI_RAW", "/workspace/nych-ui-actions/data/raw"))
@@ -122,7 +123,7 @@ def make_loop(s, srcs):
     r = s["max_retries"]
     return {
         "loop_id": f"TL-CORE-{s['id']}", "name": s["name"], "category": s["category"],
-        "canonical_action": s["canonical_action"], "status": STATUS, "verified_by_human": False,
+        "canonical_action": s["canonical_action"], "tool_or_object": OBJECTS[s["id"]], "status": STATUS, "verified_by_human": False,
         "actor": {"kind": "declared_function", "authority": AUTHORITY, "acts_on_behalf_of": None,
                   "goal_seeking": False, "may_chain": False},
         "tote": {
