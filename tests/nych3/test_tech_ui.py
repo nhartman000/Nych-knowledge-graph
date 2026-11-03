@@ -29,7 +29,7 @@ def test_tech_ui_ingest(tmp_path):
     assert db.get("TL-UI-VERIFY_STATE")["modality_cell"].startswith("verify_state,👀²")
     assert db.gate("G-UI-TAP_OR_CLICK")["conditions"] == ["screen_shows(TAP_OR_CLICK)"]
     assert db.lookup("tap", "settings")["method"] == "exact_action_object"
-    assert all(len(r["t"].split()) <= 25 for r in db.q("MATCH (s:SourceRef) RETURN s.sentence_text AS t"))
+    assert all(len([w for w in r["t"].split() if w != "…"]) <= 25 for r in db.q("MATCH (s:SourceRef) RETURN s.sentence_text AS t"))
     db.close()
 
 

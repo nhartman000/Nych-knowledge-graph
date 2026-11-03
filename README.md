@@ -59,8 +59,11 @@ LOOP 1  TL-H-adf1a0c0945a
          lookup(stir): exact_action_object -> TL-STIR-SAUCE-001
 ```
 Accuracy is measured against `tests/nych3/gold/gold_v1.jsonl` (300 sentences, 75 per domain), which is
-**agent-graded, pending human review** — see `tests/nych3/gold/README.md` for notation and judgment
-calls. `tests/nych3/test_round4.py::test_accuracy_report` prints the per-field / per-domain table on
+**agent-graded with the extractor output visible (agreement bias); blinded human annotation is still pending** — see
+`tests/nych3/gold/README.md` for notation and judgment calls. nych3-eval reports two per-field families: `fields` =
+**conditional (action-matched)**, scored only on loops whose action matched (e.g. modality F1 0.979, exit 0.900), and
+`fields_end_to_end`, where unmatched gold and predicted loops count against every field (modality F1 0.771, exit 0.709,
+objects 0.733). The metric definition was extended on 2026-11-03, not replaced. `tests/nych3/test_round4.py::test_accuracy_report` prints the per-field / per-domain table on
 every test run (non-failing; xfails only if a field collapses below a floor).
 
 ## Schema (single source: `stages/02-schema/output/schema.cypher`)
@@ -76,14 +79,20 @@ every test run (non-failing; xfails only if a field collapses below a floor).
 Canonical UI actions harvested from 2,887 tech help-center articles (Microsoft 1,500, YouTube 436, Claude 367, Android 222, Chrome 197,
 Gemini 136, Apple 29) by the nych-ui-actions pipeline (copy in `REVIEW/tech_ui_pipeline/`).
 `shared/data/tech_ui/` holds the compact export (81 canonical actions + 63,487 mapped actions: URL, retrieval date, section/step,
-quote <= 25 words; no article text). Top-10/25/50/100 canonical actions cover 55.9/79.7/93.1/96.3% of 65,929 extracted actions.
+quote = at most 25 source tokens plus `…` markers when truncated; no article text) and `ui_actions_unmapped.jsonl.gz` (the 2,442
+unmapped records, so the 65,929 denominator can be rebuilt). An authored 81-class mapping accounts for 96.3% of the recorded
+extracted-action denominator; extraction and labeling remain provisional (spot check: 21 correct, 6 partial, 13 wrong of 40).
+Top-10/25/50 classes: 55.9/79.7/93.1%. 2,010 instance groups span more than one platform; `ToteDB.lookup(..., domain=, platform=)`
+prefers a context match and records a fallback. 1,257 records have neither section nor step (`locator_quality` flag).
 Ingest: `cd shared && python -m nych3.harvest.tech_ui [--replace]` -> 81 `TL-UI-<ACTION>` canonical-action loops (🙌 operate / 👀² verify,
 g8son gate `G-UI-<ACTION>`), 36,445 `TL-UI-I-*` instance loops (deduped by canonical+verb+object, `repeat_count`), 63,487 web `SourceRef`s,
 `INSTANCE_OF` instance->canonical. All rows `status=candidate`, `epistemic_status=PROVISIONAL`, `review_status=provisional_unreviewed`
-(spot check 21/40 correct, agent-graded). `tote.kuzu` stays gitignored.
+(spot check 21/40 correct, agent-graded). Canonical status needs authority metadata (required, not authenticated). `tote.kuzu` stays gitignored.
 
 ## Evaluation caveat
-The 300-sentence gold set (`tests/nych3/gold/`) is AGENT-GRADED, PENDING HUMAN REVIEW. See `REVIEW/LIMITATIONS.md` and
+The 300-sentence gold set (`tests/nych3/gold/`) is AGENT-GRADED with extractor output visible, PENDING blinded HUMAN annotation.
+The 4 Gutenberg books are not in git: `reproduce.sh` fetches them into `REVIEW/_run/corpus/` and checks `REVIEW/corpus.sha256`.
+Review r2 responses: `REVIEW/RESPONSE_TO_REVIEW.md`. See `REVIEW/LIMITATIONS.md` and
 `REVIEW/REVIEWER_BRIEF.md`; reproduce everything with `bash REVIEW/reproduce.sh`.
 
 ## How to cite

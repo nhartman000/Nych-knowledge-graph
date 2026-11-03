@@ -2,13 +2,20 @@
 
 - 1 canonical-action loop per canonical UI action (TL-UI-<ACTION>): 🙌 operate + 👀² verify, g8son exit gate G-UI-<ACTION>.
 - Instance loops (TL-UI-I-<hash>) = extracted actions deduped by (canonical, verb, object); repeat_count = occurrences;
-  each occurrence is a SourceRef (URL, retrieval date, section, step #, quote <= 25 words; no article text).
+  each occurrence is a SourceRef (URL, retrieval date, section, step #, quote; no article text).
+  Quote definition: at most 25 whitespace tokens of source text; when truncated, a leading and/or trailing "…"
+  marker is added, so a stored quote can be up to 27 whitespace tokens (25 source + 2 markers).
+  Locator quality: section headings and step numbers are not always present. Each SourceRef carries a
+  flag "locator_quality:<section+step|section_only|step_only|url_only>"; ingest() returns the counts
+  (in the shipped export 1,257 records are url_only, i.e. neither section nor step).
+- Instance groups span platforms/modifiers: an instance loop's perspective_cell is the FIRST occurrence's platform;
+  techniques[0].platforms lists all of them. ingest() reports groups with >1 platform or conflicting modifiers.
   INSTANCE_OF links instance -> canonical loop.
 - EVERYTHING is status=candidate, epistemic_status=PROVISIONAL, provenance.review_status=provisional_unreviewed
-  (spot check 21/40 correct). Nothing is promoted; canonical status still requires a named authority.
+  (spot check 21/40 correct). Nothing is promoted; canonical status still requires authority metadata (a name; not authenticated).
 Usage: python -m nych3.harvest.tech_ui [--db PATH] [--export DIR] [--replace]"""
 from __future__ import annotations
-import argparse, gzip, hashlib, json, os, re
+import argparse, gzip, hashlib, json, os, re, sys
 import kuzu
 from pathlib import Path
 from ..config import SHARED
@@ -26,6 +33,25 @@ def norm_obj(s: str) -> str:
     s = re.sub(r"^(the|a|an|your|any|all|this|that)\s+", "", (s or "").lower().strip())
     s = re.sub(r"[^\w\s>&+/-]", "", s)
     return re.sub(r"\s+", " ", s).strip()[:60] or "*"
+
+
+def locator_quality(a: dict) -> str:
+    s, t = bool((a.get("section") or "").strip()), bool(a.get("step_no"))
+    return "section+step" if s and t else "section_only" if s else "step_only" if t else "url_only"
+
+
+MODIFIERS = ("direction", "count", "duration", "param")
+
+
+def context_conflicts(groups: dict) -> dict:
+    """Count instance groups (canonical, verb, object) whose occurrences disagree on platform or on a modifier."""
+    multi_plat = sum(1 for occ in groups.values() if len({a["platform"] for a in occ}) > 1)
+    mod = {k: sum(1 for occ in groups.values() if len({a[k] for a in occ if a.get(k)}) > 1) for k in MODIFIERS}
+    any_mod = sum(1 for occ in groups.values() if any(len({a[k] for a in occ if a.get(k)}) > 1 for k in MODIFIERS))
+    either = sum(1 for occ in groups.values() if len({a["platform"] for a in occ}) > 1
+                 or any(len({a[k] for a in occ if a.get(k)}) > 1 for k in MODIFIERS))
+    return {"groups": len(groups), "multi_platform": multi_plat, "conflicting_modifier_any": any_mod,
+            "conflicting_modifier_by_field": mod, "platform_or_modifier_conflict": either}
 
 
 def ensure_schema(db: ToteDB):
@@ -80,7 +106,8 @@ def ingest(db_path=DEFAULT_DB, export: Path = EXPORT, replace=False):
         if not replace:
             raise SystemExit("tech.ui already ingested; rerun with --replace")
         clear(db)
-    st = {"canonical_loops": 0, "instance_loops": 0, "source_refs": 0, "instance_of": 0, "modality_links": 0, "gates": 0}
+    st = {"canonical_loops": 0, "instance_loops": 0, "source_refs": 0, "instance_of": 0, "modality_links": 0, "gates": 0,
+          "locator_quality": {}, "context_conflicts": {}}
     gate_of = {}
     for c in canon:
         name = c["canonical"]; lid = f"TL-UI-{name}"; gid = f"G-UI-{name}"; t = c["tote_template"]
@@ -112,6 +139,7 @@ def ingest(db_path=DEFAULT_DB, export: Path = EXPORT, replace=False):
                 continue
             key = (a["canonical"], a["verb"], norm_obj(a["object"]))
             groups.setdefault(key, []).append(a)
+    st["context_conflicts"] = context_conflicts(groups)
     db.c.execute("BEGIN TRANSACTION"); n = 0
     for (cn, verb, obj), occ in groups.items():
         sk = json.dumps(["tech.ui", cn, verb, obj], ensure_ascii=False)
@@ -134,16 +162,17 @@ def ingest(db_path=DEFAULT_DB, export: Path = EXPORT, replace=False):
         for op, w in links:
             db.c.execute("MATCH (l:TOTELoop {loop_id:$l}),(o:Operator {operator_id:$o}) CREATE (l)-[:USES_MODALITY {word:$w}]->(o)", {"l": lid, "o": op, "w": w})
         for a in occ:
-            rid = "UI:" + a["id"]
+            rid = "UI:" + a["id"]; lq = locator_quality(a)
+            st["locator_quality"][lq] = st["locator_quality"].get(lq, 0) + 1
             db.c.execute("CREATE (:SourceRef {ref_id:$r,isbn:'',isbn_status:'web_source',page:$p,page_kind:'web_section',page_method:'html_heading+list_index',fallback_gutenberg_id:'',sent_key:$u,sentence_text:$t,flags:$f})",
                          dict(r=rid, p=f"{a['section'][:100]} | step {a['step_no'] or '-'}", u=a["url"], t=a["quote"],
-                              f=["web_source", f"retrieved:{a['retrieved']}", f"site:{a['site']}", f"kind:{a['kind']}", "provisional_unreviewed"]))
+                              f=["web_source", f"retrieved:{a['retrieved']}", f"site:{a['site']}", f"kind:{a['kind']}", f"locator_quality:{lq}", "provisional_unreviewed"]))
             db.c.execute("MATCH (l:TOTELoop {loop_id:$l}),(s:SourceRef {ref_id:$r}) CREATE (l)-[:SOURCED_FROM]->(s)", {"l": lid, "r": rid})
             st["source_refs"] += 1
         st["instance_loops"] += 1; st["instance_of"] += 1; st["modality_links"] += len(links); n += 1
         if n % 500 == 0:
             db.c.execute("COMMIT"); db.c.close(); db.c = kuzu.Connection(db.db)   # fresh connection per batch bounds memory
-            db.c.execute("BEGIN TRANSACTION"); print("…", n, flush=True)
+            db.c.execute("BEGIN TRANSACTION"); print("…", n, file=sys.stderr, flush=True)
     db.c.execute("COMMIT")
     st["domain_links"] = db.refresh_domain_links()
     st["store_loops"] = db.count(); st["store_by_status"] = {s: db.count(s) for s in ("candidate", "canonical")}

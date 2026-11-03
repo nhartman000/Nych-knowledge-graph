@@ -205,7 +205,7 @@ def run_sentence(c, text: str) -> dict:
 
 def _run_nych3(c, text, loop_id, method, words, status):
     """nych3 path: grounding = the structured lookup key (action_lemma, object_lemma); in_loop = key parts equal to
-    the loop's own lemmas. CANONICAL only for status=canonical rows (named authority), else CANDIDATE -> INTERMEDIATE."""
+    the loop's own lemmas. CANONICAL only for status=canonical rows (authority metadata, not authenticated), else CANDIDATE -> INTERMEDIATE."""
     uid = 'UTT-' + sha(text)[:12]
     run_id = 'RUN-' + uid + '-' + uuid.uuid4().hex[:12]
     c.execute('MERGE (:Utterance{utt_id:$u,text:$t})', dict(u=uid, t=text))
@@ -226,24 +226,62 @@ def _finish(c, text, uid, run_id, loop_id, match_method, matched_words, status, 
     out_state_id = None
     permit_id = None
     if result == 'PASS':
+        # Step 1 (before any transition): issue a single-use permit. The GST transition is NOT written here; it is
+        # committed by commit_run() in one Kuzu transaction that also consumes the permit and writes the ledger mirror.
         out_state_id = f'gst:{run_id}:out'
-        out = dict(in_state, state_id=out_state_id, internal=canon({'prior': {'mode': 'utterance_received'}, 'current': {'mode': 'loop_authorized', 'loop_id': loop_id}}))
-        c.execute('CREATE (:GSTState $p)'.replace('$p', '{' + ','.join(f'{k}:${k}' for k in out) + '}'), out)
-        c.execute('MATCH (a:GSTState{state_id:$a}),(b:GSTState{state_id:$b}) CREATE (a)-[:TRANSITIONS_TO]->(b)', dict(a=in_state['state_id'], b=out_state_id))
-        permit_id = 'PERMIT-' + sha(run_id)[:16]
-        exp = (dt.datetime.now(dt.timezone.utc) + dt.timedelta(minutes=15)).strftime('%Y-%m-%dT%H:%M:%SZ')
+        permit_id = issue_permit(c, run_id, uid, loop_id, evaluation)
+    return dict(text=text, utt_id=uid, run_id=run_id, loop_id=loop_id, match_method=match_method, matched_words=matched_words,
+                evaluation=evaluation, result=result, input_state_id=in_state['state_id'], output_state_id=out_state_id, permit_id=permit_id,
+                _in_state=in_state)
+
+
+class PermitError(RuntimeError):
+    pass
+
+
+_FAULT = None   # test hook: callable(stage:str) invoked inside the commit transaction (crash/rollback tests)
+
+
+def _fault(stage):
+    if _FAULT:
+        _FAULT(stage)
+
+
+def issue_permit(c, run_id, uid, loop_id, evaluation) -> str:
+    """Issue a single-use commit permit (status ISSUED). Issued BEFORE the GST transition exists."""
+    permit_id = 'PERMIT-' + sha(run_id)[:16]
+    exp = (dt.datetime.now(dt.timezone.utc) + dt.timedelta(minutes=15)).strftime('%Y-%m-%dT%H:%M:%SZ')
+    c.execute('BEGIN TRANSACTION')
+    try:
         c.execute('CREATE (:Permit {permit_id:$p,run_id:$r,proposal_id:$u,status:"ISSUED",purpose:"commit",expires_at:$e,version:0,epoch:0,evaluation_digest:$d,actor:"kg-runner",operation:$l})',
                   dict(p=permit_id, r=run_id, u=uid, e=exp, d=sha(canon(evaluation)), l=loop_id))
         c.execute('MATCH (g:Gate{gate_id:$g}),(p:Permit{permit_id:$p}) CREATE (g)-[:ISSUES]->(p)', dict(g=GATE_ID, p=permit_id))
         c.execute('MATCH (p:Permit{permit_id:$p}),(l:TOTELoop{loop_id:$l}) CREATE (p)-[:AUTHORIZES]->(l)', dict(p=permit_id, l=loop_id))
-    return dict(text=text, utt_id=uid, run_id=run_id, loop_id=loop_id, match_method=match_method, matched_words=matched_words,
-                evaluation=evaluation, result=result, input_state_id=in_state['state_id'], output_state_id=out_state_id, permit_id=permit_id)
+        c.execute('COMMIT')
+    except Exception:
+        c.execute('ROLLBACK'); raise
+    return permit_id
 
 
-def record_trace(c, run: dict, trace_dir: Path) -> Path:
-    """Serialize the run to a QSON v1 ledger file and mirror its events into the graph."""
-    led = qson_ledger.build_ledger(run, GATE_ID, GATE_FILE_ID, now_iso())
-    path = qson_ledger.write(led, trace_dir / f"{run['run_id']}.qson")
+def _consume_permit(c, run):
+    """Inside the open transaction: ISSUED -> CONSUMED exactly once; reject reuse, expiry, digest or operation mismatch."""
+    r = c.execute('MATCH (p:Permit{permit_id:$p}) RETURN p.status, p.expires_at, p.evaluation_digest, p.operation, p.run_id', dict(p=run['permit_id']))
+    if not r.has_next():
+        raise PermitError(f"unknown permit {run['permit_id']}")
+    st, exp, dig, op, rid = r.get_next()
+    if st != 'ISSUED':
+        raise PermitError(f"permit {run['permit_id']} is {st}; permits are single-use")
+    if exp < now_iso():
+        raise PermitError(f"permit {run['permit_id']} expired at {exp}")
+    if dig != sha(canon(run['evaluation'])) or op != run['loop_id'] or rid != run['run_id']:
+        raise PermitError(f"permit {run['permit_id']} does not match this run/evaluation")
+    n = c.execute("MATCH (p:Permit{permit_id:$p}) WHERE p.status='ISSUED' SET p.status='CONSUMED', p.version=p.version+1 RETURN count(p)",
+                  dict(p=run['permit_id'])).get_next()[0]
+    if n != 1:
+        raise PermitError(f"permit {run['permit_id']} could not be consumed")
+
+
+def _mirror_ledger(c, run, led):
     prevtid = None
     for ev in led['events']:
         c.execute('CREATE (:QSONTrace{trace_id:$t,run_id:$r,sequence:$s,event_type:$e,file_id:$f,gate_id:$g,input_state_id:$i,result:$x,action:$a,output_state_id:$o,actor_type:$at,actor_id:$ai,timestamp:$ts,previous_event_hash:$p,event_hash:$h})',
@@ -256,6 +294,39 @@ def record_trace(c, run: dict, trace_dir: Path) -> Path:
             if ev.get(key): c.execute(f'MATCH (e:QSONTrace{{trace_id:$t}}),(s:GSTState{{state_id:$s}}) CREATE (e)-[:{rel}]->(s)', dict(t=ev['trace_id'], s=ev[key]))
         if prevtid: c.execute('MATCH (a:QSONTrace{trace_id:$a}),(b:QSONTrace{trace_id:$b}) CREATE (a)-[:PRECEDES]->(b)', dict(a=prevtid, b=ev['trace_id']))
         prevtid = ev['trace_id']
+        _fault('ledger_event')
+
+
+def record_trace(c, run: dict, trace_dir: Path) -> Path:
+    """Commit the run atomically and serialize it to a QSON v1 ledger file.
+
+    Write-ahead protocol: (1) the ledger is written to <run>.qson.pending; (2) ONE Kuzu transaction consumes the
+    permit (single-use, ISSUED -> CONSUMED), creates the output GSTState + TRANSITIONS_TO edge and mirrors every
+    ledger event into the graph; (3) only after COMMIT is the pending file renamed to <run>.qson. Any failure in (2)
+    rolls the transaction back and deletes the pending file, so state, permit and ledger stay consistent and the
+    permit remains ISSUED (retryable). A reused permit raises PermitError and writes nothing."""
+    import os
+    led = qson_ledger.build_ledger(run, GATE_ID, GATE_FILE_ID, now_iso())
+    path = Path(trace_dir) / f"{run['run_id']}.qson"
+    pending = qson_ledger.write(led, path.with_name(path.name + '.pending'))
+    c.execute('BEGIN TRANSACTION')
+    try:
+        if run.get('permit_id'):
+            _consume_permit(c, run)
+            _fault('permit_consumed')
+            ins = run['_in_state']
+            out = dict(ins, state_id=run['output_state_id'], internal=canon({'prior': {'mode': 'utterance_received'}, 'current': {'mode': 'loop_authorized', 'loop_id': run['loop_id']}}))
+            c.execute('CREATE (:GSTState $p)'.replace('$p', '{' + ','.join(f'{k}:${k}' for k in out) + '}'), out)
+            c.execute('MATCH (a:GSTState{state_id:$a}),(b:GSTState{state_id:$b}) CREATE (a)-[:TRANSITIONS_TO]->(b)', dict(a=ins['state_id'], b=run['output_state_id']))
+            _fault('state_written')
+        _mirror_ledger(c, run, led)
+        _fault('before_commit')
+        c.execute('COMMIT')
+    except BaseException:
+        c.execute('ROLLBACK')
+        pending.unlink(missing_ok=True)
+        raise
+    os.replace(pending, path)
     return path
 
 

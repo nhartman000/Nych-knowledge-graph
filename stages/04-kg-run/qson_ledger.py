@@ -5,6 +5,13 @@ Hash-chain profile (QSON §12 "stronger profile", §16.7 canonicalization) — l
   event_hash    = sha256(canonical(event minus the 'event_hash' key))
   previous_event_hash of event n = event_hash of event n-1 (i.e. sha256 of the prior event's canonical content);
   first event uses GENESIS (64 zeros).
+
+SECURITY NOTE: the chain is UNKEYED (plain SHA-256, no HMAC/signature). verify() detects accidental corruption and
+naive edits, but anyone who can rewrite the file can recompute every hash. Strong tamper-evidence claims require
+external anchoring of the final event_hash (e.g. a signed/timestamped receipt or a write-once log held elsewhere);
+none is implemented here.
+Permit ordering: the permit is issued (event 'review'/permit_issued) before the state transition; the transition
+('state_commit') consumes it single-use in the same Kuzu transaction that mirrors this ledger (kg_run.record_trace).
 """
 from __future__ import annotations
 import hashlib, json
@@ -35,7 +42,7 @@ def build_ledger(run: dict, gate_id: str, file_id: str, timestamp: str) -> dict:
     if run['permit_id']:
         specs.append(dict(event_type='review', action='permit_issued', gate_id=gate_id, evidence={'permit_id': run['permit_id']}))
         specs.append(dict(event_type='state_commit', input_state_id=run['input_state_id'], output_state_id=run['output_state_id'],
-                          action='continue', operation=run['loop_id'], evidence={'permit_id': run['permit_id']}))
+                          action='continue', operation=run['loop_id'], evidence={'permit_id': run['permit_id'], 'permit_use': 'single-use; consumed atomically with this commit'}))
     events, prev = [], GENESIS
     for i, s in enumerate(specs, 1):
         ev = {'trace_id': f'trace-{rid}-{i:06d}', 'run_id': rid, 'sequence': i, 'actor': ACTOR, 'timestamp': timestamp,

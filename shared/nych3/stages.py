@@ -162,7 +162,9 @@ def s07_tote_bind(state):
         ops = [c for c in (analysis.operator_cell(x, events[x["event_id"]], modreg) for x in chain) if c]
         act = actor_info(p)
         obj = p["object"]
-        res = db.lookup(p["lemma"], obj["head_lemma"] if obj else None)
+        cdom = (state.get("context") or {}).get("domain")
+        res = db.lookup(p["lemma"], obj["head_lemma"] if obj else None,
+                        domain=cdom if cdom not in (None, "UNRESOLVED", "MULTIPLE") else None)
         row = {"modality": " ; ".join(ops) or "UNRESOLVED,", "actor": _cell(act["resolved_name"] or act["text"] or "UNRESOLVED", bool(act["resolved_name"])),
                "action": _cell(p["lemma"]), "object": _cell(obj["head"]) if obj else "UNRESOLVED,",
                "perspective_location": loc_cell(p)}
@@ -170,7 +172,7 @@ def s07_tote_bind(state):
         anchor = ev.get("time_anchor")
         base = {"instance_id": f"ti{len(instances)}", "event_id": p["event_id"], "event_chain": [x["event_id"] for x in chain],
                 "actor": act, "object": obj, "locations": p["locations"], "time_anchor": anchor, "source_refs": refs,
-                "retrieval": {"method": res["method"], "key": res["key"], "alternatives": res["alternatives"],
+                "retrieval": {"method": res["method"], "key": res["key"], "alternatives": res["alternatives"], "context": res.get("context"),
                               "forbidden_methods": ["word_overlap", "nearest_match", "objective_text_match"]}}
         if res["match"]:
             t = res["match"]

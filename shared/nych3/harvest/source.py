@@ -3,12 +3,12 @@ Printed page when the Gutenberg HTML marks it (span.pagenum / span.pageno), othe
 DERIVED page (char offset / 2000, flagged). Gutenberg boilerplate outside
 *** START/END OF THE PROJECT GUTENBERG EBOOK *** is dropped."""
 from __future__ import annotations
-import html, re, time, urllib.request
+import html, os, re, time, urllib.request
 from html.parser import HTMLParser
 from pathlib import Path
 from ..config import SHARED, registry
 
-CORPUS = SHARED / "data" / "corpus"
+CORPUS = SHARED / "data" / "corpus"   # default cache; override with env NYCH3_CORPUS_DIR (REVIEW/reproduce.sh does)
 _last = [0.0]
 DERIVED_CHARS = 2000
 
@@ -17,7 +17,12 @@ def sources():
     return registry("harvest_sources")
 
 
-def fetch(book: dict, cache: Path = CORPUS) -> str:
+def corpus_dir() -> Path:
+    return Path(os.environ["NYCH3_CORPUS_DIR"]) if os.environ.get("NYCH3_CORPUS_DIR") else CORPUS
+
+
+def fetch(book: dict, cache: Path | None = None) -> str:
+    cache = Path(cache) if cache else corpus_dir()
     cache.mkdir(parents=True, exist_ok=True)
     f = cache / f"{book['gutenberg_id']}.html"
     if f.exists():

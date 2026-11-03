@@ -2,7 +2,7 @@
 (action_lemma, object_lemma), then a row that explicitly declares object_lemma='*'.
 Nothing else. No word overlap, no nearest match: otherwise NO_MATCH + a harvest
 candidate row (status=candidate, with provenance). Canonical rows are only written
-with a named authority; nothing is auto-promoted."""
+with authority metadata (a named authority string; required, NOT authenticated); nothing is auto-promoted."""
 from __future__ import annotations
 import json, re, shutil
 from pathlib import Path
@@ -130,8 +130,10 @@ class ToteDB:
     def add_loop(self, row, *, status: str, provenance: dict):
         if status not in STATUSES:
             raise ValueError(f"status must be one of {STATUSES}")
-        if status == "canonical" and not (provenance or {}).get("authority"):
-            raise ValueError("canonical TOTE rows need a named authority in provenance (no auto-promotion)")
+        if status == "canonical":
+            # authority METADATA required (not authenticated): a non-empty name string, optionally checked
+            # against authority_registry. No identity, signature or credential is verified.
+            self._check_authority((provenance or {}).get("authority"))
         if not provenance or not provenance.get("source"):
             raise ValueError("every TOTE row needs provenance.source")
         rec = {k: row.get(k) for k in COLS}
@@ -152,9 +154,9 @@ class ToteDB:
                            dict(g=row["exit_gate_id"], l=row["loop_id"]))
 
     def promote(self, loop_id: str, authority: str, note: str = ""):
-        """Candidate -> canonical. Requires a named authority. Never called automatically."""
-        if not authority or not authority.strip():
-            raise ValueError("promotion requires a named authority")
+        """Candidate -> canonical. Authority metadata required (not authenticated): a non-empty name, optionally
+        checked against authority_registry. Never called automatically."""
+        self._check_authority(authority)
         row = self.get(loop_id)
         if row is None:
             raise KeyError(loop_id)
@@ -163,6 +165,15 @@ class ToteDB:
         prov_["authority"] = authority
         self.c.execute("MATCH (l:TOTELoop {loop_id:$l}) SET l.status='canonical', l.provenance=$p",
                        {"l": loop_id, "p": json.dumps(prov_, ensure_ascii=False)})
+
+    # Optional allow-list of authority names (set of str). None = any non-empty name is accepted as metadata.
+    authority_registry: set | None = None
+
+    def _check_authority(self, authority):
+        if not authority or not str(authority).strip():
+            raise ValueError("canonical status requires authority metadata (a named authority; not authenticated, no auto-promotion)")
+        if self.authority_registry is not None and authority not in self.authority_registry:
+            raise ValueError(f"authority {authority!r} is not in the authority registry (registry check only; not authenticated)")
 
     def suggest_promotions(self, min_repeats: int = 5, min_sources: int = 2):
         """SUGGESTION ONLY (not applied): candidates seen >= min_repeats times from >= min_sources distinct books."""
@@ -200,21 +211,57 @@ class ToteDB:
             return None
         r = r[0]; r["outcomes"] = json.loads(r["outcomes"]); return r
 
-    def lookup(self, action_lemma: str, object_lemma: str | None):
-        """Exact structured lookup. Returns {'match': row|None, 'method': ..., 'key': ...}."""
+    @staticmethod
+    def _platforms(row):
+        out = set()
+        for t in row.get("techniques") or []:
+            if isinstance(t, dict):
+                out.update(t.get("platforms") or [])
+                out.update((t.get("platform_split") or {}).keys())
+        pc = (row.get("perspective_cell") or "").rstrip(",").strip()
+        if pc:
+            out.add(pc)
+        return out
+
+    def _ctx_ok(self, row, domain, platform):
+        if domain and row.get("domain") != domain and domain not in {d["domain"] for d in self.domains_of(row["loop_id"])}:
+            return False
+        if platform and platform not in self._platforms(row):
+            return False
+        return True
+
+    def lookup(self, action_lemma: str, object_lemma: str | None, *, domain: str | None = None, platform: str | None = None):
+        """Exact structured lookup. Returns {'match': row|None, 'method': ..., 'key': ..., 'alternatives': [...], 'context': {...}}.
+
+        Optional context filters (domain, platform): within the first exact tier that has rows (action+object, then
+        action+declared-wildcard), rows matching the context are preferred. If no row in that tier matches the context,
+        the lookup falls back to the context-free order (canonical first, then loop_id) and records
+        context.fell_back=True. Precondition and actor are NOT used for selection (see REVIEW/LIMITATIONS.md)."""
         ret = ",".join(f"l.{k}" for k in COLS)
         order = "ORDER BY CASE l.status WHEN 'canonical' THEN 0 ELSE 1 END, l.loop_id"
+        ctx_req = {"domain": domain, "platform": platform}
+        tiers = []
         if object_lemma:
-            r = self.q(f"MATCH (l:TOTELoop) WHERE l.action_lemma=$a AND l.object_lemma=$o RETURN {ret} {order}",
-                       {"a": action_lemma, "o": object_lemma})
-            if r:
-                return {"match": self._row(r[0]), "method": "exact_action_object", "key": [action_lemma, object_lemma],
-                        "alternatives": [x["l.loop_id"] for x in r[1:]]}
-        r = self.q(f"MATCH (l:TOTELoop) WHERE l.action_lemma=$a AND l.object_lemma='*' RETURN {ret} {order}", {"a": action_lemma})
-        if r:
-            return {"match": self._row(r[0]), "method": "exact_action_declared_wildcard_object", "key": [action_lemma, "*"],
-                    "alternatives": [x["l.loop_id"] for x in r[1:]]}
-        return {"match": None, "method": "NO_MATCH", "key": [action_lemma, object_lemma], "alternatives": []}
+            tiers.append(("exact_action_object", [action_lemma, object_lemma],
+                          f"MATCH (l:TOTELoop) WHERE l.action_lemma=$a AND l.object_lemma=$o RETURN {ret} {order}", {"a": action_lemma, "o": object_lemma}))
+        tiers.append(("exact_action_declared_wildcard_object", [action_lemma, "*"],
+                      f"MATCH (l:TOTELoop) WHERE l.action_lemma=$a AND l.object_lemma='*' RETURN {ret} {order}", {"a": action_lemma}))
+        for method, key, cy, params in tiers:
+            r = self.q(cy, params)
+            if not r:
+                continue
+            rows = [self._row(x) for x in r]
+            ctx = {"requested": ctx_req, "used": bool(domain or platform), "matched": None, "fell_back": False}
+            if domain or platform:
+                good = [x for x in rows if self._ctx_ok(x, domain, platform)]
+                if good:
+                    rows = good + [x for x in rows if x not in good]
+                    ctx.update(matched=True, n_context_matches=len(good))
+                else:
+                    ctx.update(matched=False, fell_back=True, n_context_matches=0)
+            return {"match": rows[0], "method": method, "key": key, "alternatives": [x["loop_id"] for x in rows[1:]], "context": ctx}
+        return {"match": None, "method": "NO_MATCH", "key": [action_lemma, object_lemma], "alternatives": [],
+                "context": {"requested": ctx_req, "used": bool(domain or platform), "matched": None, "fell_back": False}}
 
     def domains_of(self, loop_id):
         return self.q("MATCH (l:TOTELoop {loop_id:$l})-[r:IN_DOMAIN]->(d:Domain) RETURN d.domain_id AS domain, r.role AS role ORDER BY d.domain_id", {"l": loop_id})

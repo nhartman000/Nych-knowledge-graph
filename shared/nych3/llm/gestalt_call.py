@@ -67,9 +67,12 @@ def validate_plan(plan: dict, request: dict) -> list[dict]:
     pins = {p["word"].lower(): p["symbol_id"] for p in request.get("pinned", [])}
     glyphs = {_bare(g) for g in request["modality_operators"].values()}
     single = {g for g in glyphs if len(g) == 1}
-    sid_to_lemma, accepted = {}, []
+    sid_to_lemma, accepted, seen_occ = {}, [], set()
     for m in plan.get("mappings", []):
         w = m.get("word", ""); occ = m.get("occurrence_ref")
+        if occ in seen_occ:
+            raise ValidationError(f"duplicate mapping for occurrence {occ!r} ({w!r})")
+        seen_occ.add(occ)
         if w.lower() in protected:
             raise ValidationError(f"protected term {w!r} was Gestalt-mapped")
         if occ not in elig or elig[occ]["word"] != w:

@@ -3,8 +3,20 @@
     nych3-eval [--gold tests/nych3/gold/gold_v1.jsonl] [--json out.json] [--code-root other/shared]
 
 The gold set is AGENT-GRADED PENDING HUMAN REVIEW (see tests/nych3/gold/README.md).
-Loops are matched per sentence by action lemma (in order). Per-field micro P/R over the matched
-pairs; each loop and each sentence is graded correct / partial / wrong.
+Loops are matched per sentence by action lemma (in order); each loop and each sentence is graded
+correct / partial / wrong. Two per-field metric families are reported (definition EXTENDED 2026-11-03,
+the original metric is kept unchanged):
+
+  fields              CONDITIONAL (action-matched): micro P/R/F1 computed only over gold/pred loop pairs whose
+                      action lemma matched. Unmatched (missed or spurious) loops do not count. This is the
+                      original metric; it overstates end-to-end quality.
+  fields_end_to_end   END-TO-END: same true positives (only matched pairs can be right), but the denominators
+                      include every predicted loop (precision) and every gold loop (recall). Set fields
+                      (objects, locations, modality, amount) count set elements of all loops; loop-level fields
+                      (exit_tier, exit, actor) count one unit per loop.
+
+Grading caveat: the gold set was graded by the agent with the extractor output visible (agreement bias);
+blinded human annotation is still pending.
 """
 from __future__ import annotations
 import argparse, importlib.util, json, re, sys
@@ -59,7 +71,8 @@ def evaluate(gold_path=DEFAULT_GOLD, code_root=None):
     from nych3.harvest.spacy_extract import extract
     MR, LV = registry("modality"), set(registry("lexicon")["verbs"])
     rows = [json.loads(l) for l in open(gold_path, encoding="utf-8") if l.strip()]
-    tally = defaultdict(lambda: defaultdict(Counter))   # scope -> field -> tp/np/ng
+    tally = defaultdict(lambda: defaultdict(Counter))   # scope -> field -> tp/np/ng (conditional, action-matched)
+    e2e = defaultdict(lambda: defaultdict(Counter))     # scope -> field -> tp/np/ng (end-to-end)
     verdict = defaultdict(Counter)
     lverdict = defaultdict(Counter)
     errors = Counter(); examples = defaultdict(list)
@@ -89,6 +102,12 @@ def evaluate(gold_path=DEFAULT_GOLD, code_root=None):
             T["action"]["tp"] += len(pairs); T["action"]["np"] += len(pred); T["action"]["ng"] += len(gold)
             T["instruction_sentence"]["tp"] += int(bool(gold) and bool(pred))
             T["instruction_sentence"]["np"] += int(bool(pred)); T["instruction_sentence"]["ng"] += int(bool(gold))
+        for scope in ("all", dom):
+            E = e2e[scope]
+            for f in FIELDS:
+                E[f]["np"] += sum(len(set(pl[f])) for pl in pred); E[f]["ng"] += sum(len(set(gl[f])) for gl in gold)
+            for f in ("exit_tier", "exit", "actor"):
+                E[f]["np"] += len(pred); E[f]["ng"] += len(gold)
         ok_loops = 0
         for gl, pl in pairs:
             bad = []
@@ -96,6 +115,7 @@ def evaluate(gold_path=DEFAULT_GOLD, code_root=None):
                 tp, np_, ng = setpr(gl[f], pl[f])
                 for scope in ("all", dom):
                     tally[scope][f]["tp"] += tp; tally[scope][f]["np"] += np_; tally[scope][f]["ng"] += ng
+                    e2e[scope][f]["tp"] += tp
                 if set(gl[f]) != set(pl[f]):
                     bad.append(f)
             tier_ok = gl["exit_tier"] == pl["exit_tier"]
@@ -105,6 +125,7 @@ def evaluate(gold_path=DEFAULT_GOLD, code_root=None):
             for scope in ("all", dom):
                 for f, okv in (("exit_tier", tier_ok), ("exit", ex_ok), ("actor", act_ok)):
                     tally[scope][f]["tp"] += okv; tally[scope][f]["np"] += 1; tally[scope][f]["ng"] += 1
+                    e2e[scope][f]["tp"] += okv
             bad += [f for f, okv in (("exit_tier", tier_ok), ("exit", ex_ok and tier_ok), ("actor", act_ok)) if not okv]
             if "exit" in bad and "exit_tier" in bad:
                 bad.remove("exit")
@@ -136,8 +157,12 @@ def evaluate(gold_path=DEFAULT_GOLD, code_root=None):
         rc = c["tp"] / c["ng"] if c["ng"] else None
         f = 2 * p * rc / (p + rc) if p and rc else 0.0 if p is not None and rc is not None else None
         return {"precision": p, "recall": rc, "f1": f, **c}
-    report = {"gold": str(gold_path), "n_sentences": len(rows), "grading": "agent-graded, pending human review",
+    report = {"gold": str(gold_path), "n_sentences": len(rows), "grading": "agent-graded with extractor output visible (agreement bias), blinded human annotation pending",
+              "metric_definitions": {"fields": "conditional (action-matched): only matched loop pairs counted",
+                                     "fields_end_to_end": "end-to-end: unmatched gold and predicted loops count against every field",
+                                     "note": "metric definition extended 2026-11-03; the conditional metric is unchanged"},
               "fields": {s: {f: pr(c) for f, c in T.items()} for s, T in tally.items()},
+              "fields_end_to_end": {s: {f: pr(c) for f, c in T.items()} for s, T in e2e.items()},
               "sentence_verdicts": {s: dict(v) for s, v in verdict.items()},
               "loop_verdicts": {s: dict(v) for s, v in lverdict.items()},
               "errors": dict(errors.most_common()), "examples": {k: v[:15] for k, v in examples.items()}, "details": details}
@@ -152,11 +177,19 @@ def fmt(rep):
         sv, lv = rep["sentence_verdicts"][scope], rep["loop_verdicts"][scope]
         L.append(f"\n[{scope}] sentences correct/partial/wrong = {sv.get('correct',0)}/{sv.get('partial',0)}/{sv.get('wrong',0)}"
                  f"   loops correct/partial/wrong = {lv.get('correct',0)}/{lv.get('partial',0)}/{lv.get('wrong',0)}")
-        for f in order:
+        g = lambda x: "  -  " if x is None else f"{x:.3f}"
+        E = rep.get("fields_end_to_end", {}).get(scope, {})
+        L.append("  -- detection (all loops / sentences)")
+        for f in order[:2]:
             if f in F:
                 c = F[f]
-                g = lambda x: "  -  " if x is None else f"{x:.3f}"
                 L.append(f"  {f:22s} P {g(c['precision'])}  R {g(c['recall'])}  F1 {g(c['f1'])}   (tp {c['tp']}, pred {c['np']}, gold {c['ng']})")
+        for title, src in (("conditional (action-matched loops only)", F), ("end-to-end (unmatched loops count as errors)", E)):
+            L.append(f"  -- per-field, {title}")
+            for f in order[2:]:
+                if f in src:
+                    c = src[f]
+                    L.append(f"  {f:22s} P {g(c['precision'])}  R {g(c['recall'])}  F1 {g(c['f1'])}   (tp {c['tp']}, pred {c['np']}, gold {c['ng']})")
     L.append("\nerrors: " + ", ".join(f"{k}={v}" for k, v in rep["errors"].items()))
     return "\n".join(L)
 

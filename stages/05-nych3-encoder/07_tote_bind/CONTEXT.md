@@ -6,6 +6,6 @@
 
 **Musts:**
 - Lookup is exact on (action lemma, object lemma) or a declared '*' row. Never word overlap, never nearest match.
-- Harvested rows are status=candidate with provenance; canonical needs a named authority.
+- Harvested rows are status=candidate with provenance; canonical needs authority metadata (a named authority; required, not authenticated).
 
 **Run:** `python 07_tote_bind/run.py`
