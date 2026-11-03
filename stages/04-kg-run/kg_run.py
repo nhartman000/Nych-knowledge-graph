@@ -149,7 +149,8 @@ def load_base(c):
         c.execute('MATCH (s:Span{span_id:$a}),(g:Gestalt{gestalt_id:$g}) CREATE (s)-[:SPANS]->(g)', dict(a=x['span_id'], g=glyphs[x['gestalt']]))
     c.execute('CREATE (:Gate {gate_id:$g,file_id:$f,`order`:1,type:"AND",conditions:$c,outcomes:$o})',
               dict(g=GATE_ID, f=GATE_FILE_ID,
-                   c=['selected loop epistemic_status == CANONICAL', 'grounded gestalt count > 0', 'every grounded gestalt is USES_GESTALT of selected loop'],
+                   c=['selected loop epistemic_status == CANONICAL', 'grounded gestalt count > 0', 'every grounded gestalt is USES_GESTALT of selected loop',
+                      'utterance has no negation cue (else INTERMEDIATE)', 'legacy path: every content word occurs in the selected loop vocabulary (else INTERMEDIATE)'],
                    o=canon({'PASS': 'continue', 'FAIL': 'stop', 'INTERMEDIATE': 'review'})))
 
 
@@ -157,12 +158,53 @@ def count(c, t):
     return c.execute(f'MATCH (n:{t}) RETURN count(n)').get_next()[0]
 
 
-def evaluate_gate(status, grounded, in_loop) -> str:
-    """g8son result space: PASS / FAIL / INTERMEDIATE."""
+# r3 review (finding R3-05): the lexical gate alone passed negated and wrong-domain requests
+# ("do not repair the failing unit test bug", "repair the failing pregnancy test"). Two conservative guards now
+# withhold PASS (-> INTERMEDIATE = human review, no permit). They are lexical heuristics, NOT semantic understanding.
+NEGATION = re.compile(r"\b(not|no|never|without|neither|nor|cannot|dont|don't|doesn't|shouldn't|mustn't|won't)\b|n't\b", re.I)
+STOPWORDS = set('a an the this that these those my our your their its it to of for in on at by with and or from into '
+                'please is are be was were been do does did can could should would will shall may might must me us i we you '
+                'all any some one'.split())
+
+
+def _stem(w: str) -> str:
+    w = w.lower()
+    for suf in ('ures', 'ure', 'ing', 'ed', 'es', 's'):
+        if suf == 's' and w.endswith('ss'):
+            continue
+        if len(w) > len(suf) + 2 and w.endswith(suf):
+            return w[:-len(suf)]
+    return w
+
+
+def content_words(text: str) -> list[str]:
+    return [w for w in re.findall(r"[a-z][a-z'-]*", text.lower()) if w not in STOPWORDS and not NEGATION.fullmatch(w)]
+
+
+def loop_vocabulary(c, loop_id) -> set:
+    """Stemmed words of the selected loop's own name/objective/tests/steps plus all tote_db gestalt forms."""
+    texts = list(c.execute('MATCH (l:TOTELoop{loop_id:$l}) RETURN l.name, l.objective, l.initial_test, l.exit_predicate', dict(l=loop_id)).get_next())
+    r = c.execute('MATCH (l:TOTELoop{loop_id:$l})-[:HAS_STEP]->(s:Step) RETURN s.plain_text', dict(l=loop_id))
+    while r.has_next(): texts.append(r.get_next()[0])
+    r = c.execute('MATCH (g:Gestalt) WHERE g.origin="tote_db" RETURN g.lexical_form')
+    while r.has_next(): texts.append(r.get_next()[0])
+    return {_stem(w) for t in texts if t for w in re.findall(r'[a-z]+', t.lower())}
+
+
+def context_guard(text: str, vocab: set | None) -> dict:
+    """negated: utterance contains a negation cue; unaccounted: content words absent from the loop vocabulary."""
+    unacc = [] if vocab is None else [w for w in content_words(text) if _stem(w) not in vocab]
+    return {'negated': bool(NEGATION.search(text)), 'unaccounted_words': unacc}
+
+
+def evaluate_gate(status, grounded, in_loop, guard: dict | None = None) -> str:
+    """g8son result space: PASS / FAIL / INTERMEDIATE. This is LEXICAL-MEMBERSHIP consistency, not semantic approval."""
     if status is None or grounded == 0:
         return 'INTERMEDIATE'
     if grounded != in_loop:
         return 'FAIL'
+    if guard and (guard.get('negated') or guard.get('unaccounted_words')):
+        return 'INTERMEDIATE'
     return 'PASS' if status == 'CANONICAL' else 'INTERMEDIATE'
 
 
@@ -200,7 +242,8 @@ def run_sentence(c, text: str) -> dict:
         status = c.execute('MATCH (l:TOTELoop{loop_id:$l}) RETURN l.epistemic_status', dict(l=loop_id)).get_next()[0]
         ids = [g for g, _ in grounded]
         in_loop = c.execute('MATCH (l:TOTELoop{loop_id:$l})-[:USES_GESTALT]->(g:Gestalt) WHERE g.gestalt_id IN $ids RETURN count(DISTINCT g)', dict(l=loop_id, ids=ids)).get_next()[0]
-    return _finish(c, text, uid, run_id, loop_id, t.get('match_method'), t.get('matched_words'), status, [g for g, _ in grounded], in_loop)
+    return _finish(c, text, uid, run_id, loop_id, t.get('match_method'), t.get('matched_words'), status, [g for g, _ in grounded], in_loop,
+                   vocab=loop_vocabulary(c, loop_id) if loop_id else None)
 
 
 def _run_nych3(c, text, loop_id, method, words, status):
@@ -216,9 +259,11 @@ def _run_nych3(c, text, loop_id, method, words, status):
     return _finish(c, text, uid, run_id, loop_id, method, words, 'CANONICAL' if status == 'canonical' else 'CANDIDATE', words, in_loop)
 
 
-def _finish(c, text, uid, run_id, loop_id, match_method, matched_words, status, grounded_ids, in_loop):
-    result = evaluate_gate(status, len(grounded_ids), in_loop)
-    evaluation = {'gate_id': GATE_ID, 'loop_id': loop_id, 'epistemic_status': status, 'grounded': grounded_ids, 'in_loop': in_loop, 'result': result}
+def _finish(c, text, uid, run_id, loop_id, match_method, matched_words, status, grounded_ids, in_loop, vocab=None):
+    guard = context_guard(text, vocab)
+    result = evaluate_gate(status, len(grounded_ids), in_loop, guard)
+    evaluation = {'gate_id': GATE_ID, 'loop_id': loop_id, 'epistemic_status': status, 'grounded': grounded_ids, 'in_loop': in_loop,
+                  'negated': guard['negated'], 'unaccounted_words': guard['unaccounted_words'], 'result': result}
     in_state = {'state_id': f'gst:{run_id}:in', 'gst_version': '1.0', 'internal': canon({'current': {'mode': 'utterance_received'}}),
                 'external': canon({'current': {'utterance': text}}), 'continuity': canon({}), 'intent': text,
                 'outcome_expectation': 'select one CANONICAL TOTE loop consistent with grounding', 'constraints': canon({'gate': GATE_ID})}

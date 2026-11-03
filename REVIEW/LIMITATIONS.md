@@ -89,3 +89,10 @@ Read this before quoting any number from this repo.
     written ahead as `.pending` and renamed only after COMMIT (deleted on rollback). The permit row itself is committed in its own
     earlier transaction, so a crash between issue and commit leaves an ISSUED, unconsumed permit (it expires after 15 min).
     A crash after COMMIT but before the rename leaves a `.pending` file next to a committed graph state (the graph is authoritative).
+24. **The kg_run gate is lexical-membership consistency, not semantic approval.** PASS means: the selected loop is CANONICAL,
+    the grounded gestalt words all belong to it, no negation cue is present, and (legacy path) every content word of the
+    utterance occurs in the selected loop's own text or the gestalt list (r3 guards, `kg_run.context_guard`). The guards are
+    crude: a fixed negation word list and a stemmed bag-of-words check. They withhold PASS for the reviewer's controls
+    ("do not repair ...", "repair the failing pregnancy test", "test the patient"), but they also send legitimate paraphrases with
+    unseen words (e.g. "repair the failing integration test") to INTERMEDIATE, and they do not understand scope, sarcasm, or
+    negation they do not list ("refrain from", "skip"). No population error rate has been measured (see RESPONSE_TO_REVIEW_r3 E1).
