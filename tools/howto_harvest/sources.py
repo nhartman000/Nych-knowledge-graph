@@ -40,8 +40,9 @@ SOURCES = [
  dict(name="costco", sitemaps=["https://customerservice.costco.com/ci/sitemap/answers/page/1"], include=r"answer_view/a_id/\d+/~/[a-z0-9%-]*(return|refund|order|online|deliver|track|cancel|ship|price|account|sign-in|password|app|pay|gift|warranty|same-day|pickup)", cap=200, domain=D_SHOP, platform="costco"),
  dict(name="shopapp", sitemaps=["https://help.shop.app/sitemap.xml"], include=r"help\.shop\.app/en/", cap=80, domain=D_SHOP, platform="shop_app"),
  dict(name="motorola", sitemaps=["https://en-us.support.motorola.com/ci/sitemap/answers/page/1"], include=r"answer_view/a_id/\d+", cap=300, domain=D_TECH, platform="android"),
- dict(name="tomsguide", classify=True, sitemaps=["https://www.tomsguide.com/sitemap.xml"], include=r"tomsguide\.com/[a-z0-9/-]*how-to-[a-z0-9-]+$", cap=400, domain=D_TECH, platform="web"),
+ dict(name="tomsguide", classify=True, sitemaps=["https://www.tomsguide.com/sitemap.xml"], include=r"tomsguide\.com/[a-z0-9/-]*how-to-[a-z0-9-]+$", cap=1000, domain=D_TECH, platform="web"),
  dict(name="swappa", sitemaps=["https://swappa.com/faq/sitemap.xml", "https://swappa.com/blog/post-sitemap.xml"], include=r"swappa\.com/(faq/(?!.*/es/)[a-z0-9/_-]+|blog/[a-z0-9-]*(sell|buy|safe|price|list|ship|scam|meet|trade|wipe|reset|unlock|prepare|photo)[a-z0-9-]*/?)$", cap=300, domain=D_MKT, platform="swappa"),
+ dict(name="digitaltrends", classify=True, sitemaps=["https://www.digitaltrends.com/sitemap-articles-2025-index.xml"], include=r"digitaltrends\.com/[a-z0-9/-]*how-to-[a-z0-9-]+/?$", cap=600, domain=D_TECH, platform="web"),
 ]
 SKIPPED = {
  "www.wikihow.com": "robots.txt NOTICE prohibits use 'for training or retrieval for AI models or similar machine learning systems' without a licence; NYCH abstraction for a KG is close enough that we did not crawl",
