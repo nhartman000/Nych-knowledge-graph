@@ -40,31 +40,32 @@
   "howto.marketplace": 385
  },
  "actions_by_domain": {
-  "howto.digital_life": 14293,
-  "howto.shopping_returns": 1897,
-  "howto.rental": 5092,
-  "howto.tech_phone": 3509,
-  "howto.ai_tools": 7484,
-  "howto.social_creator": 11750,
-  "howto.marketplace": 2026
+  "howto.digital_life": 12777,
+  "howto.shopping_returns": 1514,
+  "howto.rental": 5049,
+  "howto.tech_phone": 2468,
+  "howto.ai_tools": 6390,
+  "howto.social_creator": 10872,
+  "howto.marketplace": 1992
  },
- "actions": 46051,
- "mapped_to_ui_canonical": 40478,
+ "actions": 41062,
+ "mapped_to_ui_canonical": 36598,
  "filters": {
-  "non_step_line": 231240,
-  "actions": 46051,
-  "non_action": 5838,
-  "cta_or_feature_list": 6813,
-  "bare_verb_or_junk_object": 2101,
+  "non_step_line": 195851,
+  "actions": 41062,
+  "non_action": 5128,
+  "site_repeated_line": 44945,
+  "cta_or_feature_list": 2106,
+  "bare_verb_or_junk_object": 1351,
   "boiler": 1017,
   "enterprise_admin_page": 128
  },
  "modality": {
-  "🙌": 39564,
-  "👀²": 6070,
+  "🙌": 34813,
+  "👀²": 5310,
   "💭": 133,
   "👂👂": 35,
-  "🧠🗯": 249
+  "🧠🗯": 771
  },
  "with_amount_range": 677
 }
