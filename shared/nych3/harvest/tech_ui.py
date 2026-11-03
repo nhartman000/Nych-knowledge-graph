@@ -25,7 +25,7 @@ DOMAIN = "tech.ui"
 EXPORT = SHARED / "data" / "tech_ui"
 LOOK = {"VERIFY_STATE", "REVIEW_CONTENT", "WAIT"}
 REVIEW = {"review_status": "provisional_unreviewed", "spot_check": "21/40 correct, 6 partial, 13 wrong (agent-graded 2026-11-02, pending human review)"}
-SRC = "nych-ui-actions tech help-center harvest (Microsoft/Google/Claude/Apple support pages)"
+SRC = "nych-ui-actions tech help-center harvest (Microsoft/Google/Claude/Apple/Samsung/Microsoft Copilot support pages)"
 INSTANCE_DDL = "CREATE REL TABLE INSTANCE_OF(FROM TOTELoop TO TOTELoop, method STRING, provenance STRING)"
 
 
