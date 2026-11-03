@@ -10,7 +10,7 @@ batch() {
   flock /workspace/kg.ingest.lock env PYTHONPATH=shared python -m nych3.harvest.howto >| $RAW/ingest_logs/batch$n.json 2>| $RAW/ingest_logs/batch$n.err
   echo "[$(date +%H:%M)] batch $n ingest rc=$? $(head -c 300 $RAW/ingest_logs/batch$n.json | tr '\n' ' ')" >> $RAW/batch_loop.log
   "${GIT[@]}" add shared/data/howto && "${GIT[@]}" commit -qm "Harvest job B batch $n: compact howto export update" && \
-  "${GIT[@]}" pull --rebase -q origin nych3-integration && "${GIT[@]}" push -q origin nych3-integration
+  "${GIT[@]}" pull --rebase --autostash -q origin nych3-integration && "${GIT[@]}" push -q origin nych3-integration
   echo "[$(date +%H:%M)] batch $n commit $(git log -1 --format=%h)" >> $RAW/batch_loop.log
 }
 n=${START_N:-2}
