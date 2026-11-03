@@ -21,3 +21,4 @@
 | 2026-11-03 15:30–16:06 | Harvest end of day: Job B final batch (8d17b59); Job A final tech.ui export + ingest | store 105,130 loops (dev store incl. howto) |
 | 2026-11-03 17:2x | Final howto build with site-repeated-line filter (44,945 chrome lines dropped) + ingest; commit 102d296 | howto 41,062 actions from 6,862 pages (6,990 fetched); ingest new_loops 0; store 105,130 |
 | 2026-11-03 17:25–17:36 | `PY=kgenv bash REVIEW/reproduce.sh` in a clone of 102d296 | all pass except stale input checksums / expected_store (r2 values; tech.ui export grew to 68,975 instances); expected_store.json, inputs.sha256, MANIFEST.sha256 regenerated for r3 |
+| 2026-11-03 18:11–18:22 | `PY=kgenv bash REVIEW/reproduce.sh` in a fresh clone of ac13db6 (r3 third-opinion fixes) | overall: ALL PASS (12/12 checks; pytest 201 passed; store/eval/coverage unchanged); core_tote validate 0 errors; MANIFEST ok. Next commit adds only this row + MANIFEST |
