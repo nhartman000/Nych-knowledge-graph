@@ -10,12 +10,18 @@ from pathlib import Path
 R = Path(__file__).resolve().parents[2]
 E3 = R / "REVIEW/experiments/E3"
 LOOPS = R / "shared/data/tech_ui/core_tote/core_loops.json"
+# Deviation 2026-11-03 (see E3_PREREG.md): Anthropic replaced by Gemini (no Anthropic key).
 MODELS = {  # subject models (cheap, strong) per provider; override with --models
-    "openai": ["gpt-4o-mini", "gpt-4o"],
-    "anthropic": ["claude-3-5-haiku-latest", "claude-sonnet-4-5"]}
-GRADER = {"openai": ("anthropic", "claude-sonnet-4-5"), "anthropic": ("openai", "gpt-4o")}
-PRICE = {"gpt-4o-mini": (0.15, 0.6), "gpt-4o": (2.5, 10), "claude-3-5-haiku-latest": (0.8, 4),
-         "claude-sonnet-4-5": (3, 15), "mock": (0, 0)}  # USD per 1M in/out tokens (check current pricing)
+    "openai": ["gpt-4.1-mini", "gpt-4.1"],
+    "gemini": ["gemini-3.5-flash-lite", "gemini-3.8-flash"]}
+GRADER = {"openai": ("gemini", "gemini-3.8-flash"), "gemini": ("openai", "gpt-4.1")}
+OTHER = {"openai": "gemini", "gemini": "openai"}
+# USD per 1M in/out tokens, verified 2026-11-03 on platform.openai.com/docs/pricing and ai.google.dev pricing
+# (Gemini output includes thinking tokens; gemini-3.8-flash promo price through 2026-12-31).
+PRICE = {"gpt-4.1-mini": (0.4, 1.6), "gpt-4.1": (2.0, 8.0), "gemini-3.5-flash-lite": (0.3, 2.5),
+         "gemini-3.8-flash": (0.75, 3.75), "mock": (0, 0)}
+CAP_USD = 20.0  # TOTAL across both providers incl. grading; enforced on a combined running total
+def usd(model, ti, to): p = PRICE.get(model, (0, 0)); return ti * p[0] / 1e6 + to * p[1] / 1e6
 FORBIDDEN = re.compile(r"(?i)\bMG8\b|DARPA|defen[cs]e plan|roadmap")
 
 # ---------- loops & retrieval ----------
@@ -85,6 +91,15 @@ def call(provider, model, system, user, max_tokens=600):
                   {"model": model, "temperature": 0, "max_tokens": max_tokens,
                    "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}]})
         return r["choices"][0]["message"]["content"], r["usage"]["prompt_tokens"], r["usage"]["completion_tokens"]
+    if provider == "gemini":
+        r = _post(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+                  {"x-goog-api-key": os.environ["GEMINI_API_KEY"]},
+                  {"systemInstruction": {"parts": [{"text": system}]}, "contents": [{"role": "user", "parts": [{"text": user}]}],
+                   "generationConfig": {"temperature": 0, "maxOutputTokens": max_tokens + 1024,
+                                        "thinkingConfig": {"thinkingLevel": "low"}}})
+        u = r.get("usageMetadata", {}); parts = r["candidates"][0].get("content", {}).get("parts", [])
+        txt = "".join(p.get("text", "") for p in parts if not p.get("thought"))
+        return txt, u.get("promptTokenCount", 0), u.get("candidatesTokenCount", 0) + u.get("thoughtsTokenCount", 0)
     r = _post("https://api.anthropic.com/v1/messages", {"x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01"},
               {"model": model, "temperature": 0, "max_tokens": max_tokens, "system": system, "messages": [{"role": "user", "content": user}]})
     return r["content"][0]["text"], r["usage"]["input_tokens"], r["usage"]["output_tokens"]
@@ -120,6 +135,9 @@ def summarize(rows):
         out[f"{sm}|{mode}"] = res
     return out
 
+def _ledger(p, total, dry):
+    if not dry: p.write_text(json.dumps({"total_usd": round(total, 4), "cap_usd": CAP_USD}, indent=1))
+
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--dry-run", action="store_true"); ap.add_argument("--limit", type=int)
     ap.add_argument("--models", nargs="*", help="provider:model ...")
@@ -128,12 +146,12 @@ def main():
     out = Path(a.out + ("_dryrun" if a.dry_run else "")); out.mkdir(parents=True, exist_ok=True)
     tasks = [json.loads(l) for l in open(E3 / "tasks.jsonl")][: a.limit]
     loops = json.load(open(LOOPS))["loops"]; texts = [render(l) for l in loops]; ret = Retriever(loops)
-    if a.dry_run: subjects = [("openai", "mock"), ("anthropic", "mock")]
+    if a.dry_run: subjects = [("openai", "mock"), ("gemini", "mock")]
     elif a.models: subjects = [tuple(m.split(":", 1)) for m in a.models]
     else:
         subjects = [(p, m) for p, ms in MODELS.items() if os.environ.get(f"{p.upper()}_API_KEY") for m in ms]
-        if not subjects or not all(os.environ.get(k) for k in ("OPENAI_API_KEY", "ANTHROPIC_API_KEY")):
-            raise SystemExit("Need both OPENAI_API_KEY and ANTHROPIC_API_KEY (cross-provider blind grading).")
+        if not subjects or not all(os.environ.get(k) for k in ("OPENAI_API_KEY", "GEMINI_API_KEY")):
+            raise SystemExit("Need both OPENAI_API_KEY and GEMINI_API_KEY (cross-provider blind grading).")
     rng = random.Random(3); assign = {}
     for t in tasks:
         i, sc = ret.top(t["prompt"]); j = matched_random(i, texts, rng)
@@ -143,30 +161,42 @@ def main():
     raw = out / "raw.jsonl"; done = set()
     if raw.exists():
         for l in open(raw): r = json.loads(l); done.add((r["subject"], r["mode"], r["task_id"], r["cond"]))
-    cost = collections.Counter(); f = open(raw, "a")
+    cost = collections.Counter(); spent = 0.0
+    ledger = R / "REVIEW/experiments/E3/cost_ledger.json"   # combined total across ALL runs (smoke + full)
+    spent_prior = json.loads(ledger.read_text())["total_usd"] if ledger.exists() and not a.dry_run else 0.0
+    f = open(raw, "a")
     for prov, model in subjects:
-        gprov, gmodel = ("anthropic" if prov == "openai" else "openai", "mock") if a.dry_run else GRADER[prov]
+        gprov, gmodel = (OTHER[prov], "mock") if a.dry_run else GRADER[prov]
         for mode in ("steps", "next"):
             for t in tasks:
                 conds = list("ABC"); random.Random(t["task_id"] + model + mode).shuffle(conds)  # randomized order
                 for c in conds:
                     key = (f"{prov}:{model}", mode, t["task_id"], c)
                     if key in done: continue
+                    worst = usd(model, 2500, 2000) + usd(gmodel, 3000, 1500)   # pessimistic next-pair cost
+                    if spent_prior + spent + worst > CAP_USD:
+                        f.close(); _ledger(ledger, spent_prior + spent, a.dry_run)
+                        raise SystemExit(f"COST CAP: stopping at ${spent_prior + spent:.2f} (cap ${CAP_USD})")
                     lt = None if c == "A" else by_id[assign[t["task_id"]][c]]
                     ans, ti, to = call(prov, model, SYS, subj_prompt(t, mode, lt), 600 if mode == "steps" else 80)
                     g, gi, go = call(gprov, gmodel, "You are a strict, impartial grader.", grade_prompt(t, mode, ans), 200)
                     j = parse_json(g) or {}
-                    cost[model] += ti * PRICE.get(model, (0, 0))[0] / 1e6 + to * PRICE.get(model, (0, 0))[1] / 1e6
-                    cost[gmodel] += gi * PRICE.get(gmodel, (0, 0))[0] / 1e6 + go * PRICE.get(gmodel, (0, 0))[1] / 1e6
+                    c1, c2 = usd(model, ti, to), usd(gmodel, gi, go); cost[model] += c1; cost[gmodel] += c2; spent += c1 + c2
                     rec = {"subject": key[0], "mode": mode, "task_id": t["task_id"], "cond": c, "answer": ans,
                            "grader": f"{gprov}:{gmodel}", "grade_raw": g,
                            "score": float(j["score"]) if isinstance(j.get("score"), (int, float)) else None,
                            "wrong": j.get("wrong_or_invented_steps", j.get("wrong_or_invented")),
-                           "safe_stopping": j.get("safe_stopping"), "tokens": [ti, to, gi, go]}
+                           "safe_stopping": j.get("safe_stopping"), "tokens": [ti, to, gi, go], "usd": c1 + c2,
+                           "B_score": assign[t["task_id"]]["B_score"]}
                     f.write(json.dumps(rec) + "\n"); f.flush()
-    f.close()
+                    _ledger(ledger, spent_prior + spent, a.dry_run)
+    f.close(); _ledger(ledger, spent_prior + spent, a.dry_run)
     rows = [json.loads(l) for l in open(raw)]
-    summ = summarize(rows); summ["_cost_usd_this_invocation"] = dict(cost)
+    summ = summarize(rows)
+    med = sorted(v["B_score"] for v in assign.values())[len(assign) // 2]
+    summ["_secondary_well_matched (B_score >= median %.2f)" % med] = summarize([r for r in rows if assign[r["task_id"]]["B_score"] >= med])
+    summ["_unparseable_grades"] = sum(r["score"] is None for r in rows)
+    summ["_cost_usd_this_invocation"] = dict(cost)
     (out / "summary.json").write_text(json.dumps(summ, indent=1))
     # blind hand-check sheet: 30 random step answers, condition hidden
     hc = random.Random(7).sample([r for r in rows if r["mode"] == "steps"], min(30, sum(r["mode"] == "steps" for r in rows)))

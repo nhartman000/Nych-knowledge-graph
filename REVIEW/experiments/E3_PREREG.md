@@ -65,3 +65,21 @@ PYTHONPATH=shared /workspace/kgenv/bin/python tools/e3/build_tasks.py
 /workspace/kgenv/bin/python tools/e3/run_e3.py --limit 5              # paid smoke test
 /workspace/kgenv/bin/python tools/e3/run_e3.py                        # full run
 ```
+
+## Deviation 1 (2026-11-03, 9:15 PM EST, committed before any paid call)
+- **Why:** there's no Anthropic API key (`ANTHROPIC_API_KEY` on the box is a copy of the OpenAI key), so Anthropic is replaced by Google Gemini.
+- **Subjects:** OpenAI **gpt-4.1-mini** (cheap) and **gpt-4.1** (strong); Gemini **gemini-3.5-flash-lite** (cheap) and **gemini-3.8-flash** (strong).
+- **Model choice:** gpt-4o and gpt-4o-mini were swapped for the gpt-4.1 tier, which is cheaper per unit of quality and still non-reasoning, so temperature 0 holds. gemini-2.5-* is deprecated, so the current Gemini models are used.
+- **Graders (cross-provider and blind):** **gemini-3.8-flash** grades the OpenAI answers, and **gpt-4.1** grades the Gemini answers.
+- **Gemini settings:** temperature 0 and `thinkingLevel: low`. Thinking tokens are billed as output.
+- **Prices:** USD per 1M input/output tokens, verified 2026-11-03 on the providers' pricing pages.
+
+  | Model | Input | Output |
+  | --- | --- | --- |
+  | gpt-4.1-mini | 0.40 | 1.60 |
+  | gpt-4.1 | 2.00 | 8.00 |
+  | gemini-3.5-flash-lite | 0.30 | 2.50 |
+  | gemini-3.8-flash | 0.75 | 3.75 (promo price through 2026-12-31) |
+
+- **Cost cap:** **$20 total across both providers, including grading and the smoke test.** It's enforced as a combined running total in `REVIEW/experiments/E3/cost_ledger.json`. The runner stops before any call pair whose pessimistic cost would push the total over $20. If the cap cuts the run short, the analysis covers only tasks with all three conditions complete, and that is reported.
+- **Unchanged:** tasks, conditions, rubric, success rule and statistics.
