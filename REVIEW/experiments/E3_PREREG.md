@@ -83,3 +83,24 @@ PYTHONPATH=shared /workspace/kgenv/bin/python tools/e3/build_tasks.py
 
 - **Cost cap:** **$20 total across both providers, including grading and the smoke test.** It's enforced as a combined running total in `REVIEW/experiments/E3/cost_ledger.json`. The runner stops before any call pair whose pessimistic cost would push the total over $20. If the cap cuts the run short, the analysis covers only tasks with all three conditions complete, and that is reported.
 - **Unchanged:** tasks, conditions, rubric, success rule and statistics.
+
+## Deviation 2 (2026-11-03, about 10:00 PM EST, committed before any experiment call). Status: PRELIMINARY
+- **Why:** the OpenAI account has no credits, and there's no budget for any paid API. E3 runs on **Google Gemini only, on the free tier, with zero spend.**
+- **Free tier verified (zero cost):** a 1-token call to a paid-only model (gemini-3.1-pro-preview) returned `generate_content_free_tier_* limit: 0`, which shows the key's project is on the free tier.
+- **Subjects (all "Free of charge" on the free tier):**
+  - **gemini-3.1-flash-lite** (cheaper);
+  - **gemini-3.8-flash** (stronger).
+- **Grader:** **gemini-3.6-flash**, a different model from both subjects. It never sees the condition or the loop, and is temperature 0. **It replaces the strong cross-provider graders of Deviation 1.**
+- **Weakness stated up front:** the grader comes from the same provider and model family as the subjects, so it may share their blind spots or favour their style. Results are labelled **PRELIMINARY**.
+- **Throttling:** at most one call per 6.5 s per model.
+  - Calls are ordered steps-mode first, interleaved across tasks and subjects, so a partial run stays balanced.
+  - Per-minute free-tier 429s wait 65 s and then retry.
+  - These stop the run without retrying: daily quota exhausted, any out-of-credit or billing error, and any Gemini quota error **not** tagged `free_tier` (a possible billed tier).
+  - The run is resumable from `results/raw.jsonl`.
+- **Partial runs:** if daily quotas stop the run, results are reported for the tasks completed, with n, and the run resumes the next day.
+- **Hand check (30 items, blind):** done by the agent. It is reported **as grader agreement only**, not as primary grading.
+- **Cross-provider check (added on request):** a blinded packet of about 60 step-mode answers (20 per condition, shuffled, condition hidden) goes in `E3/gpt_chat_packet/`, in 3 chunks with a strict JSON rubric. Nick will have GPT grade it by hand in its chat app.
+  - The key is `E3/gpt_chat_key_SECRET.json`, kept outside the packet.
+  - `tools/e3/gpt_packet.py ingest` computes GPT-vs-Gemini grader agreement.
+  - This is a check on the grader, not primary grading.
+- **Unchanged:** tasks, conditions, rubric, success rule (B−C 95% CI > 0) and statistics.

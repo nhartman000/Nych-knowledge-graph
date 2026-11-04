@@ -20,6 +20,11 @@ OTHER = {"openai": "gemini", "gemini": "openai"}
 # (Gemini output includes thinking tokens; gemini-3.8-flash promo price through 2026-12-31).
 PRICE = {"gpt-4.1-mini": (0.4, 1.6), "gpt-4.1": (2.0, 8.0), "gemini-3.5-flash-lite": (0.3, 2.5),
          "gemini-3.8-flash": (0.75, 3.75), "mock": (0, 0)}
+FREE_TIER_PRICE = {"gemini-3.1-flash-lite": (0, 0), "gemini-3.8-flash": (0, 0), "gemini-3.6-flash": (0, 0)}
+# Deviation 2 (2026-11-03): Gemini-only, FREE TIER, zero spend. Grader differs from both subjects.
+FREE_SUBJECTS = [("gemini", "gemini-3.1-flash-lite"), ("gemini", "gemini-3.8-flash")]
+FREE_GRADER = ("gemini", "gemini-3.6-flash")
+FREE_ALLOW = {m for _, m in FREE_SUBJECTS} | {FREE_GRADER[1]}   # all "Free of charge" on the free tier (pricing page 2026-11-03)
 CAP_USD = 20.0  # TOTAL across both providers incl. grading; enforced on a combined running total
 def usd(model, ti, to): p = PRICE.get(model, (0, 0)); return ti * p[0] / 1e6 + to * p[1] / 1e6
 FORBIDDEN = re.compile(r"(?i)\bMG8\b|DARPA|defen[cs]e plan|roadmap")
@@ -70,14 +75,34 @@ def grade_prompt(task, mode, answer):
     return f"{NEXT_RUBRIC}\n\nTask: {task['prompt']}\nGold next action: {task['next_action_gold']}\n\nPredicted: {answer}"
 
 # ---------- model calls ----------
-def _post(url, hdr, body):
-    for a in range(5):
+class Stop(Exception):
+    """Non-retryable: out of credit, daily quota, or any sign the call could be billed."""
+LAST = collections.defaultdict(float); MIN_INTERVAL = {"gemini": 6.5, "openai": 0.0}  # free-tier throttle (~9 RPM/model)
+def _post(url, hdr, body, prov="?", model="?"):
+    for a in range(8):
+        wait = MIN_INTERVAL.get(prov, 0) - (time.time() - LAST[model])
+        if wait > 0: time.sleep(wait)
+        LAST[model] = time.time()
         try:
             req = urllib.request.Request(url, json.dumps(body).encode(), {**hdr, "content-type": "application/json"})
             return json.load(urllib.request.urlopen(req, timeout=120))
-        except Exception as e:
-            if a == 4: raise
-            time.sleep(2 ** a * 2)
+        except urllib.error.HTTPError as e:
+            msg = e.read().decode("utf-8", "ignore")
+            if re.search(r"insufficient_quota|credit_balance|no credits|billing_not_active|PAYMENT", msg):
+                raise Stop(f"{prov}:{model} out of credit / billing: {msg[:300]}")
+            if e.code == 429:
+                if prov == "gemini" and "free_tier" not in msg:
+                    raise Stop(f"{prov}:{model} quota error not tagged free_tier (possible billed tier) -> stop: {msg[:300]}")
+                if re.search(r"(?i)per ?day|PerDay|daily", msg):
+                    raise Stop(f"{prov}:{model} daily quota exhausted: {msg[:300]}")
+                if a >= 5: raise Stop(f"{prov}:{model} persistent rate limit: {msg[:300]}")
+                time.sleep(65); continue
+            if e.code >= 500 and a < 5: time.sleep(2 ** a * 3); continue
+            raise Stop(f"{prov}:{model} HTTP {e.code}: {msg[:300]}")
+        except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
+            if a >= 5: raise Stop(f"{prov}:{model} network: {e}")
+            time.sleep(2 ** a * 3)
+    raise Stop("retries exhausted")
 def call(provider, model, system, user, max_tokens=600):
     assert not FORBIDDEN.search(user), "refusing to send restricted material"
     if model == "mock":
@@ -89,14 +114,14 @@ def call(provider, model, system, user, max_tokens=600):
     if provider == "openai":
         r = _post("https://api.openai.com/v1/chat/completions", {"authorization": f"Bearer {os.environ['OPENAI_API_KEY']}"},
                   {"model": model, "temperature": 0, "max_tokens": max_tokens,
-                   "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}]})
+                   "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}]}, prov=provider, model=model)
         return r["choices"][0]["message"]["content"], r["usage"]["prompt_tokens"], r["usage"]["completion_tokens"]
     if provider == "gemini":
         r = _post(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
                   {"x-goog-api-key": os.environ["GEMINI_API_KEY"]},
                   {"systemInstruction": {"parts": [{"text": system}]}, "contents": [{"role": "user", "parts": [{"text": user}]}],
                    "generationConfig": {"temperature": 0, "maxOutputTokens": max_tokens + 1024,
-                                        "thinkingConfig": {"thinkingLevel": "low"}}})
+                                        "thinkingConfig": {"thinkingLevel": "low"}}}, prov=provider, model=model)
         u = r.get("usageMetadata", {}); parts = r["candidates"][0].get("content", {}).get("parts", [])
         txt = "".join(p.get("text", "") for p in parts if not p.get("thought"))
         return txt, u.get("promptTokenCount", 0), u.get("candidatesTokenCount", 0) + u.get("thoughtsTokenCount", 0)
@@ -141,12 +166,17 @@ def _ledger(p, total, dry):
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--dry-run", action="store_true"); ap.add_argument("--limit", type=int)
     ap.add_argument("--models", nargs="*", help="provider:model ...")
+    ap.add_argument("--gemini-free", action="store_true", help="Deviation 2: Gemini free tier only, zero spend")
     ap.add_argument("--out", default=str(E3 / "results"))
     a = ap.parse_args()
     out = Path(a.out + ("_dryrun" if a.dry_run else "")); out.mkdir(parents=True, exist_ok=True)
     tasks = [json.loads(l) for l in open(E3 / "tasks.jsonl")][: a.limit]
     loops = json.load(open(LOOPS))["loops"]; texts = [render(l) for l in loops]; ret = Retriever(loops)
     if a.dry_run: subjects = [("openai", "mock"), ("gemini", "mock")]
+    elif a.gemini_free:
+        PRICE.update(FREE_TIER_PRICE)   # verified free tier: paid-only model returned free_tier limit 0
+        if not os.environ.get("GEMINI_API_KEY"): raise SystemExit("Need GEMINI_API_KEY")
+        subjects = FREE_SUBJECTS
     elif a.models: subjects = [tuple(m.split(":", 1)) for m in a.models]
     else:
         subjects = [(p, m) for p, ms in MODELS.items() if os.environ.get(f"{p.upper()}_API_KEY") for m in ms]
@@ -164,19 +194,22 @@ def main():
     cost = collections.Counter(); spent = 0.0
     ledger = R / "REVIEW/experiments/E3/cost_ledger.json"   # combined total across ALL runs (smoke + full)
     spent_prior = json.loads(ledger.read_text())["total_usd"] if ledger.exists() and not a.dry_run else 0.0
-    f = open(raw, "a")
-    for prov, model in subjects:
-        gprov, gmodel = (OTHER[prov], "mock") if a.dry_run else GRADER[prov]
-        for mode in ("steps", "next"):
-            for t in tasks:
+    f = open(raw, "a"); stop_reason = None
+    try:
+      for mode in ("steps", "next"):             # primary outcome first; balanced across subjects if cut short
+        for t in tasks:
+          for prov, model in subjects:
+                if a.dry_run: gprov, gmodel = (OTHER[prov], "mock")
+                elif a.gemini_free: gprov, gmodel = FREE_GRADER
+                else: gprov, gmodel = GRADER[prov]
+                if a.gemini_free: assert model in FREE_ALLOW and gmodel in FREE_ALLOW and gmodel != model
                 conds = list("ABC"); random.Random(t["task_id"] + model + mode).shuffle(conds)  # randomized order
                 for c in conds:
                     key = (f"{prov}:{model}", mode, t["task_id"], c)
                     if key in done: continue
                     worst = usd(model, 2500, 2000) + usd(gmodel, 3000, 1500)   # pessimistic next-pair cost
                     if spent_prior + spent + worst > CAP_USD:
-                        f.close(); _ledger(ledger, spent_prior + spent, a.dry_run)
-                        raise SystemExit(f"COST CAP: stopping at ${spent_prior + spent:.2f} (cap ${CAP_USD})")
+                        raise Stop(f"COST CAP: stopping at ${spent_prior + spent:.2f} (cap ${CAP_USD})")
                     lt = None if c == "A" else by_id[assign[t["task_id"]][c]]
                     ans, ti, to = call(prov, model, SYS, subj_prompt(t, mode, lt), 600 if mode == "steps" else 80)
                     g, gi, go = call(gprov, gmodel, "You are a strict, impartial grader.", grade_prompt(t, mode, ans), 200)
@@ -187,9 +220,11 @@ def main():
                            "score": float(j["score"]) if isinstance(j.get("score"), (int, float)) else None,
                            "wrong": j.get("wrong_or_invented_steps", j.get("wrong_or_invented")),
                            "safe_stopping": j.get("safe_stopping"), "tokens": [ti, to, gi, go], "usd": c1 + c2,
-                           "B_score": assign[t["task_id"]]["B_score"]}
+                           "B_score": assign[t["task_id"]]["B_score"], "ts": time.strftime("%Y-%m-%dT%H:%M:%S%z")}
                     f.write(json.dumps(rec) + "\n"); f.flush()
                     _ledger(ledger, spent_prior + spent, a.dry_run)
+    except Stop as e:
+        stop_reason = str(e); print("STOPPED:", stop_reason, flush=True)
     f.close(); _ledger(ledger, spent_prior + spent, a.dry_run)
     rows = [json.loads(l) for l in open(raw)]
     summ = summarize(rows)
@@ -197,6 +232,8 @@ def main():
     summ["_secondary_well_matched (B_score >= median %.2f)" % med] = summarize([r for r in rows if assign[r["task_id"]]["B_score"] >= med])
     summ["_unparseable_grades"] = sum(r["score"] is None for r in rows)
     summ["_cost_usd_this_invocation"] = dict(cost)
+    summ["_stop_reason"] = stop_reason
+    summ["_records_total"] = len(rows)
     (out / "summary.json").write_text(json.dumps(summ, indent=1))
     # blind hand-check sheet: 30 random step answers, condition hidden
     hc = random.Random(7).sample([r for r in rows if r["mode"] == "steps"], min(30, sum(r["mode"] == "steps" for r in rows)))
@@ -208,5 +245,6 @@ def main():
     (out / "handcheck_key.json").write_text(json.dumps([{"hc_id": k, "subject": r["subject"], "task_id": r["task_id"],
         "cond": r["cond"], "grader_score": r["score"]} for k, r in enumerate(hc)], indent=1))
     print(json.dumps(summ, indent=1)[:3000])
+    if stop_reason: raise SystemExit(3)
 
 if __name__ == "__main__": main()
