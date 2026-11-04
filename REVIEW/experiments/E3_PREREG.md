@@ -122,3 +122,76 @@ PYTHONPATH=shared /workspace/kgenv/bin/python tools/e3/build_tasks.py
 - **Run order:** steps mode runs first for all tasks; next-action mode runs only if quota remains.
 - **Quota handling:** per-minute free-tier 429s wait for the server's `retryDelay`. Daily-quota 429s stop the run, which resumes the next day (quotas reset at midnight Pacific, 3:00 AM EST).
 - **Output directory:** `E3/results_v2b/`.
+
+---
+
+## E3b addendum: non-computer physical tasks, observe-and-assist framing (PRELIMINARY)
+
+Written 2026-11-04 at about 12:55 AM EST, **before any E3b model call**. It doesn't change E3. Builder: `tools/e3b/build_e3b.py`. Runner: `tools/e3b/run_e3b.py`. Worker: `tools/e3b/worker_e3b.sh`. Data: `REVIEW/experiments/E3b/`.
+
+**Status: PRELIMINARY.** This is an exploratory pilot of a redesigned test. It's free tier only, with $0 spend; the shared ledger `E3/cost_ledger.json` must stay at $0.00, and the hard cap stays $20 total.
+
+### Purpose and use framing
+- **Civilian uses only:** assistive robotics, accessibility, elder-care help and ergonomics. The intended system watches a person doing an everyday physical task, matches a TOTE loop, and uses physical-capability factors to decide where to offer help.
+- **Hypotheses, not judgments:** ability predictions only guide offers of help. They are never a judgment of the person.
+- **No protected-trait proxies:** profiles hold physical capability only (height, weight, reach, grip, lift, tremor, dexterity, hands available, heat sensation, near vision, standing tolerance, balance, gait, posture). They contain no age, sex, race, disability label or other protected trait.
+- **Synthetic profiles:** every profile is **synthetic**, labelled `SYNTHETIC: true` with an explicit note, and is not a real person.
+
+### Tasks
+- **Count:** 77 tasks in `E3b/tasks.jsonl`, built deterministically (seed 31): **48 cooking**, **16 woodworking** and **13 knitting/crochet**.
+- **Source:** the only non-computer sources harvested in the Kuzu store, all public-domain Project Gutenberg books:
+  - #65061 *Boston Cooking-School Cook Book*
+  - #71855 *Essentials of Woodworking*
+  - #26113 *Handbook of Wool Knitting and Crochet*
+  - #13510 *Knots, Splices and Rope Work* (0 tasks passed the filters)
+- **Domains the store doesn't cover:** home repair, cleaning, first aid, car care, gardening and personal care. They aren't in the store yet and are **out of scope** until they're harvested.
+- **One task** is one book section: a heading plus the harvested action sentences under it.
+  - Section size is 3 to 8 steps, each at most 50 words.
+  - At least 2/3 of the steps must have a NYCH-complete loop.
+  - Titles are de-duplicated.
+  - The heading is recovered from the cached Gutenberg HTML.
+- **Reference steps:** the harvested action sentences, verbatim.
+- **NYCH rule:** loops used anywhere (tasks or library) must have a modality operator, actor, action and object/tool cell. Senses are **input data**: observations report "modality cues sensed", never sensing as an action.
+- **Observation (model input):** sensor-style lines for the first half of the steps. They give the motion consistent with the action lemmas, the objects in view, the tool in hand and the modality cues. The **task name is never given**.
+- **Step requirements (rule-based keywords; table in the builder):** fine_motor, grip_force, lifting_load, bimanual, heat_hazard, sharp_tool, fine_vision, sustained_standing and balance_reach.
+- **Profile limitations:** each profile has 0 to 3 limitations, mapped to the requirements by a fixed table.
+- **Gold struggle steps:** the steps whose requirements hit one of the profile's limitations.
+- **Gold completion bucket:** high (no struggle steps), medium (40% of steps or fewer) or low (more than 40%).
+
+### Conditions (paired, randomized order per task)
+- **A:** no loop.
+- **B:** up to 3 retrieved loops.
+- **C:** the same number of random NYCH-complete non-computer loops.
+- **Loop wording:** in B and C the loops are labelled "may or may not be relevant".
+- **Hold-out:** every loop grounded in the task's own section is removed from retrieval and from C. A loop is never rendered with a grounding sentence equal to any gold step.
+
+### Retrieval fix (vs E3)
+E3 matched the task title loosely against the loop name and text with TF-IDF and kept the top 1. B was often irrelevant, and in the interim GPT check of 20 items B scored .463 vs C .571 and A .665. E3b changes retrieval as follows:
+1. Matching is on the loop's NYCH cells against the observation cues: object lemma (weight 2), tool (weight 1.5) and action lemma (weight 1), each IDF-weighted.
+2. An **object or tool match is required**. If nothing matches, B gets no loop and C gets one loop (logged).
+3. Only NYCH-complete loops (3,167 in the library) are eligible.
+4. The top 3 must come from 3 **distinct source paragraphs**, so they aren't near-duplicates.
+5. The retrieval score is logged per task (`B_score`). 76 of 77 tasks get at least one B loop.
+
+### Outputs and scoring (rule-based, no LLM grader)
+1. **Task identification:** the model ranks the top 5 of 20 candidate titles: the truth, up to 9 from the same domain and the rest from other domains (fixed per task). Scores: `identify_top1` and `identify_top5` (0/1).
+2. **Ability:** the model is given the observation, the profile and the matched step list. It returns `struggle_steps` and a `completion_likelihood`.
+   - Score = mean of (F1 of struggle steps vs gold, where both empty = 1) and (completion: exact = 1, adjacent = 0.5, else 0).
+
+### Models and quota
+- **Subjects:** gemma-4-26b-a4b-it and gemma-4-31b-it on the Gemini API free tier, temperature 0.
+- **No grader:** scoring is rule-based, so no grader quota is used.
+- **Spacing:** 12 s between calls, which is politer than E3's 6.5 s, because the quota is shared with the running E3 workers.
+- **Quota handling:** a daily-quota stop sleeps until 3:10 AM EST and resumes. Transient errors retry after 10 min, up to 6 times. Any billing or non-free-tier signal stops the run.
+- **Run order:** identification runs first for all tasks, then ability.
+
+### Success rule and analysis
+- **Success rule:** for each subject and metric, the loop helps only if the **B−C** paired bootstrap 95% CI lower bound is above 0 (10k resamples). B−A and C−A are reported.
+- **Secondary:** results split by the B_score median.
+
+### Known limitations, stated up front
+- **Rule-derived gold:** the requirement tags and gold struggle steps come from keyword rules, not from human or biomechanical ground truth. That makes the ability metric a test of consistency with the rules.
+- **Text only:** observations are synthesized from loop fields, not real sensor data.
+- **Unbalanced domains:** cooking dominates.
+- **Step list in the ability prompt:** the ability prompt reveals the true step list, which separates ability from identification.
+- **Restricted material:** none of the unpublished MG8 layer, defense or DARPA material is used, and the E3 FORBIDDEN guard is applied to every prompt.
