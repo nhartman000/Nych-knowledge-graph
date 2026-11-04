@@ -1,8 +1,8 @@
 # Gate — 03-ontology
-status: PENDING
-reviewer:
-date:
-notes:
+status: APPROVED
+reviewer: N Hartman (human)
+date: 2026-11-03
+notes: Approved by N Hartman (human), 2026-11-03, via chat instruction; recorded by Grok Bot.
 
 ## Review checklist (edit `status:` to APPROVED only when all are ticked)
 - [ ] `schema.cypher` is accepted as the single source (ontology.json is generated from it).
