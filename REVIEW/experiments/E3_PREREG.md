@@ -201,3 +201,53 @@ E3 matched the task title loosely against the loop name and text with TF-IDF and
 - **Data discarded:** those records were deleted.
 - **Fix:** E3b now sends `thinkingLevel: minimal` for Gemma, with a 400-token answer budget. A test call returned valid JSON.
 - **E3 untouched:** E3 code and its runs are not changed.
+
+---
+
+## E3c addendum: run-to-run consistency / auditability (PRELIMINARY)
+
+Written 2026-11-04 at about 1:10 AM EST, **before any E3c model call**. Runner: `tools/e3c/run_e3c.py`. Worker: `tools/e3c/worker_e3c.sh`. Output: `REVIEW/experiments/E3c/results_prelim/`.
+
+**Question:** given the same loop, does the model keep giving the same answer while the no-loop answer changes? Hypothesis: **B is more stable than A and C**.
+
+### Tasks (10, hand-picked where the B match is semantically solid)
+**Computer (E3), with the B loop for each:**
+- **E3-105** Samsung, check for software updates: `SET_UPDATE`
+- **E3-167** Google Account, sign out of someone else's device: `ACC_SIGN_OUT`
+- **E3-012** Drive/Android, automatically back up your device: `SET_BACKUP`
+- **E3-066** Docs, permanently delete all files in trash: `FILE_DELETE`
+- **E3-009** Android, find AICore updates: `SET_UPDATE`
+
+**Physical (E3b), each with 3 retrieved loops:**
+- **E3b-050** Vol-au-vents
+- **E3b-020** Miter joint
+- **E3b-057** Stuffed onions
+- **E3b-070** Stewed mushrooms
+- **E3b-071** Broiled venison steak
+
+**Loop contexts:** B and C are the fixed loops already assigned by the E3 and E3b runs. They're identical across the 20 repeats.
+
+### Design
+- **Model:** **gemma-4-31b-it** on the Gemini free tier, $0 spend, hard cap $20 total. Its E3 worker is stopped (taken as is, not restarted), so its quota is the least contended.
+- **Sampling:** **temperature 0.7** for every condition, other settings default, minimal thinking, 600-token answers.
+- **Repeats:** **20 per condition** (A, B, C), so 10 × 3 × 20 = 600 calls. Repeats are interleaved, so a partial run stays balanced.
+- **Prompt:** the E3 steps prompt. Physical tasks give the task name directly; E3c tests stability, not identification.
+- **Spacing:** 15 s between calls, the politest of the three runs.
+- **Resuming:** the run is resumable and detached. A daily-quota stop resumes at 3:10 AM EST.
+
+### Metrics (all rule-based, computed per task and condition over the 20 answers)
+1. **Pairwise step-set Jaccard:** steps are content-word bags (stemmed, stopwords removed). Two steps match if their token Jaccard is at least .3 (greedy alignment). Score = matched / (|A| + |B| − matched). This is the **primary** metric.
+2. **Pairwise order agreement:** the fraction of concordant matched pairs.
+3. **Distinct answers:** the number of distinct canonicalized step lists.
+4. **Spread:** variance of the gold score and SD of the step count.
+5. **Gold score:** gold coverage (token Jaccard of at least .2) minus 0.1 per invented step.
+6. **Invented-step rate:** the share of answer steps that share less than 10% of their tokens with every gold step. This is a crude proxy.
+
+### Success rule
+- **Primary:** B is more stable only if the paired-over-tasks bootstrap 95% CI (10k resamples) lower bound is above 0 for **both** B−A and B−C on pairwise step-set Jaccard.
+- **Secondary:** the other metrics are descriptive. With n = 10 tasks, this is a pilot.
+
+### Caveats
+- **Lexical similarity:** the metrics compare words, not meaning.
+- **Selected tasks:** the tasks were chosen for good B matches, so they favour B by design.
+- **Verbatim copying:** a loop can make answers stable simply because the model copies it word for word. Stability isn't correctness, so the gold score is reported alongside.
