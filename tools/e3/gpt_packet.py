@@ -5,7 +5,7 @@ The packet shows task + gold steps + one anonymized answer. Condition, subject m
 import json, random, sys, re, collections
 from pathlib import Path
 R = Path(__file__).resolve().parents[2]; E3 = R / "REVIEW/experiments/E3"
-PK = E3 / "gpt_chat_packet"; KEY = E3 / "gpt_chat_key_SECRET.json"; RAW = E3 / "results/raw.jsonl"
+PK = E3 / "gpt_chat_packet"; KEY = E3 / "gpt_chat_key_SECRET.json"; RAW = E3 / "results_v2b/raw.jsonl"
 N, CHUNK = 60, 20
 RUBRIC = """You are grading how-to instructions against a gold step list taken from an official help page.
 You do not know how any answer was produced. Grade each item independently and strictly.

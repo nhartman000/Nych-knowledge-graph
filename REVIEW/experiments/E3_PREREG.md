@@ -111,3 +111,14 @@ PYTHONPATH=shared /workspace/kgenv/bin/python tools/e3/build_tasks.py
 - **New grader:** **gemini-3-flash-preview**, still a different model from both subjects.
 - **Free tier:** all three are free of charge on the free tier.
 - **Overload errors:** 503s now back off from 15 s up to 300 s and retry, because they're transient and not quota errors.
+
+### Deviation 2b (2026-11-03, about 10:35 PM EST, before any data in the analysed run)
+- **What happened:** the free tier allows only **20 requests per day per model** for the Gemini 3.x Flash models (quota `GenerateRequestsPerDayPerProjectPerModel-FreeTier`, value 20). The 2a grader ran out after 17 records.
+- **Pilot data excluded:** those 17 records are kept in `E3/results_pilot_2a/` and left out of the analysis.
+- **New subjects (same free API):** **gemma-4-26b-a4b-it** (cheaper, MoE) and **gemma-4-31b-it** (stronger).
+- **New grader:** **gemini-3.5-flash-lite**. It's a different model family from the subjects (Gemini vs Gemma) but from the same provider.
+- **Batched grading:** each grader call grades the 3 answers for one (subject, task) together. The answers are anonymized as X/Y/Z in random order, and the grader is told to grade each one independently against the gold. This cuts grader calls by 3×.
+  - Risk: the grader may score the answers relative to each other. That's stated as a caveat.
+- **Run order:** steps mode runs first for all tasks; next-action mode runs only if quota remains.
+- **Quota handling:** per-minute free-tier 429s wait for the server's `retryDelay`. Daily-quota 429s stop the run, which resumes the next day (quotas reset at midnight Pacific, 3:00 AM EST).
+- **Output directory:** `E3/results_v2b/`.
