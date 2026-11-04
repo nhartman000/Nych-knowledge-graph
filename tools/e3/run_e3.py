@@ -20,10 +20,10 @@ OTHER = {"openai": "gemini", "gemini": "openai"}
 # (Gemini output includes thinking tokens; gemini-3.8-flash promo price through 2026-12-31).
 PRICE = {"gpt-4.1-mini": (0.4, 1.6), "gpt-4.1": (2.0, 8.0), "gemini-3.5-flash-lite": (0.3, 2.5),
          "gemini-3.8-flash": (0.75, 3.75), "mock": (0, 0)}
-FREE_TIER_PRICE = {"gemini-3.1-flash-lite": (0, 0), "gemini-3.8-flash": (0, 0), "gemini-3.6-flash": (0, 0)}
+FREE_TIER_PRICE = {"gemini-3.5-flash-lite": (0, 0), "gemini-3.6-flash": (0, 0), "gemini-3-flash-preview": (0, 0)}
 # Deviation 2 (2026-11-03): Gemini-only, FREE TIER, zero spend. Grader differs from both subjects.
-FREE_SUBJECTS = [("gemini", "gemini-3.1-flash-lite"), ("gemini", "gemini-3.8-flash")]
-FREE_GRADER = ("gemini", "gemini-3.6-flash")
+FREE_SUBJECTS = [("gemini", "gemini-3.5-flash-lite"), ("gemini", "gemini-3.6-flash")]   # 2a: 3.1-lite/3.8 were 503-overloaded
+FREE_GRADER = ("gemini", "gemini-3-flash-preview")
 FREE_ALLOW = {m for _, m in FREE_SUBJECTS} | {FREE_GRADER[1]}   # all "Free of charge" on the free tier (pricing page 2026-11-03)
 CAP_USD = 20.0  # TOTAL across both providers incl. grading; enforced on a combined running total
 def usd(model, ti, to): p = PRICE.get(model, (0, 0)); return ti * p[0] / 1e6 + to * p[1] / 1e6
@@ -97,7 +97,7 @@ def _post(url, hdr, body, prov="?", model="?"):
                     raise Stop(f"{prov}:{model} daily quota exhausted: {msg[:300]}")
                 if a >= 5: raise Stop(f"{prov}:{model} persistent rate limit: {msg[:300]}")
                 time.sleep(65); continue
-            if e.code >= 500 and a < 5: time.sleep(2 ** a * 3); continue
+            if e.code >= 500 and a < 7: time.sleep(min(300, 15 * 2 ** a)); continue   # 503 overload: transient, back off
             raise Stop(f"{prov}:{model} HTTP {e.code}: {msg[:300]}")
         except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
             if a >= 5: raise Stop(f"{prov}:{model} network: {e}")

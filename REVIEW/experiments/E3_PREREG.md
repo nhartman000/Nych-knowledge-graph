@@ -104,3 +104,10 @@ PYTHONPATH=shared /workspace/kgenv/bin/python tools/e3/build_tasks.py
   - `tools/e3/gpt_packet.py ingest` computes GPT-vs-Gemini grader agreement.
   - This is a check on the grader, not primary grading.
 - **Unchanged:** tasks, conditions, rubric, success rule (B−C 95% CI > 0) and statistics.
+
+### Deviation 2a (2026-11-03, about 10:10 PM EST, before any experiment data)
+- **What happened:** a smoke call produced no data. gemini-3.1-flash-lite and gemini-3.8-flash both returned HTTP 503 ("high demand").
+- **New subjects:** **gemini-3.5-flash-lite** (cheaper) and **gemini-3.6-flash** (stronger).
+- **New grader:** **gemini-3-flash-preview**, still a different model from both subjects.
+- **Free tier:** all three are free of charge on the free tier.
+- **Overload errors:** 503s now back off from 15 s up to 300 s and retry, because they're transient and not quota errors.
