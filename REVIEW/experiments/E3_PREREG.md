@@ -195,3 +195,9 @@ E3 matched the task title loosely against the loop name and text with TF-IDF and
 - **Unbalanced domains:** cooking dominates.
 - **Step list in the ability prompt:** the ability prompt reveals the true step list, which separates ability from identification.
 - **Restricted material:** none of the unpublished MG8 layer, defense or DARPA material is used, and the E3 FORBIDDEN guard is applied to every prompt.
+
+#### E3b deviation 1 (2026-11-04, about 12:50 AM EST, before any scored E3b data)
+- **What happened:** the first 2 calls returned empty text. Gemma 4's default thinking used 1.2k to 4k tokens and never emitted an answer.
+- **Data discarded:** those records were deleted.
+- **Fix:** E3b now sends `thinkingLevel: minimal` for Gemma, with a 400-token answer budget. A test call returned valid JSON.
+- **E3 untouched:** E3 code and its runs are not changed.

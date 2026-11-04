@@ -9,6 +9,11 @@ import run_e3 as E   # reuse free-tier call(), quota/billing stops, FORBIDDEN gu
 R = Path(__file__).resolve().parents[2]; D = R / "REVIEW/experiments/E3b"
 LEDGER = R / "REVIEW/experiments/E3/cost_ledger.json"   # shared combined ledger; free tier -> stays $0
 E.MIN_INTERVAL["gemini"] = 12.0   # politer than E3 (6.5s): free quota is shared with the running E3 workers
+_post0 = E._post
+def _post_min_think(url, hdr, body, **kw):   # Gemma 4 default thinking ran ~3-4k tokens and returned empty text; use minimal
+    if "gemma" in url: body.setdefault("generationConfig", {})["thinkingConfig"] = {"thinkingLevel": "minimal"}
+    return _post0(url, hdr, body, **kw)
+E._post = _post_min_think
 K_LOOPS, N_CAND = 3, 20
 STOP = set("a an the to of in on for and or with from is are be it this that until".split())
 def cues(t):
@@ -125,12 +130,13 @@ def main():
                 for m in subjects:
                     assert m == "mock" or m in E.FREE_ALLOW
                     for cnd in random.Random(t["task_id"] + m + metric).sample("ABC", 3):
+                        if E.FORBIDDEN.search(t["title_hidden_from_model"]): continue
                         if (m, metric, t["task_id"], cnd) in done: continue
                         ctx = "" if cnd == "A" else ("\n\nReference TOTE loops from the system's library (may or may not be relevant):\n" +
                                                      "\n".join(render(lib[i], g) for i, _, g in assign[t["task_id"]]["_" + cnd]))
                         up = id_prompt(t, cands, ctx) if metric == "identify" else ab_prompt(t, ctx)
                         if m == "mock": ans = json.dumps({"top5": random.Random(up).sample(range(1, 21), 5), "struggle_steps": [1], "completion_likelihood": "medium"}); ti = to = 0
-                        else: ans, ti, to = E.call("gemini", m, SYS, up, 200)
+                        else: ans, ti, to = E.call("gemini", m, SYS, up, 400)
                         j = pj(ans)
                         if metric == "identify": s1, s5 = score_id(j, truth) if j else (None, None)
                         else: s1 = score_ab(j, t) if j else None; s5 = None
