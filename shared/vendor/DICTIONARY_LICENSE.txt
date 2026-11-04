@@ -1,0 +1,48 @@
+nych/data/dictionary_words.txt.gz
+=================================
+
+What it is: the lowercase entries (91,034 words, including inflected forms,
+hyphenated words, and contractions) of the English Speller Database (ESDB,
+formerly SCOWL), size 60, American + British spellings, max variant level 1,
+accents removed. Capitalized-only entries (people's names, places, months)
+are deliberately excluded: nych.protected_terms uses this list to decide
+whether a word "has a dictionary definition", and a name that appears only
+in capitalized form must not count as one.
+
+Source: https://github.com/en-wl/wordlist
+Commit: 1e5b7d3a72f47a71da5d28686c1dd4b397178485
+Generated with:
+    make
+    ./scowl --db scowl.db word-list 60 A,B,Z 1 --deaccent \
+      | grep -E "^[a-z][a-z'-]*$" | LC_ALL=C sort -u | gzip -9 -n
+
+Size 60 is at or below 80, so the UKACD terms do not apply; American and
+British spellings without the Australian 'D' spelling / 'AU' region, so the
+AU terms do not apply. The applicable notice follows.
+
+-----------------------------------------------------------------------------
+Copyright 2000-2026 by Kevin Atkinson
+
+Permission to use, copy, modify, distribute, and sell any part of the English
+Speller Database (ESDB, previously known as SCOWLv2), or word lists
+created from it, is hereby granted without fee, provided that the above
+copyright notice appears in all copies and that both the above copyright
+notice and this notice appear in supporting documentation.  Kevin Atkinson
+makes no representations about the suitability of this database for any
+purpose.  It is provided "as is" without express or implied warranty.
+
+ESDB is derived from many sources, most of which are in the Public Domain.
+Data from the Corpus of Contemporary American English (COCA) was also used.
+
+All data from COCA comes from 3-gram data that is not freely available;
+however, the usage is within the rights given by the NDA that was signed when
+purchasing the data.  More information on COCA is available at
+https://www.english-corpora.org/coca/.
+
+The primary source of words for ESDB comes from 12dicts and ENABLE2K.  Both
+are in the Public Domain, but Alan Beale <biljir@pobox.com> deserves special
+credit as he is the author of 12dicts and a major contributor to ENABLE2K.  In
+addition, he gave me an incredible amount of feedback and created a number of
+special lists in order to help improve the overall quality of ESDB.
+
+===

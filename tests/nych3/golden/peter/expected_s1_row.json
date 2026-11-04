@@ -1,0 +1,12 @@
+{
+  "_doc": "User golden case, sentence 1: 'Peter loved looking at the stars from the hill behind his house.' Row = one TOTE loop (user model). Cells are 'word,Gestalt'; Gestalt is blank before stage 10.",
+  "template_id": "TL-LOOK-AT-STARS-001",
+  "row": {
+    "modality": "loved,🫶 ; looking,👀¹",
+    "actor": "Peter,[protected]",
+    "action": "look,",
+    "object": "stars,",
+    "perspective_location": "hill, ; behind house(his→Peter),",
+    "exit": "G-EXIT-LOOK-AT-STARS-001: object_visually_available == false OR activity_continues == false [inferred candidates: daylight | falls_asleep]"
+  }
+}

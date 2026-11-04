@@ -1,0 +1,114 @@
+{
+  "events": [
+    {
+      "action": "continue",
+      "actor": {
+        "id": "knowledge-graph/poc.py",
+        "type": "runtime"
+      },
+      "event_hash": "7cb80b08dbd9071fcc47d0a8b4f334a45bbd23280546bffa6c087f36dd44b079",
+      "event_type": "external_input",
+      "evidence": {
+        "match_method": "gestalt-lexical",
+        "matched_words": [
+          "repair",
+          "test",
+          "bug"
+        ],
+        "utterance": "repair the failing unit test bug"
+      },
+      "input_state_id": "gst:RUN-UTT-5bd713ef5606-73f4bf2d6fb7:in",
+      "previous_event_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "run_id": "RUN-UTT-5bd713ef5606-73f4bf2d6fb7",
+      "sequence": 1,
+      "timestamp": "2026-11-01T21:42:32Z",
+      "trace_id": "trace-RUN-UTT-5bd713ef5606-73f4bf2d6fb7-000001"
+    },
+    {
+      "action": "continue",
+      "actor": {
+        "id": "knowledge-graph/poc.py",
+        "type": "runtime"
+      },
+      "event_hash": "eb0749a644c56890d749a06cf49f6c607a0d685aecbd52b940891d6c5425df4c",
+      "event_type": "gate_attempt",
+      "evidence": {
+        "epistemic_status": "CANONICAL",
+        "gate_id": "kg.grounding.consistent",
+        "grounded": [
+          "bug",
+          "repair",
+          "test"
+        ],
+        "in_loop": 3,
+        "loop_id": "code.unit_test_repair",
+        "result": "PASS"
+      },
+      "file_id": "knowledge-graph.kg-gates.001",
+      "gate_id": "kg.grounding.consistent",
+      "input_state_id": "gst:RUN-UTT-5bd713ef5606-73f4bf2d6fb7:in",
+      "operation": "code.unit_test_repair",
+      "output_state_id": "gst:RUN-UTT-5bd713ef5606-73f4bf2d6fb7:out",
+      "previous_event_hash": "7cb80b08dbd9071fcc47d0a8b4f334a45bbd23280546bffa6c087f36dd44b079",
+      "references": [
+        "trace-RUN-UTT-5bd713ef5606-73f4bf2d6fb7-000001"
+      ],
+      "result": "PASS",
+      "run_id": "RUN-UTT-5bd713ef5606-73f4bf2d6fb7",
+      "sequence": 2,
+      "timestamp": "2026-11-01T21:42:32Z",
+      "trace_id": "trace-RUN-UTT-5bd713ef5606-73f4bf2d6fb7-000002"
+    },
+    {
+      "action": "permit_issued",
+      "actor": {
+        "id": "knowledge-graph/poc.py",
+        "type": "runtime"
+      },
+      "event_hash": "4c9d80e69ec79f10a67e3c552a0a515abb1f62aba3861f996e527e9866bb6915",
+      "event_type": "review",
+      "evidence": {
+        "permit_id": "PERMIT-df0722a98b2ef31f"
+      },
+      "gate_id": "kg.grounding.consistent",
+      "previous_event_hash": "eb0749a644c56890d749a06cf49f6c607a0d685aecbd52b940891d6c5425df4c",
+      "references": [
+        "trace-RUN-UTT-5bd713ef5606-73f4bf2d6fb7-000002"
+      ],
+      "run_id": "RUN-UTT-5bd713ef5606-73f4bf2d6fb7",
+      "sequence": 3,
+      "timestamp": "2026-11-01T21:42:32Z",
+      "trace_id": "trace-RUN-UTT-5bd713ef5606-73f4bf2d6fb7-000003"
+    },
+    {
+      "action": "continue",
+      "actor": {
+        "id": "knowledge-graph/poc.py",
+        "type": "runtime"
+      },
+      "event_hash": "6684a9b7aff6234d9fdbb8caf0936ff31b642644fac539dbae5799c0c6265652",
+      "event_type": "state_commit",
+      "evidence": {
+        "permit_id": "PERMIT-df0722a98b2ef31f"
+      },
+      "input_state_id": "gst:RUN-UTT-5bd713ef5606-73f4bf2d6fb7:in",
+      "operation": "code.unit_test_repair",
+      "output_state_id": "gst:RUN-UTT-5bd713ef5606-73f4bf2d6fb7:out",
+      "previous_event_hash": "4c9d80e69ec79f10a67e3c552a0a515abb1f62aba3861f996e527e9866bb6915",
+      "references": [
+        "trace-RUN-UTT-5bd713ef5606-73f4bf2d6fb7-000003"
+      ],
+      "run_id": "RUN-UTT-5bd713ef5606-73f4bf2d6fb7",
+      "sequence": 4,
+      "timestamp": "2026-11-01T21:42:32Z",
+      "trace_id": "trace-RUN-UTT-5bd713ef5606-73f4bf2d6fb7-000004"
+    }
+  ],
+  "metadata": {
+    "hash_profile": "kg-sha256-chain-v1",
+    "text": "repair the failing unit test bug",
+    "utt_id": "UTT-5bd713ef5606"
+  },
+  "qson_version": "1.0",
+  "run_id": "RUN-UTT-5bd713ef5606-73f4bf2d6fb7"
+}

@@ -1,0 +1,108 @@
+{
+ "domain_links": [
+  [
+   "astronomy.observation",
+   "human_action.perception",
+   1
+  ],
+  [
+   "cooking",
+   "craft.knitting",
+   20
+  ],
+  [
+   "cooking",
+   "craft.ropework",
+   2
+  ],
+  [
+   "cooking",
+   "craft.woodworking",
+   23
+  ],
+  [
+   "craft.knitting",
+   "craft.ropework",
+   4
+  ],
+  [
+   "craft.knitting",
+   "craft.woodworking",
+   6
+  ]
+ ],
+ "loops_by_domain": {
+  "cooking": 2956,
+  "craft.knitting": 251,
+  "craft.ropework": 70,
+  "craft.woodworking": 266,
+  "human_action.locomotion": 1,
+  "human_action.perception": 1,
+  "tech.ui": 69056
+ },
+ "loops_by_status": {
+  "": 0,
+  "candidate": 72599,
+  "canonical": 2
+ },
+ "nodes": {
+  "Domain": 9,
+  "GSTState": 0,
+  "Gate": 3626,
+  "Gestalt": 0,
+  "HarvestSentence": 29377,
+  "LexicalEntry": 0,
+  "Measure": 41,
+  "MeasureRule": 6,
+  "Occurrence": 0,
+  "Operator": 10,
+  "Permit": 0,
+  "QSONTrace": 0,
+  "Sense": 0,
+  "SourceRef": 155407,
+  "Span": 0,
+  "Step": 0,
+  "SymbolPattern": 0,
+  "TOTELoop": 72601,
+  "Utterance": 0
+ },
+ "rels": {
+  "AUTHORIZES": 0,
+  "CELL_GESTALT": 0,
+  "CELL_SENSE": 0,
+  "DOMAIN_LINK": 6,
+  "GROUNDED_TO": 0,
+  "GUARDS": 72601,
+  "HAS_STEP": 0,
+  "INPUT_STATE": 0,
+  "INSTANCE_OF": 68975,
+  "INSTANTIATES": 0,
+  "IN_DOMAIN": 72650,
+  "ISSUES": 0,
+  "MAPPED_TO": 0,
+  "MEASURE_WEIGHT_IN": 14,
+  "NEXT_ON_MATCH": 0,
+  "NEXT_ON_MISMATCH": 0,
+  "OCCURS_AS": 0,
+  "OUTPUT_STATE": 0,
+  "PATTERN_GESTALT": 0,
+  "PATTERN_OPERATOR": 0,
+  "PRECEDES": 0,
+  "RECORDS": 0,
+  "SELECTED_LOOP": 0,
+  "SENSE_OF": 0,
+  "SOURCED_FROM": 155407,
+  "SPANS": 0,
+  "TRACE_OF": 0,
+  "TRANSITIONS_TO": 0,
+  "USES_GESTALT": 0,
+  "USES_MODALITY": 142830,
+  "USES_OPERATOR": 0
+ },
+ "tech_ui": {
+  "canonical_action_loops": 81,
+  "instance_loops": 68975,
+  "non_provisional_rows": 0,
+  "web_sourcerefs": 144655
+ }
+}

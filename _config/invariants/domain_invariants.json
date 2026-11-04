@@ -1,0 +1,764 @@
+{
+ "_doc": "Domain canonical invariants (user idea, 2026-11-01). A number/quantity + UNIT is a quantity modifier on the following noun (the object); a unit is never a tool and never the object when a noun follows. Time units are exit material (durations), never objects. Units/quantity modifiers live in measures.json (master list + per-domain overrides + sense weights).",
+ "time_units": [
+  "second",
+  "minute",
+  "hour",
+  "day",
+  "week",
+  "night",
+  "moment"
+ ],
+ "number_words": {
+  "one": "1",
+  "two": "2",
+  "three": "3",
+  "four": "4",
+  "five": "5",
+  "six": "6",
+  "seven": "7",
+  "eight": "8",
+  "nine": "9",
+  "ten": "10",
+  "eleven": "11",
+  "twelve": "12",
+  "fifteen": "15",
+  "twenty": "20",
+  "thirty": "30",
+  "forty": "40",
+  "fifty": "50",
+  "sixty": "60",
+  "few": "few",
+  "several": "several",
+  "half": "1/2",
+  "one-half": "1/2",
+  "one-third": "1/3",
+  "one-fourth": "1/4",
+  "three-fourths": "3/4",
+  "two-thirds": "2/3",
+  "one-eighth": "1/8"
+ },
+ "noun_classes": {
+  "instrument": [
+   "spoon",
+   "knife",
+   "fork",
+   "whisk",
+   "beater",
+   "brush",
+   "sieve",
+   "strainer",
+   "spatula",
+   "skewer",
+   "saw",
+   "plane",
+   "chisel",
+   "hammer",
+   "mallet",
+   "gouge",
+   "rule",
+   "square",
+   "gage",
+   "gauge",
+   "bit",
+   "brace",
+   "drill",
+   "file",
+   "rasp",
+   "sandpaper",
+   "screwdriver",
+   "awl",
+   "needle",
+   "hook",
+   "pin",
+   "scissors",
+   "shears",
+   "ax",
+   "axe",
+   "hatchet",
+   "rope",
+   "cord",
+   "string",
+   "bandage",
+   "splint",
+   "cloth",
+   "towel",
+   "napkin",
+   "paper",
+   "pencil",
+   "straight-edge",
+   "try-square",
+   "bevel",
+   "clamp",
+   "vise",
+   "hand",
+   "hands",
+   "finger",
+   "fingers",
+   "thumb",
+   "foot",
+   "machine",
+   "cutter",
+   "grater",
+   "mold",
+   "mould",
+   "roller",
+   "pin",
+   "tongs"
+  ],
+  "ingredient": [
+   "salt",
+   "pepper",
+   "butter",
+   "flour",
+   "sugar",
+   "milk",
+   "cream",
+   "egg",
+   "water",
+   "stock",
+   "lard",
+   "oil",
+   "vinegar",
+   "lemon",
+   "juice",
+   "cayenne",
+   "paprika",
+   "mustard",
+   "nutmeg",
+   "cinnamon",
+   "mace",
+   "parsley",
+   "onion",
+   "celery",
+   "potato",
+   "vegetable",
+   "crumb",
+   "cheese",
+   "gelatine",
+   "yeast",
+   "soda",
+   "baking-powder",
+   "wine",
+   "sherry",
+   "jelly",
+   "fruit",
+   "rice",
+   "meat",
+   "white",
+   "yolk",
+   "dressing",
+   "sauce",
+   "syrup",
+   "molasses",
+   "chocolate",
+   "vanilla",
+   "glue",
+   "varnish",
+   "shellac",
+   "stain",
+   "wool",
+   "yarn"
+  ],
+  "container": [
+   "pan",
+   "bowl",
+   "dish",
+   "pot",
+   "kettle",
+   "saucepan",
+   "oven",
+   "boiler",
+   "mold",
+   "mould",
+   "tin",
+   "cup",
+   "basin",
+   "jar",
+   "water",
+   "fat",
+   "box",
+   "bag",
+   "pail",
+   "bucket",
+   "jars",
+   "tumbler",
+   "crock",
+   "glass",
+   "bottle",
+   "can",
+   "basket",
+   "stewpan",
+   "casserole",
+   "platter",
+   "plate"
+  ]
+ },
+ "verb_classes": {
+  "transform": [
+   "cut",
+   "chop",
+   "slice",
+   "dice",
+   "divide",
+   "split",
+   "shape",
+   "form",
+   "roll",
+   "fold",
+   "break",
+   "beat",
+   "whip",
+   "make",
+   "mould",
+   "mold",
+   "turn",
+   "saw",
+   "rip",
+   "grind",
+   "crush",
+   "mash",
+   "tear",
+   "bend",
+   "twist",
+   "braid"
+  ],
+  "placement": [
+   "put",
+   "place",
+   "pour",
+   "lay",
+   "set",
+   "drop",
+   "turn",
+   "transfer",
+   "add",
+   "insert",
+   "fit",
+   "stand",
+   "hang",
+   "spread"
+  ],
+  "motion": [
+   "go",
+   "ride",
+   "walk",
+   "run",
+   "return",
+   "come",
+   "drive",
+   "row",
+   "paddle",
+   "swim",
+   "climb",
+   "move",
+   "travel",
+   "march",
+   "hike",
+   "crawl",
+   "carry",
+   "bring",
+   "take",
+   "lead",
+   "send"
+  ],
+  "stative_or_descriptive": [
+   "serve",
+   "show",
+   "illustrate",
+   "consist",
+   "represent",
+   "belong",
+   "depend",
+   "vary",
+   "mean",
+   "expect",
+   "call",
+   "seem",
+   "appear",
+   "become",
+   "contain",
+   "include",
+   "require",
+   "need",
+   "cost",
+   "weigh",
+   "remain",
+   "know",
+   "exist",
+   "lie",
+   "matter",
+   "equal",
+   "resemble",
+   "differ",
+   "suppose",
+   "believe",
+   "think",
+   "hope",
+   "wish"
+  ],
+  "particle_in": [
+   "fold",
+   "stir",
+   "beat",
+   "mix",
+   "work",
+   "cut",
+   "rub",
+   "add",
+   "whisk",
+   "knead",
+   "pour",
+   "sift"
+  ]
+ },
+ "apparatus_patterns": [
+  "^\\s*\\[?\\s*illustration",
+  "transcriber",
+  "has been changed to",
+  "have been changed to",
+  "corrected to",
+  "^\\s*page \\d+\\s*:",
+  "^\\s*fig(ure)?s?\\.?\\s*\\d+",
+  "^\\s*plate\\s+[ivxlc\\d]+",
+  "^\\s*chapter\\s+[ivxlc\\d]+",
+  "project gutenberg",
+  "spellings? (retained|preserved)",
+  "typographical error",
+  "^\\s*\\d+\\s*\\.?\\s*$",
+  "^[^.;:!?]{1,90},\\s*\\d{2,4}(\\s*,\\s*\\d{2,4})*\\s*\\.?\\s*$",
+  "[—–-]\\s*page\\s+\\d+\\s*\\.?\\s*$"
+ ],
+ "apparatus_all_caps_min_letters": 6,
+ "instruction_gate": {
+  "_doc": "Fix 1: only instruction sentences become loops. Imperative mood, or a procedural pattern: modal + you/one/passive ('should be cut', 'you must stir'), or a present agentless passive of a hands-on verb ('the board is then planed'). Past-tense narrative and non-you active indicatives are rejected; imperatives that are idioms/figurative are rejected.",
+  "narrative_aux": [
+   "was",
+   "were",
+   "had",
+   "did"
+  ],
+  "procedural_subjects": [
+   "you",
+   "one"
+  ],
+  "figurative_imperatives": [
+   [
+    "take",
+    "care"
+   ],
+   [
+    "take",
+    "heart"
+   ],
+   [
+    "take",
+    "time"
+   ],
+   [
+    "take",
+    "pain"
+   ],
+   [
+    "take",
+    "pleasure"
+   ],
+   [
+    "take",
+    "interest"
+   ],
+   [
+    "bear",
+    "mind"
+   ],
+   [
+    "keep",
+    "mind"
+   ],
+   [
+    "make",
+    "sure"
+   ],
+   [
+    "make",
+    "mistake"
+   ],
+   [
+    "make",
+    "point"
+   ],
+   [
+    "take",
+    "advantage"
+   ],
+   [
+    "take",
+    "account"
+   ],
+   [
+    "let",
+    "go"
+   ],
+   [
+    "give",
+    "way"
+   ],
+   [
+    "take",
+    "place"
+   ],
+   [
+    "pay",
+    "attention"
+   ],
+   [
+    "take",
+    "step"
+   ],
+   [
+    "turn",
+    "attention"
+   ],
+   [
+    "draw",
+    "conclusion"
+   ],
+   [
+    "draw",
+    "attention"
+   ],
+   [
+    "draw",
+    "line"
+   ]
+  ],
+  "figurative_markers": [
+   "as it were",
+   "so to speak",
+   "figuratively",
+   "metaphor",
+   "in a sense",
+   "in other words"
+  ],
+  "procedural_modals": [
+   "should",
+   "must",
+   "shall",
+   "ought"
+  ],
+  "_doc_modals": "'may/can/might be used' is optional/descriptive, not an instruction; only should/must/shall/ought count.",
+  "descriptive_adverbs": [
+   "often",
+   "usually",
+   "generally",
+   "sometimes",
+   "commonly",
+   "frequently",
+   "easily",
+   "seldom",
+   "rarely",
+   "always",
+   "never_desc",
+   "occasionally",
+   "mostly",
+   "chiefly",
+   "largely",
+   "principally",
+   "readily",
+   "very",
+   "extremely",
+   "now"
+  ],
+  "descriptive_subjects": [
+   "this",
+   "these",
+   "that",
+   "those",
+   "which"
+  ],
+  "_doc_passive": "2026-11-02 round 2: every passive without should/must/shall/ought is descriptive and rejected ('slippers are easily knitted', 'peas are often drained', 'slabs are sawed'). Frequency/ease adverbs or a demonstrative subject also reject a modal clause."
+ },
+ "non_location_prep_objects": {
+  "_doc": "Fix 3: 'in place of X', 'in case of', 'in order to', 'in addition to', 'in the same way' etc. are not locations.",
+  "in": [
+   "place",
+   "case",
+   "order",
+   "addition",
+   "lieu",
+   "way",
+   "manner",
+   "spite",
+   "fact",
+   "turn",
+   "time",
+   "general",
+   "short",
+   "particular",
+   "proportion",
+   "regard",
+   "respect",
+   "front_of_time"
+  ],
+  "instead": [
+   "*"
+  ],
+  "by": [
+   "way",
+   "means",
+   "hand"
+  ],
+  "on": [
+   "account",
+   "top_of_that"
+  ]
+ },
+ "sense_cues": {
+  "_doc": "Sense mentions (user rule 2026-11-02): never stored alone. Each is attached as a TEST/EXIT step of the action loop it belongs to (e.g. 'fry until golden' -> 👀 verify color golden in the fry loop). Unattached mentions are only counted.",
+  "external_visual": {
+   "step": "verify",
+   "words": [
+    "golden",
+    "brown",
+    "browned",
+    "white",
+    "yellow",
+    "red",
+    "pink",
+    "clear",
+    "transparent",
+    "opaque",
+    "colored",
+    "coloured",
+    "black",
+    "green",
+    "dark",
+    "light-brown",
+    "creamy",
+    "glossy",
+    "bubbling",
+    "bubbles",
+    "boiling",
+    "foamy",
+    "frothy",
+    "smoking",
+    "level",
+    "square",
+    "plumb",
+    "straight",
+    "even",
+    "flush",
+    "true",
+    "visible",
+    "see",
+    "look",
+    "watch",
+    "observe"
+   ],
+   "cue_verbs": [
+    "see",
+    "look",
+    "watch",
+    "observe",
+    "appear",
+    "notice"
+   ],
+   "color_words": [
+    "golden",
+    "brown",
+    "browned",
+    "white",
+    "yellow",
+    "red",
+    "pink",
+    "black",
+    "green",
+    "dark",
+    "light-brown",
+    "creamy",
+    "colored",
+    "coloured"
+   ]
+  },
+  "internal_kinesthetic": {
+   "step": "feel",
+   "words": [
+    "soft",
+    "tender",
+    "firm",
+    "stiff",
+    "thick",
+    "thin",
+    "smooth",
+    "rough",
+    "elastic",
+    "crisp",
+    "dry",
+    "moist",
+    "wet",
+    "sticky",
+    "tight",
+    "taut",
+    "loose",
+    "snug",
+    "hard",
+    "resistance",
+    "springy",
+    "warm",
+    "hot",
+    "cold",
+    "cool",
+    "lukewarm",
+    "feel",
+    "feels",
+    "feeling"
+   ],
+   "cue_verbs": [
+    "feel"
+   ]
+  },
+  "external_auditory": {
+   "step": "listen for",
+   "words": [
+    "sizzle",
+    "sizzling",
+    "crackle",
+    "crackling",
+    "hiss",
+    "hissing",
+    "sound",
+    "hear",
+    "ring",
+    "click"
+   ],
+   "cue_verbs": [
+    "hear",
+    "listen",
+    "sound"
+   ]
+  },
+  "smell": {
+   "step": "smell",
+   "words": [
+    "fragrant",
+    "smell",
+    "odor",
+    "odour",
+    "aroma",
+    "scorched",
+    "scorch"
+   ],
+   "cue_verbs": [
+    "smell"
+   ]
+  },
+  "taste": {
+   "step": "taste",
+   "words": [
+    "taste",
+    "tasting",
+    "sweet",
+    "salty",
+    "sour",
+    "bitter",
+    "seasoned",
+    "palatable"
+   ],
+   "cue_verbs": [
+    "taste"
+   ]
+  },
+  "memory": {
+   "step": "recall",
+   "words": [
+    "remember",
+    "recall"
+   ],
+   "cue_verbs": [
+    "remember",
+    "recall"
+   ]
+  },
+  "imagine": {
+   "step": "imagine",
+   "words": [
+    "imagine",
+    "picture"
+   ],
+   "cue_verbs": [
+    "imagine"
+   ]
+  }
+ },
+ "implied_count_noun": {
+  "_doc": "Fix 2 (knitting): a bare number is never an object. In knitting, 'knit 2' counts stitches (canonical measure for the domain), so the object is 'stitch(implied)' with quantity 2, rule INV-IMPLIED-COUNT-NOUN.",
+  "craft.knitting": {
+   "noun": "stitch",
+   "verbs": [
+    "knit",
+    "purl",
+    "slip",
+    "cast",
+    "bind",
+    "narrow",
+    "decrease",
+    "increase",
+    "crochet",
+    "work",
+    "miss",
+    "skip",
+    "pick",
+    "take",
+    "make"
+   ]
+  }
+ },
+ "noun_verbs_kept_as_nouns": [
+  "butter",
+  "cream",
+  "oil",
+  "stuff",
+  "line",
+  "file",
+  "plane",
+  "saw",
+  "water",
+  "salt",
+  "pepper",
+  "flour",
+  "sugar",
+  "milk",
+  "ice",
+  "dust",
+  "sand",
+  "paste",
+  "pin",
+  "needle",
+  "hook",
+  "thread",
+  "stitch",
+  "knot",
+  "loop",
+  "row",
+  "hammer",
+  "clamp",
+  "glue",
+  "nail",
+  "screw",
+  "brush",
+  "whip",
+  "dice",
+  "mark",
+  "coat",
+  "stain",
+  "paint",
+  "varnish",
+  "wax",
+  "bandage",
+  "splint",
+  "drill",
+  "chisel",
+  "bore"
+ ],
+ "_doc_index_lines": "Round 4: back-of-book index entries ('Live, to Broil, 189.' / 'Ice Cream, 446, 447.') and plate captions ending '—Page 43.' are apparatus, never instructions. Index page numbers are 2-4 digits directly after a comma, so knitting counts ('knit 2, purl 1.') are not matched."
+}

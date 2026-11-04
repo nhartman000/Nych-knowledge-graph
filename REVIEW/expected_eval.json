@@ -1,0 +1,22 @@
+{
+ "n_sentences": 300,
+ "sentence_verdicts.all.correct": 146,
+ "sentence_verdicts.all.partial": 132,
+ "sentence_verdicts.all.wrong": 22,
+ "loop_verdicts.all.correct": 181,
+ "loop_verdicts.all.partial": 120,
+ "loop_verdicts.all.wrong": 162,
+ "fields.all.action.tp": 301,
+ "fields.all.action.np": 321,
+ "fields.all.action.ng": 443,
+ "fields.all.objects.tp": 246,
+ "fields.all.modality.tp": 308,
+ "fields.all.exit.tp": 271,
+ "fields_end_to_end.all.objects.tp": 246,
+ "fields_end_to_end.all.objects.np": 284,
+ "fields_end_to_end.all.objects.ng": 387,
+ "fields_end_to_end.all.modality.np": 341,
+ "fields_end_to_end.all.modality.ng": 458,
+ "fields_end_to_end.all.exit.np": 321,
+ "fields_end_to_end.all.exit.ng": 443
+}

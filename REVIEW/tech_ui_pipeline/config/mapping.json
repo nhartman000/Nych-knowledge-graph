@@ -1,0 +1,1096 @@
+{
+ "_doc": "Ordered rules: first match wins. 'verbs' are lemma or lemma+particle ('turn on'). Optional 'obj_types' (any of) and 'text' (regex on step text, case-insens). Edit freely; rerun src/canon.py. Second pass: if no rule matches with obj_types, the first rule whose verbs match is used ignoring obj_types.",
+ "rules": [
+  {
+   "canon": "LONG_PRESS",
+   "text": "(touch|press|tap|click) and hold|long[- ]press|press and hold"
+  },
+  {
+   "canon": "DOUBLE_CLICK_TAP",
+   "text": "double[- ](click|tap)"
+  },
+  {
+   "canon": "RIGHT_CLICK",
+   "text": "right[- ]click|control[- ]click|secondary click"
+  },
+  {
+   "canon": "TRIPLE_PRESS_BUTTON",
+   "text": "triple[- ](click|press)"
+  },
+  {
+   "canon": "PRESS_HARDWARE_BUTTON",
+   "verbs": [
+    "press",
+    "hold",
+    "click",
+    "push"
+   ],
+   "obj_types": [
+    "hardware_button"
+   ]
+  },
+  {
+   "canon": "PRESS_KEY_COMBO",
+   "verbs": [
+    "press",
+    "hold",
+    "hit",
+    "use",
+    "type"
+   ],
+   "obj_types": [
+    "key"
+   ]
+  },
+  {
+   "canon": "SWIPE",
+   "verbs": [
+    "swipe",
+    "flick",
+    "slide"
+   ]
+  },
+  {
+   "canon": "SCROLL",
+   "verbs": [
+    "scroll",
+    "scroll down",
+    "scroll up"
+   ]
+  },
+  {
+   "canon": "DRAG_AND_DROP",
+   "verbs": [
+    "drag",
+    "drag and drop",
+    "drop"
+   ]
+  },
+  {
+   "canon": "PINCH_ZOOM",
+   "verbs": [
+    "pinch",
+    "zoom",
+    "zoom in",
+    "zoom out",
+    "spread"
+   ]
+  },
+  {
+   "canon": "HOVER",
+   "verbs": [
+    "hover",
+    "point",
+    "mouse over",
+    "move pointer"
+   ]
+  },
+  {
+   "canon": "TOGGLE_ON",
+   "verbs": [
+    "turn on",
+    "enable",
+    "switch on",
+    "activate",
+    "toggle on",
+    "allow"
+   ],
+   "obj_types": [
+    "toggle",
+    "setting",
+    "feature",
+    "named_control",
+    "other",
+    "none",
+    "notification",
+    "permission",
+    "location"
+   ]
+  },
+  {
+   "canon": "TOGGLE_OFF",
+   "verbs": [
+    "turn off",
+    "disable",
+    "switch off",
+    "deactivate",
+    "toggle off",
+    "block"
+   ],
+   "obj_types": [
+    "toggle",
+    "setting",
+    "feature",
+    "named_control",
+    "other",
+    "none",
+    "notification",
+    "permission",
+    "location"
+   ]
+  },
+  {
+   "canon": "TOGGLE",
+   "verbs": [
+    "toggle",
+    "switch",
+    "flip"
+   ]
+  },
+  {
+   "canon": "TOGGLE_ON",
+   "verbs": [
+    "turn on",
+    "enable",
+    "activate",
+    "switch on"
+   ]
+  },
+  {
+   "canon": "TOGGLE_OFF",
+   "verbs": [
+    "turn off",
+    "disable",
+    "deactivate"
+   ]
+  },
+  {
+   "canon": "POWER_ON_DEVICE",
+   "verbs": [
+    "turn on",
+    "power on",
+    "boot",
+    "start up"
+   ],
+   "obj_types": [
+    "device"
+   ]
+  },
+  {
+   "canon": "POWER_OFF_DEVICE",
+   "verbs": [
+    "turn off",
+    "shut down",
+    "power off",
+    "shut off",
+    "shutdown"
+   ]
+  },
+  {
+   "canon": "RESTART_DEVICE",
+   "verbs": [
+    "restart",
+    "reboot",
+    "force restart"
+   ]
+  },
+  {
+   "canon": "OPEN_SETTINGS",
+   "verbs": [
+    "open",
+    "go to",
+    "launch",
+    "access"
+   ],
+   "obj_types": [
+    "settings_app"
+   ]
+  },
+  {
+   "canon": "OPEN_APP",
+   "verbs": [
+    "open",
+    "launch",
+    "start",
+    "run",
+    "run"
+   ],
+   "obj_types": [
+    "app"
+   ]
+  },
+  {
+   "canon": "OPEN_MENU",
+   "verbs": [
+    "open",
+    "expand",
+    "display",
+    "show",
+    "bring up",
+    "show"
+   ],
+   "obj_types": [
+    "menu"
+   ]
+  },
+  {
+   "canon": "OPEN_FILE",
+   "verbs": [
+    "open"
+   ],
+   "obj_types": [
+    "file",
+    "folder",
+    "document"
+   ]
+  },
+  {
+   "canon": "OPEN_WEBPAGE",
+   "verbs": [
+    "open",
+    "go to",
+    "visit",
+    "navigate to",
+    "browse",
+    "sign in to",
+    "head to"
+   ],
+   "obj_types": [
+    "web"
+   ]
+  },
+  {
+   "canon": "OPEN_TAB_PANEL",
+   "verbs": [
+    "open",
+    "switch to",
+    "switch to"
+   ],
+   "obj_types": [
+    "tab",
+    "window",
+    "pane"
+   ]
+  },
+  {
+   "canon": "NAVIGATE_TO",
+   "verbs": [
+    "go",
+    "go to",
+    "navigate",
+    "navigate to",
+    "head",
+    "return",
+    "browse",
+    "find",
+    "locate",
+    "head to",
+    "switch to",
+    "switch"
+   ]
+  },
+  {
+   "canon": "GO_BACK",
+   "verbs": [
+    "go back",
+    "return to",
+    "navigate back",
+    "back"
+   ]
+  },
+  {
+   "canon": "OPEN_ITEM",
+   "verbs": [
+    "open",
+    "access",
+    "view",
+    "expand",
+    "show",
+    "display",
+    "bring up",
+    "visit",
+    "reveal",
+    "unhide",
+    "reopen",
+    "bring up"
+   ]
+  },
+  {
+   "canon": "CLOSE_ITEM",
+   "verbs": [
+    "close",
+    "dismiss",
+    "exit",
+    "quit",
+    "leave",
+    "collapse",
+    "minimize",
+    "force quit",
+    "end"
+   ]
+  },
+  {
+   "canon": "SIGN_IN",
+   "verbs": [
+    "sign in",
+    "log in",
+    "login",
+    "signin",
+    "log on",
+    "sign back in"
+   ]
+  },
+  {
+   "canon": "SIGN_OUT",
+   "verbs": [
+    "sign out",
+    "log out",
+    "logout",
+    "log off"
+   ]
+  },
+  {
+   "canon": "CREATE_ACCOUNT",
+   "verbs": [
+    "sign up",
+    "register",
+    "create"
+   ],
+   "obj_types": [
+    "account"
+   ]
+  },
+  {
+   "canon": "ENTER_PASSWORD",
+   "verbs": [
+    "enter",
+    "type",
+    "input",
+    "provide",
+    "re-enter",
+    "use"
+   ],
+   "obj_types": [
+    "password"
+   ]
+  },
+  {
+   "canon": "ENTER_CODE",
+   "verbs": [
+    "enter",
+    "type",
+    "input"
+   ],
+   "obj_types": [
+    "code"
+   ]
+  },
+  {
+   "canon": "TYPE_TEXT",
+   "verbs": [
+    "type",
+    "enter",
+    "input",
+    "write",
+    "fill",
+    "fill in",
+    "fill out",
+    "key",
+    "complete",
+    "paste in"
+   ]
+  },
+  {
+   "canon": "SEARCH",
+   "verbs": [
+    "search",
+    "search for",
+    "look up",
+    "query",
+    "look for"
+   ]
+  },
+  {
+   "canon": "SELECT_OPTION",
+   "verbs": [
+    "select",
+    "choose",
+    "pick",
+    "check",
+    "uncheck",
+    "clear",
+    "tick",
+    "set"
+   ],
+   "obj_types": [
+    "option",
+    "dropdown",
+    "checkbox",
+    "list",
+    "radio"
+   ]
+  },
+  {
+   "canon": "SELECT_ITEM",
+   "verbs": [
+    "select",
+    "choose",
+    "pick",
+    "highlight",
+    "mark"
+   ],
+   "obj_types": [
+    "file",
+    "folder",
+    "list",
+    "content",
+    "other",
+    "device",
+    "account",
+    "none"
+   ]
+  },
+  {
+   "canon": "TAP_OR_CLICK",
+   "verbs": [
+    "tap",
+    "click",
+    "press",
+    "hit",
+    "touch",
+    "tap on",
+    "click on",
+    "push",
+    "select",
+    "choose",
+    "pick"
+   ]
+  },
+  {
+   "canon": "CONFIRM_DIALOG",
+   "verbs": [
+    "confirm",
+    "accept",
+    "agree",
+    "ok",
+    "approve",
+    "acknowledge",
+    "agree to"
+   ]
+  },
+  {
+   "canon": "CANCEL_ACTION",
+   "verbs": [
+    "cancel",
+    "decline",
+    "reject",
+    "deny",
+    "skip",
+    "ignore"
+   ]
+  },
+  {
+   "canon": "COPY",
+   "verbs": [
+    "copy",
+    "copy and paste",
+    "duplicate"
+   ]
+  },
+  {
+   "canon": "PASTE",
+   "verbs": [
+    "paste"
+   ]
+  },
+  {
+   "canon": "CUT",
+   "verbs": [
+    "cut"
+   ]
+  },
+  {
+   "canon": "UNDO_REDO",
+   "verbs": [
+    "undo",
+    "redo",
+    "revert"
+   ]
+  },
+  {
+   "canon": "SAVE",
+   "verbs": [
+    "save",
+    "store",
+    "keep",
+    "bookmark"
+   ]
+  },
+  {
+   "canon": "DELETE_ITEM",
+   "verbs": [
+    "delete",
+    "remove",
+    "erase",
+    "clear",
+    "trash",
+    "discard",
+    "wipe",
+    "get rid of",
+    "clean up"
+   ]
+  },
+  {
+   "canon": "UNINSTALL_APP",
+   "verbs": [
+    "uninstall"
+   ]
+  },
+  {
+   "canon": "INSTALL_APP",
+   "verbs": [
+    "install",
+    "reinstall",
+    "get",
+    "add"
+   ],
+   "obj_types": [
+    "app",
+    "software",
+    "update",
+    "driver",
+    "extension",
+    "other",
+    "named_control",
+    "none",
+    "file"
+   ]
+  },
+  {
+   "canon": "DOWNLOAD",
+   "verbs": [
+    "download",
+    "redownload"
+   ]
+  },
+  {
+   "canon": "UPLOAD_FILE",
+   "verbs": [
+    "upload",
+    "attach",
+    "import",
+    "add"
+   ],
+   "obj_types": [
+    "file",
+    "document",
+    "photo",
+    "video",
+    "folder",
+    "other",
+    "named_control",
+    "none",
+    "ai"
+   ]
+  },
+  {
+   "canon": "UPDATE_SOFTWARE",
+   "verbs": [
+    "update",
+    "upgrade",
+    "install"
+   ],
+   "obj_types": [
+    "update",
+    "software",
+    "os",
+    "device",
+    "none",
+    "other",
+    "named_control",
+    "app"
+   ]
+  },
+  {
+   "canon": "CREATE_ITEM",
+   "verbs": [
+    "create",
+    "make",
+    "new",
+    "start",
+    "build",
+    "generate",
+    "compose",
+    "draft",
+    "set up a new",
+    "record",
+    "take",
+    "schedule"
+   ]
+  },
+  {
+   "canon": "ADD_ITEM",
+   "verbs": [
+    "add",
+    "insert",
+    "include",
+    "append",
+    "attach",
+    "pin"
+   ]
+  },
+  {
+   "canon": "EDIT_ITEM",
+   "verbs": [
+    "edit",
+    "modify",
+    "rename",
+    "change",
+    "update",
+    "revise",
+    "rewrite",
+    "format",
+    "customize",
+    "personalize",
+    "crop",
+    "rotate",
+    "resize",
+    "trim",
+    "replace",
+    "fix",
+    "correct",
+    "hide",
+    "unhide",
+    "name"
+   ]
+  },
+  {
+   "canon": "SET_VALUE",
+   "verbs": [
+    "set",
+    "adjust",
+    "configure",
+    "specify",
+    "assign",
+    "define",
+    "set up",
+    "setup",
+    "increase",
+    "decrease",
+    "raise",
+    "lower",
+    "limit",
+    "manage",
+    "tune",
+    "revoke",
+    "restrict",
+    "track"
+   ]
+  },
+  {
+   "canon": "MOVE_ITEM",
+   "verbs": [
+    "move",
+    "drag to",
+    "transfer",
+    "relocate",
+    "sort",
+    "organize",
+    "reorder",
+    "arrange",
+    "group"
+   ]
+  },
+  {
+   "canon": "SHARE_SEND",
+   "verbs": [
+    "share",
+    "send",
+    "email",
+    "forward",
+    "invite",
+    "post",
+    "publish",
+    "message",
+    "text",
+    "reply",
+    "respond",
+    "submit"
+   ]
+  },
+  {
+   "canon": "PRINT",
+   "verbs": [
+    "print"
+   ]
+  },
+  {
+   "canon": "CONNECT_DEVICE",
+   "verbs": [
+    "connect",
+    "plug",
+    "plug in",
+    "pair",
+    "attach",
+    "insert",
+    "link",
+    "reconnect",
+    "join",
+    "tether",
+    "dock"
+   ]
+  },
+  {
+   "canon": "DISCONNECT_DEVICE",
+   "verbs": [
+    "disconnect",
+    "unplug",
+    "unpair",
+    "eject",
+    "detach",
+    "forget",
+    "unlink",
+    "remove"
+   ]
+  },
+  {
+   "canon": "CHARGE_DEVICE",
+   "verbs": [
+    "charge",
+    "recharge"
+   ]
+  },
+  {
+   "canon": "BACKUP_RESTORE",
+   "verbs": [
+    "back up",
+    "backup",
+    "restore",
+    "recover",
+    "sync",
+    "resync"
+   ]
+  },
+  {
+   "canon": "RESET",
+   "verbs": [
+    "reset",
+    "factory reset",
+    "erase all"
+   ]
+  },
+  {
+   "canon": "LOCK_UNLOCK",
+   "verbs": [
+    "lock",
+    "unlock",
+    "wake",
+    "sleep",
+    "put"
+   ]
+  },
+  {
+   "canon": "MEDIA_PLAYBACK",
+   "verbs": [
+    "play",
+    "pause",
+    "stop",
+    "resume",
+    "mute",
+    "unmute",
+    "watch",
+    "listen",
+    "listen to",
+    "rewind",
+    "skip",
+    "video"
+   ]
+  },
+  {
+   "canon": "CALL_COMMUNICATE",
+   "verbs": [
+    "call",
+    "dial",
+    "answer",
+    "hang up",
+    "video call",
+    "facetime"
+   ]
+  },
+  {
+   "canon": "SCAN_CAPTURE",
+   "verbs": [
+    "scan",
+    "capture",
+    "photograph",
+    "screenshot",
+    "snap",
+    "take a screenshot"
+   ]
+  },
+  {
+   "canon": "VOICE_COMMAND",
+   "verbs": [
+    "say",
+    "speak",
+    "dictate",
+    "ask siri",
+    "tell"
+   ]
+  },
+  {
+   "canon": "PROMPT_AI",
+   "verbs": [
+    "ask",
+    "prompt",
+    "request",
+    "instruct",
+    "describe",
+    "explain",
+    "tell claude",
+    "summarize",
+    "give",
+    "provide",
+    "chat",
+    "analyze"
+   ],
+   "obj_types": [
+    "ai",
+    "none",
+    "other",
+    "named_control",
+    "content"
+   ]
+  },
+  {
+   "canon": "VERIFY_STATE",
+   "verbs": [
+    "check",
+    "verify",
+    "make sure",
+    "ensure",
+    "confirm that",
+    "test",
+    "look",
+    "see",
+    "notice",
+    "inspect",
+    "validate",
+    "double-check",
+    "make certain"
+   ]
+  },
+  {
+   "canon": "REVIEW_CONTENT",
+   "verbs": [
+    "review",
+    "read",
+    "view",
+    "look at",
+    "preview",
+    "examine",
+    "browse",
+    "explore",
+    "compare",
+    "scan through",
+    "learn",
+    "understand",
+    "see",
+    "watch",
+    "refer to",
+    "refer"
+   ]
+  },
+  {
+   "canon": "WAIT",
+   "verbs": [
+    "wait",
+    "allow",
+    "let",
+    "give it"
+   ]
+  },
+  {
+   "canon": "FOLLOW_PROMPTS",
+   "verbs": [
+    "follow",
+    "complete",
+    "proceed",
+    "continue",
+    "finish",
+    "go through",
+    "work through",
+    "repeat"
+   ]
+  },
+  {
+   "canon": "ALLOW_PERMISSION",
+   "verbs": [
+    "allow",
+    "grant",
+    "permit",
+    "authorize",
+    "trust"
+   ]
+  },
+  {
+   "canon": "VERIFY_IDENTITY",
+   "verbs": [
+    "verify",
+    "authenticate",
+    "approve",
+    "authenticate"
+   ],
+   "obj_types": [
+    "account",
+    "identity",
+    "code"
+   ]
+  },
+  {
+   "canon": "CONTACT_SUPPORT",
+   "verbs": [
+    "contact",
+    "reach out",
+    "get help",
+    "report",
+    "call support",
+    "chat with"
+   ]
+  },
+  {
+   "canon": "REFRESH_RELOAD",
+   "verbs": [
+    "refresh",
+    "reload",
+    "retry",
+    "try again",
+    "try"
+   ]
+  },
+  {
+   "canon": "EXPORT_IMPORT",
+   "verbs": [
+    "export",
+    "import",
+    "convert"
+   ]
+  },
+  {
+   "canon": "FILTER_SORT",
+   "verbs": [
+    "filter",
+    "sort",
+    "narrow",
+    "refine"
+   ]
+  },
+  {
+   "canon": "USE_FEATURE",
+   "verbs": [
+    "use",
+    "try",
+    "apply",
+    "utilize",
+    "enter into",
+    "leverage",
+    "work with",
+    "take advantage"
+   ]
+  },
+  {
+   "canon": "KEEP_REMEMBER",
+   "verbs": [
+    "remember",
+    "note",
+    "keep in mind",
+    "write down",
+    "record"
+   ]
+  },
+  {
+   "canon": "PAY_PURCHASE",
+   "verbs": [
+    "buy",
+    "purchase",
+    "pay",
+    "subscribe",
+    "upgrade to",
+    "order",
+    "redeem",
+    "cancel subscription"
+   ]
+  },
+  {
+   "canon": "PHYSICAL_HANDLE",
+   "verbs": [
+    "hold",
+    "place",
+    "put",
+    "position",
+    "rotate",
+    "turn",
+    "flip",
+    "shake",
+    "tilt",
+    "raise",
+    "lift",
+    "remove",
+    "clean",
+    "wipe",
+    "dry",
+    "replace",
+    "release",
+    "let go"
+   ]
+  }
+ ],
+ "non_action_verbs": [
+  "help",
+  "work",
+  "improve",
+  "develop",
+  "protect",
+  "secure",
+  "receive",
+  "respect",
+  "reduce",
+  "plan",
+  "visualize",
+  "interact",
+  "consult",
+  "remind",
+  "perform",
+  "process",
+  "-",
+  "control",
+  "file",
+  "sign",
+  "enjoy",
+  "benefit",
+  "stay",
+  "keep",
+  "be",
+  "feel",
+  "know",
+  "understand",
+  "learn",
+  "consider",
+  "think",
+  "decide",
+  "avoid",
+  "imagine",
+  "explore",
+  "discuss",
+  "suggest",
+  "prevent",
+  "identify",
+  "spend",
+  "discover",
+  "re",
+  "enhance",
+  "resolve",
+  "maintain",
+  "require",
+  "meet",
+  "profile",
+  "support",
+  "pass",
+  "vivo",
+  "mouse",
+  "determine",
+  "deploy",
+  "notify",
+  "power"
+ ]
+}

@@ -1,0 +1,67 @@
+# E3 pre-registration: do NYCH TOTE loops help a model on how-to tasks?
+
+Committed 2026-11-03 before any model call. No paid calls have been made. Any change after this commit will be logged as a deviation in E3_RESULTS.md.
+
+## Question
+Does giving a model a retrieved NYCH TOTE loop improve its how-to answers **more than giving it an unrelated loop of the same length**?
+
+## Tasks
+- **Count:** 180 held-out tasks in `REVIEW/experiments/E3/tasks.jsonl`, built by `tools/e3/build_tasks.py` (deterministic, seed 3).
+- **Source:** ordered (ol) step lists from official public help pages in `shared/data/tech_ui/ui_actions.jsonl.gz`. The pages cover Google products, Microsoft, Copilot, Apple, Samsung and Claude, capped at 13 tasks per site.
+- **Held out:** a task's page URL never appears among the sources or candidates of any core loop (457 URLs excluded).
+- **Filters:** a task has 3 to 8 steps and no truncated quotes.
+- **Gold:** the verbatim step quotes. The success criteria are listed per task.
+- **Next-action variant:** the model sees the first half of the gold steps, and the gold answer is the following step.
+- **Restricted material:** none of the MG8 layer, the defense plan, DARPA material or roadmaps is used. The runner refuses any prompt matching those terms.
+
+## Conditions (within-task, paired)
+- **A:** the model alone.
+- **B:** the model plus the top-1 core loop. It's retrieved by IDF-weighted lexical overlap between the task title and the loop name, category, object, action and operate text, from the 88 core loops.
+- **C:** the model plus a random core loop other than B, drawn from the 5 loops closest to B in word length (seed 3).
+- **Loop wording:** in B and C the loop is labelled "Reference material (may or may not be relevant)".
+- **Order:** the order of the conditions is randomized per task.
+- **Provisional loops:** the 105k provisional Kuzu loops are **not** used in the primary analysis.
+
+## Models
+- **Subjects:** for each provider with a key, a cheap model and a strong model: OpenAI gpt-4o-mini and gpt-4o, and Anthropic claude-3-5-haiku and claude-sonnet-4-5.
+- **Settings:** temperature 0.
+- **Grader:** always a strong model from the *other* provider (gpt-4o grades Anthropic answers, and claude-sonnet-4-5 grades OpenAI answers). The grader never sees the condition or the loop.
+- **Keys:** both `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` are required. If a model name is unavailable, the nearest current tier is substituted and logged.
+
+## Outcomes
+- **Primary:** the step-mode rubric score in [0,1]. It's correct gold steps divided by the number of gold steps, minus 0.1 per wrong or invented step, with a floor of 0.
+- **Rubric fields:** correct steps, missing steps, wrong or invented steps, and safe stopping.
+- **Secondary:**
+  - next-action score (0, 0.5 or 1);
+  - wrong or invented steps per answer;
+  - safe-stopping rate;
+  - B-C on the subset where the retrieval score is at or above the median.
+
+## Success rule (decided in advance)
+Loops "help" for a given subject model only if the **mean B−C** paired difference in primary score is positive **and** its paired bootstrap 95% CI (10,000 resamples, seed 0) excludes 0.
+- **B vs A:** reported, but it cannot establish a gain on its own.
+- **Overall:** loops help if the rule holds for at least one model. Results are reported for every model, with no selective reporting.
+
+## Statistics
+- **Reported for B−C, B−A and C−A:** means per condition, paired bootstrap 95% CIs and win/tie/loss rates.
+- **Multiple comparisons:** none are corrected for, because there are 4 models × 2 modes. This is stated as a caveat.
+- **Unparseable grades:** dropped. The count is reported.
+
+## Grader check
+I (the agent) blindly hand-score 30 random step-mode answers from `handcheck_blind.jsonl`, with the condition hidden. Agreement with the grader is reported as Spearman ρ and mean absolute difference. If ρ < 0.6, the result is flagged as low-trust.
+
+## Cost
+Estimated under $20 in total. The actual token-based cost is logged in `summary.json`.
+
+## Known limitations, stated in advance
+- The 88 loops each describe a single generic function, while the tasks are product-specific, multi-step procedures. B often retrieves a loosely related loop, so a null result is plausible.
+- The gold steps are scraped quotes and may be incomplete.
+- The same family of model that wrote parts of the pipeline is also being tested.
+
+## Reproduce
+```
+PYTHONPATH=shared /workspace/kgenv/bin/python tools/e3/build_tasks.py
+/workspace/kgenv/bin/python tools/e3/run_e3.py --dry-run --limit 20   # mock models, no network
+/workspace/kgenv/bin/python tools/e3/run_e3.py --limit 5              # paid smoke test
+/workspace/kgenv/bin/python tools/e3/run_e3.py                        # full run
+```

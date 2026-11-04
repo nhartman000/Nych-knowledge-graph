@@ -1,0 +1,12 @@
+{
+  "_doc": "Domain -> function -> technique registry for stage 06. Keys are structured (lemma, object lemma); never a single weak word. Anything not listed -> UNRESOLVED.",
+  "domains": {
+    "human_action.perception": {"functions": {"visual_attention": {"techniques": ["stargazing", "visual_search"]}}},
+    "human_action.locomotion": {"functions": {"approach_location": {"techniques": ["walking", "biking"]}}},
+    "astronomy.observation":  {"functions": {"naked_eye_observation": {"techniques": ["stargazing"]}}}
+  },
+  "rules": [
+    {"rule_id": "CTX-LOOK-STAR", "lemma": "look", "object": "star", "domain": "human_action.perception", "function": "visual_attention", "technique": "stargazing"},
+    {"rule_id": "CTX-APPROACH-ANY", "lemma": "approach", "object": "*", "domain": "human_action.locomotion", "function": "approach_location", "technique": null}
+  ]
+}

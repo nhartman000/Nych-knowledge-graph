@@ -1,0 +1,71 @@
+{
+ "pages_by_source": {
+  "learnfree": 60,
+  "ftc": 492,
+  "cfpb": 364,
+  "usagov": 57,
+  "cisa": 46,
+  "offerup": 4,
+  "mercari": 61,
+  "discord": 6,
+  "snapchat": 500,
+  "signal": 1,
+  "cashapp": 459,
+  "zelle": 47,
+  "bitwarden": 257,
+  "onepassword": 261,
+  "dropbox": 131,
+  "apartmentlist": 700,
+  "hud": 2,
+  "zapier": 433,
+  "grammarly": 107,
+  "buffer": 1,
+  "later": 349,
+  "hootsuite": 237,
+  "staysafeonline": 200,
+  "aarp": 270,
+  "bbb": 419,
+  "shopapp": 77,
+  "tomsguide": 1000,
+  "swappa": 300,
+  "digitaltrends": 21
+ },
+ "pages_by_domain": {
+  "howto.tech_phone": 648,
+  "howto.ai_tools": 931,
+  "howto.digital_life": 2598,
+  "howto.shopping_returns": 312,
+  "howto.rental": 751,
+  "howto.social_creator": 1237,
+  "howto.marketplace": 385
+ },
+ "actions_by_domain": {
+  "howto.digital_life": 12777,
+  "howto.shopping_returns": 1514,
+  "howto.rental": 5049,
+  "howto.tech_phone": 2468,
+  "howto.ai_tools": 6390,
+  "howto.social_creator": 10872,
+  "howto.marketplace": 1992
+ },
+ "actions": 41062,
+ "mapped_to_ui_canonical": 36598,
+ "filters": {
+  "non_step_line": 195851,
+  "actions": 41062,
+  "non_action": 5128,
+  "site_repeated_line": 44945,
+  "cta_or_feature_list": 2106,
+  "bare_verb_or_junk_object": 1351,
+  "boiler": 1017,
+  "enterprise_admin_page": 128
+ },
+ "modality": {
+  "🙌": 34813,
+  "👀²": 5310,
+  "💭": 133,
+  "👂👂": 35,
+  "🧠🗯": 771
+ },
+ "with_amount_range": 677
+}
