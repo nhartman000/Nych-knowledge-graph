@@ -186,6 +186,8 @@ def _ledger(p, total, dry):
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--dry-run", action="store_true"); ap.add_argument("--limit", type=int)
     ap.add_argument("--models", nargs="*", help="provider:model ...")
+    ap.add_argument("--only-subject", help="run one subject model (parallel worker); writes raw_<model>.jsonl")
+    ap.add_argument("--analyze-only", action="store_true")
     ap.add_argument("--gemini-free", action="store_true", help="Deviation 2: Gemini free tier only, zero spend")
     ap.add_argument("--out", default=str(E3 / "results_v2b"))
     a = ap.parse_args()
@@ -196,7 +198,7 @@ def main():
     elif a.gemini_free:
         PRICE.update(FREE_TIER_PRICE)   # verified free tier: paid-only model returned free_tier limit 0
         if not os.environ.get("GEMINI_API_KEY"): raise SystemExit("Need GEMINI_API_KEY")
-        subjects = FREE_SUBJECTS
+        subjects = [x for x in FREE_SUBJECTS if not a.only_subject or x[1] == a.only_subject]
     elif a.models: subjects = [tuple(m.split(":", 1)) for m in a.models]
     else:
         subjects = [(p, m) for p, ms in MODELS.items() if os.environ.get(f"{p.upper()}_API_KEY") for m in ms]
@@ -208,9 +210,10 @@ def main():
         assign[t["task_id"]] = {"B": loops[i]["loop_id"], "B_score": sc, "C": loops[j]["loop_id"]}
     (out / "loop_assignment.json").write_text(json.dumps(assign, indent=1))
     by_id = {l["loop_id"]: texts[k] for k, l in enumerate(loops)}
-    raw = out / "raw.jsonl"; done = set()
-    if raw.exists():
-        for l in open(raw): r = json.loads(l); done.add((r["subject"], r["mode"], r["task_id"], r["cond"]))
+    raw = out / (f"raw_{a.only_subject}.jsonl" if a.only_subject else "raw.jsonl"); done = set()
+    for rf in out.glob("raw*.jsonl"):
+        for l in open(rf): r = json.loads(l); done.add((r["subject"], r["mode"], r["task_id"], r["cond"]))
+    if a.analyze_only: subjects = []
     cost = collections.Counter(); spent = 0.0
     ledger = R / "REVIEW/experiments/E3/cost_ledger.json"   # combined total across ALL runs (smoke + full)
     spent_prior = json.loads(ledger.read_text())["total_usd"] if ledger.exists() and not a.dry_run else 0.0
@@ -256,7 +259,7 @@ def main():
     except Stop as e:
         stop_reason = str(e); print("STOPPED:", stop_reason, flush=True)
     f.close(); _ledger(ledger, spent_prior + spent, a.dry_run)
-    rows = [json.loads(l) for l in open(raw)]
+    rows = [json.loads(l) for rf in sorted(out.glob("raw*.jsonl")) for l in open(rf)]
     summ = summarize(rows)
     med = sorted(v["B_score"] for v in assign.values())[len(assign) // 2]
     summ["_secondary_well_matched (B_score >= median %.2f)" % med] = summarize([r for r in rows if assign[r["task_id"]]["B_score"] >= med])
@@ -275,6 +278,6 @@ def main():
     (out / "handcheck_key.json").write_text(json.dumps([{"hc_id": k, "subject": r["subject"], "task_id": r["task_id"],
         "cond": r["cond"], "grader_score": r["score"]} for k, r in enumerate(hc)], indent=1))
     print(json.dumps(summ, indent=1)[:3000])
-    if stop_reason: raise SystemExit(3)
+    if stop_reason: raise SystemExit(4 if "DAILY" in stop_reason else 3)
 
 if __name__ == "__main__": main()

@@ -1,0 +1,316 @@
+{
+ "gemini:gemma-4-26b-a4b-it|next": {
+  "n": 1,
+  "mean_A": 0.0,
+  "mean_B": 0.0,
+  "mean_C": 0.0,
+  "B-C": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "B-A": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "C-A": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "loop_helps (pre-registered: B-C CI lower bound > 0)": false
+ },
+ "gemini:gemma-4-26b-a4b-it|steps": {
+  "n": 10,
+  "mean_A": 0.5236666666666666,
+  "wrong_A": 0.4,
+  "mean_B": 0.524,
+  "wrong_B": 1.1,
+  "mean_C": 0.524,
+  "wrong_C": 1.2,
+  "B-C": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "B-A": {
+   "mean": 0.0003333333333333299,
+   "ci95": [
+    -0.16999999999999998,
+    0.17099999999999999
+   ],
+   "win": 0.1,
+   "tie": 0.8,
+   "loss": 0.1
+  },
+  "C-A": {
+   "mean": 0.0003333333333333299,
+   "ci95": [
+    -0.16999999999999998,
+    0.17099999999999999
+   ],
+   "win": 0.1,
+   "tie": 0.8,
+   "loss": 0.1
+  },
+  "loop_helps (pre-registered: B-C CI lower bound > 0)": false
+ },
+ "gemini:gemma-4-31b-it|next": {
+  "n": 1,
+  "mean_A": 0.0,
+  "mean_B": 0.0,
+  "mean_C": 0.0,
+  "B-C": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "B-A": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "C-A": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "loop_helps (pre-registered: B-C CI lower bound > 0)": false
+ },
+ "gemini:gemma-4-31b-it|steps": {
+  "n": 2,
+  "mean_A": 0.5,
+  "wrong_A": 1.5,
+  "mean_B": 0.5,
+  "wrong_B": 2.0,
+  "mean_C": 0.5,
+  "wrong_C": 1.5,
+  "B-C": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "B-A": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "C-A": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "loop_helps (pre-registered: B-C CI lower bound > 0)": false
+ },
+ "_secondary_well_matched (B_score >= median 4.08)": {
+  "gemini:gemma-4-26b-a4b-it|next": {
+   "n": 1,
+   "mean_A": 0.0,
+   "mean_B": 0.0,
+   "mean_C": 0.0,
+   "B-C": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "B-A": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "C-A": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "loop_helps (pre-registered: B-C CI lower bound > 0)": false
+  },
+  "gemini:gemma-4-26b-a4b-it|steps": {
+   "n": 8,
+   "mean_A": 0.6545833333333333,
+   "wrong_A": 0.125,
+   "mean_B": 0.655,
+   "wrong_B": 0.625,
+   "mean_C": 0.655,
+   "wrong_C": 0.75,
+   "B-C": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "B-A": {
+    "mean": 0.0004166666666666624,
+    "ci95": [
+     -0.2125,
+     0.21375
+    ],
+    "win": 0.125,
+    "tie": 0.75,
+    "loss": 0.125
+   },
+   "C-A": {
+    "mean": 0.0004166666666666624,
+    "ci95": [
+     -0.2125,
+     0.21375
+    ],
+    "win": 0.125,
+    "tie": 0.75,
+    "loss": 0.125
+   },
+   "loop_helps (pre-registered: B-C CI lower bound > 0)": false
+  },
+  "gemini:gemma-4-31b-it|next": {
+   "n": 1,
+   "mean_A": 0.0,
+   "mean_B": 0.0,
+   "mean_C": 0.0,
+   "B-C": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "B-A": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "C-A": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "loop_helps (pre-registered: B-C CI lower bound > 0)": false
+  },
+  "gemini:gemma-4-31b-it|steps": {
+   "n": 2,
+   "mean_A": 0.5,
+   "wrong_A": 1.5,
+   "mean_B": 0.5,
+   "wrong_B": 2.0,
+   "mean_C": 0.5,
+   "wrong_C": 1.5,
+   "B-C": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "B-A": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "C-A": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "loop_helps (pre-registered: B-C CI lower bound > 0)": false
+  }
+ },
+ "_unparseable_grades": 0,
+ "_cost_usd_this_invocation": {},
+ "_stop_reason": null,
+ "_records_total": 42
+}

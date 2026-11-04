@@ -17,7 +17,7 @@ For EACH item return one JSON object; return ONLY a JSON array (no prose) like:
 - score in [0,1] = correct_steps / gold_count minus 0.1 per wrong_or_invented step (floor 0), rounded to 2 decimals.
 """
 def build():
-    rows = [json.loads(l) for l in open(RAW) if '"mode": "steps"' in l]
+    rows = [json.loads(l) for rf in sorted(RAW.parent.glob("raw*.jsonl")) for l in open(rf) if '"mode": "steps"' in l]
     rows = [r for r in rows if r["score"] is not None and r["answer"].strip()]
     tasks = {json.loads(l)["task_id"]: json.loads(l) for l in open(E3 / "tasks.jsonl")}
     rng = random.Random(60); by = collections.defaultdict(list)
