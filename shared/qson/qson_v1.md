@@ -52,6 +52,7 @@ A minimum event contains:
   "trace_id": "trace-000001",
   "run_id": "run-001",
   "sequence": 1,
+  "event_type": "gate_attempt",
   "file_id": "example.eligibility.001",
   "gate_id": "object_confidence",
   "input_state_id": "state-0001",
@@ -65,6 +66,8 @@ A minimum event contains:
   "timestamp": "2026-08-22T05:00:00Z"
 }
 ```
+
+`event_type` is REQUIRED on every event (schema `required`); the allowed values are the `event_type` enum in `schema/qson.schema.json`.
 
 `output_state_id` MAY be absent when the gate attempt does not produce a new state.
 
