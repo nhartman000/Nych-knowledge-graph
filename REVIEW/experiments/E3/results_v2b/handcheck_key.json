@@ -2,156 +2,156 @@
  {
   "hc_id": 0,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-005",
+  "task_id": "E3-012",
   "cond": "B",
-  "grader_score": 0.0
+  "grader_score": 0.7
  },
  {
   "hc_id": 1,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-002",
-  "cond": "A",
-  "grader_score": 0.67
- },
- {
-  "hc_id": 2,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-007",
-  "cond": "C",
-  "grader_score": 0.0
- },
- {
-  "hc_id": 3,
-  "subject": "gemini:gemma-4-31b-it",
-  "task_id": "E3-000",
-  "cond": "A",
-  "grader_score": 1.0
- },
- {
-  "hc_id": 4,
-  "subject": "gemini:gemma-4-31b-it",
-  "task_id": "E3-000",
-  "cond": "C",
-  "grader_score": 1.0
- },
- {
-  "hc_id": 5,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-007",
-  "cond": "A",
-  "grader_score": 0.0
- },
- {
-  "hc_id": 6,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-004",
-  "cond": "C",
-  "grader_score": 1.0
- },
- {
-  "hc_id": 7,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-009",
-  "cond": "C",
-  "grader_score": 0.0
- },
- {
-  "hc_id": 8,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-002",
-  "cond": "C",
-  "grader_score": 0.67
- },
- {
-  "hc_id": 9,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-005",
-  "cond": "C",
-  "grader_score": 0.0
- },
- {
-  "hc_id": 10,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-000",
-  "cond": "A",
-  "grader_score": 1.0
- },
- {
-  "hc_id": 11,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-004",
-  "cond": "A",
-  "grader_score": 1.0
- },
- {
-  "hc_id": 12,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-001",
-  "cond": "A",
-  "grader_score": 0.0
- },
- {
-  "hc_id": 13,
-  "subject": "gemini:gemma-4-31b-it",
-  "task_id": "E3-001",
-  "cond": "C",
-  "grader_score": 0.0
- },
- {
-  "hc_id": 14,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-000",
-  "cond": "C",
-  "grader_score": 1.0
- },
- {
-  "hc_id": 15,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-003",
-  "cond": "B",
-  "grader_score": 1.0
- },
- {
-  "hc_id": 16,
-  "subject": "gemini:gemma-4-31b-it",
-  "task_id": "E3-001",
-  "cond": "A",
-  "grader_score": 0.0
- },
- {
-  "hc_id": 17,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-006",
-  "cond": "B",
-  "grader_score": 1.0
- },
- {
-  "hc_id": 18,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-001",
-  "cond": "B",
-  "grader_score": 0.57
- },
- {
-  "hc_id": 19,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-009",
-  "cond": "A",
-  "grader_score": 0.0
- },
- {
-  "hc_id": 20,
   "subject": "gemini:gemma-4-26b-a4b-it",
   "task_id": "E3-005",
   "cond": "A",
   "grader_score": 0.5666666666666667
  },
  {
+  "hc_id": 2,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-015",
+  "cond": "A",
+  "grader_score": 0.0
+ },
+ {
+  "hc_id": 3,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-026",
+  "cond": "B",
+  "grader_score": 0.0
+ },
+ {
+  "hc_id": 4,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-001",
+  "cond": "A",
+  "grader_score": 0.0
+ },
+ {
+  "hc_id": 5,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-002",
+  "cond": "A",
+  "grader_score": 0.67
+ },
+ {
+  "hc_id": 6,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-021",
+  "cond": "B",
+  "grader_score": 0.0
+ },
+ {
+  "hc_id": 7,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-003",
+  "cond": "A",
+  "grader_score": 1.0
+ },
+ {
+  "hc_id": 8,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-014",
+  "cond": "A",
+  "grader_score": 1.0
+ },
+ {
+  "hc_id": 9,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-023",
+  "cond": "B",
+  "grader_score": 0.0
+ },
+ {
+  "hc_id": 10,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-001",
+  "cond": "B",
+  "grader_score": 0.57
+ },
+ {
+  "hc_id": 11,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-020",
+  "cond": "C",
+  "grader_score": 0.0
+ },
+ {
+  "hc_id": 12,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-008",
+  "cond": "A",
+  "grader_score": 0.0
+ },
+ {
+  "hc_id": 13,
+  "subject": "gemini:gemma-4-31b-it",
+  "task_id": "E3-000",
+  "cond": "C",
+  "grader_score": 1.0
+ },
+ {
+  "hc_id": 14,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-002",
+  "cond": "C",
+  "grader_score": 0.67
+ },
+ {
+  "hc_id": 15,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-017",
+  "cond": "B",
+  "grader_score": 0.5666666666666667
+ },
+ {
+  "hc_id": 16,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-016",
+  "cond": "B",
+  "grader_score": 0.0
+ },
+ {
+  "hc_id": 17,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-001",
+  "cond": "C",
+  "grader_score": 0.57
+ },
+ {
+  "hc_id": 18,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-009",
+  "cond": "A",
+  "grader_score": 0.0
+ },
+ {
+  "hc_id": 19,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-024",
+  "cond": "B",
+  "grader_score": 0.0
+ },
+ {
+  "hc_id": 20,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-017",
+  "cond": "A",
+  "grader_score": 0.9
+ },
+ {
   "hc_id": 21,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-000",
+  "task_id": "E3-025",
   "cond": "B",
-  "grader_score": 1.0
+  "grader_score": 0.4666666666666667
  },
  {
   "hc_id": 22,
@@ -162,51 +162,51 @@
  },
  {
   "hc_id": 23,
-  "subject": "gemini:gemma-4-31b-it",
-  "task_id": "E3-001",
-  "cond": "B",
-  "grader_score": 0.0
- },
- {
-  "hc_id": 24,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-006",
-  "cond": "A",
-  "grader_score": 1.0
- },
- {
-  "hc_id": 25,
   "subject": "gemini:gemma-4-26b-a4b-it",
   "task_id": "E3-008",
   "cond": "C",
   "grader_score": 0.0
  },
  {
-  "hc_id": 26,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-003",
+  "hc_id": 24,
+  "subject": "gemini:gemma-4-31b-it",
+  "task_id": "E3-001",
   "cond": "A",
-  "grader_score": 1.0
+  "grader_score": 0.0
+ },
+ {
+  "hc_id": 25,
+  "subject": "gemini:gemma-4-31b-it",
+  "task_id": "E3-002",
+  "cond": "A",
+  "grader_score": 0.5666666666666667
+ },
+ {
+  "hc_id": 26,
+  "subject": "gemini:gemma-4-31b-it",
+  "task_id": "E3-001",
+  "cond": "B",
+  "grader_score": 0.0
  },
  {
   "hc_id": 27,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-003",
+  "task_id": "E3-019",
   "cond": "C",
-  "grader_score": 1.0
+  "grader_score": 0.23333333333333336
  },
  {
   "hc_id": 28,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-006",
+  "task_id": "E3-003",
   "cond": "C",
   "grader_score": 1.0
  },
  {
   "hc_id": 29,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-001",
+  "task_id": "E3-000",
   "cond": "C",
-  "grader_score": 0.57
+  "grader_score": 1.0
  }
 ]
