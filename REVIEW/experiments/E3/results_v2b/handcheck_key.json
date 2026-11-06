@@ -2,211 +2,211 @@
  {
   "hc_id": 0,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-012",
-  "cond": "B",
-  "grader_score": 0.7
+  "task_id": "E3-026",
+  "cond": "A",
+  "grader_score": 0.0
  },
  {
   "hc_id": 1,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-005",
+  "task_id": "E3-011",
   "cond": "A",
-  "grader_score": 0.5666666666666667
+  "grader_score": 0.6666666666666666
  },
  {
   "hc_id": 2,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-015",
-  "cond": "A",
+  "task_id": "E3-032",
+  "cond": "C",
   "grader_score": 0.0
  },
  {
   "hc_id": 3,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-026",
-  "cond": "B",
-  "grader_score": 0.0
+  "task_id": "E3-003",
+  "cond": "A",
+  "grader_score": 1.0
  },
  {
   "hc_id": 4,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-001",
-  "cond": "A",
+  "task_id": "E3-005",
+  "cond": "C",
   "grader_score": 0.0
  },
  {
   "hc_id": 5,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-002",
-  "cond": "A",
-  "grader_score": 0.67
+  "task_id": "E3-044",
+  "cond": "C",
+  "grader_score": 0.0
  },
  {
   "hc_id": 6,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-021",
+  "task_id": "E3-007",
   "cond": "B",
   "grader_score": 0.0
  },
  {
   "hc_id": 7,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-003",
-  "cond": "A",
-  "grader_score": 1.0
+  "task_id": "E3-030",
+  "cond": "C",
+  "grader_score": 0.0
  },
  {
   "hc_id": 8,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-014",
-  "cond": "A",
-  "grader_score": 1.0
+  "task_id": "E3-048",
+  "cond": "B",
+  "grader_score": 0.0
  },
  {
   "hc_id": 9,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-023",
-  "cond": "B",
-  "grader_score": 0.0
- },
- {
-  "hc_id": 10,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-001",
-  "cond": "B",
-  "grader_score": 0.57
- },
- {
-  "hc_id": 11,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-020",
-  "cond": "C",
-  "grader_score": 0.0
- },
- {
-  "hc_id": 12,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-008",
-  "cond": "A",
-  "grader_score": 0.0
- },
- {
-  "hc_id": 13,
-  "subject": "gemini:gemma-4-31b-it",
-  "task_id": "E3-000",
+  "task_id": "E3-003",
   "cond": "C",
   "grader_score": 1.0
  },
  {
-  "hc_id": 14,
+  "hc_id": 10,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-002",
-  "cond": "C",
-  "grader_score": 0.67
- },
- {
-  "hc_id": 15,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-017",
-  "cond": "B",
-  "grader_score": 0.5666666666666667
- },
- {
-  "hc_id": 16,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-016",
-  "cond": "B",
-  "grader_score": 0.0
- },
- {
-  "hc_id": 17,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-001",
-  "cond": "C",
-  "grader_score": 0.57
- },
- {
-  "hc_id": 18,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-009",
+  "task_id": "E3-042",
   "cond": "A",
-  "grader_score": 0.0
+  "grader_score": 1.0
  },
  {
-  "hc_id": 19,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-024",
-  "cond": "B",
-  "grader_score": 0.0
- },
- {
-  "hc_id": 20,
+  "hc_id": 11,
   "subject": "gemini:gemma-4-26b-a4b-it",
   "task_id": "E3-017",
   "cond": "A",
   "grader_score": 0.9
  },
  {
-  "hc_id": 21,
+  "hc_id": 12,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-025",
-  "cond": "B",
-  "grader_score": 0.4666666666666667
+  "task_id": "E3-002",
+  "cond": "A",
+  "grader_score": 0.67
  },
  {
-  "hc_id": 22,
+  "hc_id": 13,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-006",
+  "cond": "A",
+  "grader_score": 1.0
+ },
+ {
+  "hc_id": 14,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-036",
+  "cond": "C",
+  "grader_score": 0.0
+ },
+ {
+  "hc_id": 15,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-034",
+  "cond": "A",
+  "grader_score": 0.0
+ },
+ {
+  "hc_id": 16,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-004",
+  "cond": "C",
+  "grader_score": 1.0
+ },
+ {
+  "hc_id": 17,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-019",
+  "cond": "A",
+  "grader_score": 0.23333333333333336
+ },
+ {
+  "hc_id": 18,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-006",
+  "cond": "C",
+  "grader_score": 1.0
+ },
+ {
+  "hc_id": 19,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-046",
+  "cond": "B",
+  "grader_score": 0.0
+ },
+ {
+  "hc_id": 20,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-035",
+  "cond": "A",
+  "grader_score": 0.0
+ },
+ {
+  "hc_id": 21,
   "subject": "gemini:gemma-4-26b-a4b-it",
   "task_id": "E3-004",
   "cond": "B",
   "grader_score": 1.0
  },
  {
+  "hc_id": 22,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-047",
+  "cond": "B",
+  "grader_score": 0.13333333333333336
+ },
+ {
   "hc_id": 23,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-008",
-  "cond": "C",
+  "task_id": "E3-009",
+  "cond": "B",
   "grader_score": 0.0
  },
  {
   "hc_id": 24,
-  "subject": "gemini:gemma-4-31b-it",
-  "task_id": "E3-001",
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-018",
   "cond": "A",
   "grader_score": 0.0
  },
  {
   "hc_id": 25,
+  "subject": "gemini:gemma-4-26b-a4b-it",
+  "task_id": "E3-047",
+  "cond": "A",
+  "grader_score": 0.0
+ },
+ {
+  "hc_id": 26,
   "subject": "gemini:gemma-4-31b-it",
   "task_id": "E3-002",
   "cond": "A",
   "grader_score": 0.5666666666666667
  },
  {
-  "hc_id": 26,
+  "hc_id": 27,
   "subject": "gemini:gemma-4-31b-it",
   "task_id": "E3-001",
-  "cond": "B",
+  "cond": "A",
   "grader_score": 0.0
- },
- {
-  "hc_id": 27,
-  "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-019",
-  "cond": "C",
-  "grader_score": 0.23333333333333336
  },
  {
   "hc_id": 28,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-003",
+  "task_id": "E3-017",
   "cond": "C",
-  "grader_score": 1.0
+  "grader_score": 0.0
  },
  {
   "hc_id": 29,
   "subject": "gemini:gemma-4-26b-a4b-it",
-  "task_id": "E3-000",
+  "task_id": "E3-002",
   "cond": "C",
-  "grader_score": 1.0
+  "grader_score": 0.67
  }
 ]

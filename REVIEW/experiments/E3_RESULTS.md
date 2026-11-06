@@ -1,6 +1,6 @@
-# E3 results: INTERIM and PRELIMINARY (snapshot 2026-11-05, about 12:03 PM EST)
+# E3 results: INTERIM and PRELIMINARY (snapshot 2026-11-06, about 6:58 PM EST)
 
-> **Status: incomplete.** The free-tier run (Deviation 2b) is still going. About **28 of the 180 tasks** have all three step-mode conditions graded so far (**26 for gemma-4-26b-a4b-it and 2 for gemma-4-31b-it**). Next-action mode has 1 task per model. **No conclusion can be drawn yet.** This file will be replaced when the run finishes.
+> **Status: incomplete.** The free-tier run (Deviation 2b) is still going. About **56 of the 180 tasks** have all three step-mode conditions graded so far (**53 for gemma-4-26b-a4b-it and 3 for gemma-4-31b-it**). Next-action mode has 1 task per model. **No conclusion can be drawn yet.** This file will be replaced when the run finishes.
 
 ## Setup actually used
 - **Tasks:** 180 held-out how-to tasks (see `E3_PREREG.md`).
@@ -15,10 +15,10 @@ Mean B−C is the paired difference; the 95% CI comes from a paired bootstrap wi
 
 | Subject | n tasks | A | B | C | B−C (95% CI) | B−A (95% CI) | B vs C win/loss |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| gemma-4-26b-a4b-it | 26 | 0.348 | 0.324 | 0.298 | +0.026 [−0.021, +0.089] | −0.026 [−0.095, +0.044] | 8% / 8% |
-| gemma-4-31b-it | 2 | 0.522 | 0.522 | 0.522 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0% / 0% |
+| gemma-4-26b-a4b-it | 53 | 0.265 | 0.223 | 0.231 | -0.008 [-0.062, 0.040] | -0.042 [-0.101, 0.011] | 13% / 11% |
+| gemma-4-31b-it | 3 | 0.522 | 0.522 | 0.522 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0% / 0% |
 
-- **Pre-registered rule:** loops help only if the B−C CI lower bound is above 0. **It isn't met for either model so far.** With n=26 and n=2, that is still not evidence of no effect.
+- **Pre-registered rule:** loops help only if the B−C CI lower bound is above 0. **It isn't met for either model so far.** With n=53 and n=3, that is still not evidence of no effect.
 - **Grading pattern:** the grader often gives all three answers for a task the same score (ties dominate the B vs C comparison).
 - **Unparseable grades:** 0.
 
@@ -32,7 +32,7 @@ Mean B−C is the paired difference; the 95% CI comes from a paired bootstrap wi
 - **Ingest so far:** chunk 1 responses are in `E3/gpt_chat_packet/responses/chunk_1.json` (Spearman ρ ≈ 0.78 vs Gemini on those items). Chunk 2 still needs a response file.
 
 ## Caveats
-1. **Small n.** 28 of 180 tasks, so nothing here is conclusive.
+1. **Small n.** 56 of 180 tasks, so nothing here is conclusive.
 2. **Same-provider grader** (Gemini grading Gemma). Batched grading may also push the three scores toward each other.
 3. **Empty answers.** Some subject answers come back empty (thinking budget), scored 0 in every condition, which dilutes any effect.
 4. **Loose retrieval.** The 88 core loops are generic, so the B loop is often only loosely related to the task.
@@ -40,7 +40,7 @@ Mean B−C is the paired difference; the 95% CI comes from a paired bootstrap wi
 
 ## Run state
 - **Workers:** `tools/e3/worker.sh <model>` runs one per subject, detached with `setsid nohup`, and resumes from `results_v2b/raw_*.jsonl`.
-- **Restarted 2026-11-05 ~11:58 EST** after both workers had exited (31b on a network timeout, exit 3). Free-tier workers are running again.
+- **Restarted 2026-11-06 ~18:57 EST** after the 31b worker had exited (EXIT 3 since 08:12). A hung `wc6.py` sharing the free-tier Gemini key was stopped so it would not steal quota. The 26b worker was already running from an 18:43 restart.
 - **Daily quota:** a daily free-tier quota error makes a worker sleep until 03:10 EST (after the midnight-Pacific reset) and then resume.
 - **Hard stops:** any billing, out-of-credit or non-free-tier quota error stops the worker for good.
 - **Reanalyse:** `tools/e3/run_e3.py --gemini-free --analyze-only`.
