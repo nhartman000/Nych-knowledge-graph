@@ -52,7 +52,7 @@ visual: `report.html`. 30 runs per setting, no API errors.
 | Steps with a machine-runnable exit check | 273/588 (46%) | 66/114 (58%) | 66/115 (57%) |
 | Numeric limits not in the cited line | 0 | 9 | 8 |
 | Gold steps covered (6 sources, sums over reruns) | 129/186 (69%) | 66/186 (35%) | 66/186 (35%) |
-| Produced steps matching no gold step | 147/342 (43%) | 0/66 (0%) | 0/66 (0%) |
+| Produced steps matching no gold step | 147/342 (43%) *(before the noise fix; see the section below)* | 0/66 (0%) | 0/66 (0%) |
 
 Gold lists: hand-made by an AI assistant, not a human (see `gold/*.json`). Recall is line-overlap based.
 
@@ -71,3 +71,38 @@ only 3 steps (no gold list for this one; the model also found 3).
 What this does and does not show: it does not show better semantic accuracy than a strong model; only one small
 model was tested. The defensible claim is reproducibility and traceability by construction, plus the gate/audit
 layer that the plain model has no equivalent of.
+
+
+---
+
+# Noise-fix run, 2026-11-19 (pipeline rules-2; same 10 sources, 3 reruns, two temperatures)
+
+Change: the pipeline no longer turns sample terminal output into steps. Four filters, all in `checklist.py`: (1) plain
+`$ ` lines that follow an echoed prompt (`$ (env) $ cmd`) in the same block are sample output; (2) interpreter
+sessions (`>>>`, `...`) are not shell commands; (3) a command ending in a backslash is joined with its continuation
+line; (4) cross-reference/scope notes ("see Section 19.2", "not covered here") are not actions. Skipped lines are listed
+in `unmapped_lines` with a reason, never silently dropped. A second, separate commit adds one recall rule: sentences
+with explicit obligation wording ("you should", "it is important that", "you are advised to") become review steps.
+The model side was re-run live (fresh calls, no API errors); its numbers are within noise of the first run.
+
+| Measure | Pipeline before | Pipeline after | Model, temp 0 | Model, default temp |
+| --- | --- | --- | --- | --- |
+| Steps whose quote is verbatim in the cited lines | 588/588 (100%) | 507/507 (100%) | 105/114 (92%) | 113/121 (93%) |
+| Numeric limits not in the cited line | 0 | 0 | 9 | 8 |
+| Gold steps covered | 129/186 (69%) | 132/186 (71%) | 66/186 (35%) | 68/186 (37%) |
+| Produced steps matching no gold step | 147/342 (43%) | 33/228 (14%) | 0/66 | 0/66 |
+| Steps with a machine-runnable exit check | 273/588 (46%) | 153/507 (30%) | 66/114 (58%) | 66/121 (55%) |
+| Identical output on every rerun | 10/10 | 10/10 | 10/10 | 0/10 |
+
+* The filters alone give 27/219 spurious (12%) with recall unchanged at 129/186 (69%). The obligation rule adds 3
+  recall points (132/186) but also 6 more spurious steps; drop the second commit if you prefer the cleaner list.
+* python_venv: 159 steps over 3 runs down to 48 (spurious 123 down to 36). pg_upgrade: 111 down to 105 (spurious 21 down to 15).
+* The share of machine-checkable steps fell from 46% to 30% because most of the "commands" removed were sample output
+  that had been given a fake exit-code check. The remaining machine checks are real commands.
+* `pg_continuous_archiving` (no gold list): 3 steps before, 12 after. The 3 old ones were two configuration lines and one
+  expanded example; the new ones are mostly "you should / it is important that" requirements. By eye about half are
+  real requirements; the rest are explanatory sentences. It is still not a step-by-step procedure, so this is a
+  modest gain, not a fix.
+* Still spurious by the gold lists: a few real commands that the gold author left out (`$ (env) $ python`, the tablespace
+  `rsync`), and advisory sentences ("Do not start any servers yet", "Avoid carbon monoxide poisoning").
+* Same caveats as before: gold lists written by an AI assistant, one small model, simulated gate evidence.
