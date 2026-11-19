@@ -1,0 +1,542 @@
+{
+ "baseline": {
+  "conditions": {
+   "t0": {
+    "per_source": {
+     "original_release_check_sop": {
+      "api_errors": 0,
+      "distinct_outputs": 1,
+      "gold_covered": 12,
+      "gold_steps": 12,
+      "machine_checkable": 9,
+      "numeric_limits_not_in_cited_lines": 0,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "spurious_steps": 0,
+      "steps": 12,
+      "steps_on_gold_sources": 12,
+      "traceable": 12
+     },
+     "pg_checksums": {
+      "api_errors": 0,
+      "distinct_outputs": 1,
+      "gold_covered": 9,
+      "gold_steps": 9,
+      "machine_checkable": 6,
+      "numeric_limits_not_in_cited_lines": 0,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "spurious_steps": 0,
+      "steps": 9,
+      "steps_on_gold_sources": 9,
+      "traceable": 9
+     },
+     "pg_continuous_archiving": {
+      "api_errors": 0,
+      "distinct_outputs": 1,
+      "machine_checkable": 3,
+      "numeric_limits_not_in_cited_lines": 0,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "steps": 9,
+      "traceable": 6
+     },
+     "pg_sql_dump": {
+      "api_errors": 0,
+      "distinct_outputs": 1,
+      "machine_checkable": 15,
+      "numeric_limits_not_in_cited_lines": 0,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "steps": 15,
+      "traceable": 15
+     },
+     "pg_upgrade": {
+      "api_errors": 0,
+      "distinct_outputs": 1,
+      "gold_covered": 15,
+      "gold_steps": 60,
+      "machine_checkable": 12,
+      "numeric_limits_not_in_cited_lines": 0,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "spurious_steps": 0,
+      "steps": 15,
+      "steps_on_gold_sources": 15,
+      "traceable": 15
+     },
+     "pg_verifybackup": {
+      "api_errors": 0,
+      "distinct_outputs": 1,
+      "gold_covered": 6,
+      "gold_steps": 9,
+      "machine_checkable": 3,
+      "numeric_limits_not_in_cited_lines": 0,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "spurious_steps": 0,
+      "steps": 6,
+      "steps_on_gold_sources": 6,
+      "traceable": 6
+     },
+     "python_venv": {
+      "api_errors": 0,
+      "distinct_outputs": 1,
+      "gold_covered": 12,
+      "gold_steps": 33,
+      "machine_checkable": 6,
+      "numeric_limits_not_in_cited_lines": 0,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "spurious_steps": 0,
+      "steps": 12,
+      "steps_on_gold_sources": 12,
+      "traceable": 12
+     },
+     "ready_floods": {
+      "api_errors": 0,
+      "distinct_outputs": 1,
+      "machine_checkable": 0,
+      "numeric_limits_not_in_cited_lines": 0,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "steps": 15,
+      "traceable": 15
+     },
+     "ready_home_fires": {
+      "api_errors": 0,
+      "distinct_outputs": 1,
+      "machine_checkable": 6,
+      "numeric_limits_not_in_cited_lines": 6,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "steps": 9,
+      "traceable": 6
+     },
+     "ready_power_outages": {
+      "api_errors": 0,
+      "distinct_outputs": 1,
+      "gold_covered": 12,
+      "gold_steps": 63,
+      "machine_checkable": 6,
+      "numeric_limits_not_in_cited_lines": 3,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "spurious_steps": 0,
+      "steps": 12,
+      "steps_on_gold_sources": 12,
+      "traceable": 9
+     }
+    },
+    "total": {
+     "api_errors": 0,
+     "gold_covered": 66,
+     "gold_steps": 186,
+     "machine_checkable": 66,
+     "numeric_limits_not_in_cited_lines": 9,
+     "runs": 30,
+     "schema_valid_runs": 30,
+     "sources": 10,
+     "sources_identical_across_runs": 10,
+     "spurious_steps": 0,
+     "steps": 114,
+     "steps_on_gold_sources": 66,
+     "traceable": 105
+    }
+   },
+   "tdefault": {
+    "per_source": {
+     "original_release_check_sop": {
+      "api_errors": 0,
+      "distinct_outputs": 3,
+      "gold_covered": 12,
+      "gold_steps": 12,
+      "machine_checkable": 9,
+      "numeric_limits_not_in_cited_lines": 0,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "spurious_steps": 0,
+      "steps": 12,
+      "steps_on_gold_sources": 12,
+      "traceable": 10
+     },
+     "pg_checksums": {
+      "api_errors": 0,
+      "distinct_outputs": 3,
+      "gold_covered": 9,
+      "gold_steps": 9,
+      "machine_checkable": 6,
+      "numeric_limits_not_in_cited_lines": 0,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "spurious_steps": 0,
+      "steps": 9,
+      "steps_on_gold_sources": 9,
+      "traceable": 9
+     },
+     "pg_continuous_archiving": {
+      "api_errors": 0,
+      "distinct_outputs": 3,
+      "machine_checkable": 3,
+      "numeric_limits_not_in_cited_lines": 0,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "steps": 10,
+      "traceable": 6
+     },
+     "pg_sql_dump": {
+      "api_errors": 0,
+      "distinct_outputs": 3,
+      "machine_checkable": 14,
+      "numeric_limits_not_in_cited_lines": 0,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "steps": 15,
+      "traceable": 15
+     },
+     "pg_upgrade": {
+      "api_errors": 0,
+      "distinct_outputs": 3,
+      "gold_covered": 13,
+      "gold_steps": 60,
+      "machine_checkable": 12,
+      "numeric_limits_not_in_cited_lines": 0,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "spurious_steps": 0,
+      "steps": 13,
+      "steps_on_gold_sources": 13,
+      "traceable": 13
+     },
+     "pg_verifybackup": {
+      "api_errors": 0,
+      "distinct_outputs": 3,
+      "gold_covered": 6,
+      "gold_steps": 9,
+      "machine_checkable": 3,
+      "numeric_limits_not_in_cited_lines": 0,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "spurious_steps": 0,
+      "steps": 6,
+      "steps_on_gold_sources": 6,
+      "traceable": 6
+     },
+     "python_venv": {
+      "api_errors": 0,
+      "distinct_outputs": 3,
+      "gold_covered": 13,
+      "gold_steps": 33,
+      "machine_checkable": 9,
+      "numeric_limits_not_in_cited_lines": 0,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "spurious_steps": 0,
+      "steps": 13,
+      "steps_on_gold_sources": 13,
+      "traceable": 13
+     },
+     "ready_floods": {
+      "api_errors": 0,
+      "distinct_outputs": 3,
+      "machine_checkable": 1,
+      "numeric_limits_not_in_cited_lines": 0,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "steps": 14,
+      "traceable": 14
+     },
+     "ready_home_fires": {
+      "api_errors": 0,
+      "distinct_outputs": 3,
+      "machine_checkable": 6,
+      "numeric_limits_not_in_cited_lines": 6,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "steps": 10,
+      "traceable": 9
+     },
+     "ready_power_outages": {
+      "api_errors": 0,
+      "distinct_outputs": 3,
+      "gold_covered": 13,
+      "gold_steps": 63,
+      "machine_checkable": 3,
+      "numeric_limits_not_in_cited_lines": 2,
+      "runs": 3,
+      "schema_valid_runs": 3,
+      "spurious_steps": 0,
+      "steps": 13,
+      "steps_on_gold_sources": 13,
+      "traceable": 12
+     }
+    },
+    "total": {
+     "api_errors": 0,
+     "gold_covered": 66,
+     "gold_steps": 186,
+     "machine_checkable": 66,
+     "numeric_limits_not_in_cited_lines": 8,
+     "runs": 30,
+     "schema_valid_runs": 30,
+     "sources": 10,
+     "sources_identical_across_runs": 0,
+     "spurious_steps": 0,
+     "steps": 115,
+     "steps_on_gold_sources": 66,
+     "traceable": 107
+    }
+   }
+  },
+  "model": "gemini-3.1-flash-lite-preview",
+  "note": "rescored from saved raw model outputs with demo/run_demo.py --baseline-raw; no model call",
+  "provider": "gemini",
+  "raw_file": "benchmark_baseline_raw_gemini-3.1-flash-lite-preview.json",
+  "runs_per_source": 3
+ },
+ "openai": "PENDING: key accepted by /v1/models but every completion returned HTTP 429 insufficient_quota (no API credit) on 2026-11-19; code path built and mock-tested only",
+ "pipeline_metrics": {
+  "api_errors": 0,
+  "gold_covered": 129,
+  "gold_steps": 186,
+  "machine_checkable": 273,
+  "numeric_limits_not_in_cited_lines": 0,
+  "runs": 30,
+  "schema_valid_runs": 30,
+  "sources": 10,
+  "sources_identical_across_runs": 10,
+  "spurious_steps": 147,
+  "steps": 588,
+  "steps_on_gold_sources": 342,
+  "traceable": 588
+ },
+ "pipeline_per_source": {
+  "original_release_check_sop": {
+   "api_errors": 0,
+   "distinct_outputs": 1,
+   "gold_covered": 12,
+   "gold_steps": 12,
+   "machine_checkable": 9,
+   "numeric_limits_not_in_cited_lines": 0,
+   "runs": 3,
+   "schema_valid_runs": 3,
+   "spurious_steps": 0,
+   "steps": 12,
+   "steps_on_gold_sources": 12,
+   "traceable": 12
+  },
+  "pg_checksums": {
+   "api_errors": 0,
+   "distinct_outputs": 1,
+   "gold_covered": 6,
+   "gold_steps": 9,
+   "machine_checkable": 3,
+   "numeric_limits_not_in_cited_lines": 0,
+   "runs": 3,
+   "schema_valid_runs": 3,
+   "spurious_steps": 0,
+   "steps": 6,
+   "steps_on_gold_sources": 6,
+   "traceable": 6
+  },
+  "pg_continuous_archiving": {
+   "api_errors": 0,
+   "distinct_outputs": 1,
+   "machine_checkable": 9,
+   "numeric_limits_not_in_cited_lines": 0,
+   "runs": 3,
+   "schema_valid_runs": 3,
+   "steps": 9,
+   "traceable": 9
+  },
+  "pg_sql_dump": {
+   "api_errors": 0,
+   "distinct_outputs": 1,
+   "machine_checkable": 45,
+   "numeric_limits_not_in_cited_lines": 0,
+   "runs": 3,
+   "schema_valid_runs": 3,
+   "steps": 78,
+   "traceable": 78
+  },
+  "pg_upgrade": {
+   "api_errors": 0,
+   "distinct_outputs": 1,
+   "gold_covered": 39,
+   "gold_steps": 60,
+   "machine_checkable": 48,
+   "numeric_limits_not_in_cited_lines": 0,
+   "runs": 3,
+   "schema_valid_runs": 3,
+   "spurious_steps": 21,
+   "steps": 111,
+   "steps_on_gold_sources": 111,
+   "traceable": 111
+  },
+  "pg_verifybackup": {
+   "api_errors": 0,
+   "distinct_outputs": 1,
+   "gold_covered": 9,
+   "gold_steps": 9,
+   "machine_checkable": 6,
+   "numeric_limits_not_in_cited_lines": 0,
+   "runs": 3,
+   "schema_valid_runs": 3,
+   "spurious_steps": 0,
+   "steps": 9,
+   "steps_on_gold_sources": 9,
+   "traceable": 9
+  },
+  "python_venv": {
+   "api_errors": 0,
+   "distinct_outputs": 1,
+   "gold_covered": 27,
+   "gold_steps": 33,
+   "machine_checkable": 153,
+   "numeric_limits_not_in_cited_lines": 0,
+   "runs": 3,
+   "schema_valid_runs": 3,
+   "spurious_steps": 123,
+   "steps": 159,
+   "steps_on_gold_sources": 159,
+   "traceable": 159
+  },
+  "ready_floods": {
+   "api_errors": 0,
+   "distinct_outputs": 1,
+   "machine_checkable": 0,
+   "numeric_limits_not_in_cited_lines": 0,
+   "runs": 3,
+   "schema_valid_runs": 3,
+   "steps": 75,
+   "traceable": 75
+  },
+  "ready_home_fires": {
+   "api_errors": 0,
+   "distinct_outputs": 1,
+   "machine_checkable": 0,
+   "numeric_limits_not_in_cited_lines": 0,
+   "runs": 3,
+   "schema_valid_runs": 3,
+   "steps": 84,
+   "traceable": 84
+  },
+  "ready_power_outages": {
+   "api_errors": 0,
+   "distinct_outputs": 1,
+   "gold_covered": 36,
+   "gold_steps": 63,
+   "machine_checkable": 0,
+   "numeric_limits_not_in_cited_lines": 0,
+   "runs": 3,
+   "schema_valid_runs": 3,
+   "spurious_steps": 3,
+   "steps": 45,
+   "steps_on_gold_sources": 45,
+   "traceable": 45
+  }
+ },
+ "scenario": "all-pass",
+ "sources": {
+  "original_release_check_sop": {
+   "audit_chain_verified": true,
+   "audit_problems": [],
+   "checklist_sha256": "b291b0ec1bc7954ca3e548ff99c99616cbc056b7bee4fca9498928b4579107e4",
+   "outcomes": {
+    "PASS": 4
+   },
+   "steps": 4,
+   "unmapped_lines": 1
+  },
+  "pg_checksums": {
+   "audit_chain_verified": true,
+   "audit_problems": [],
+   "checklist_sha256": "9665bbe271e50cbd6ac34d57c134421b455c0e127929ad42cf225b9f02d05309",
+   "outcomes": {
+    "PASS": 2
+   },
+   "steps": 2,
+   "unmapped_lines": 3
+  },
+  "pg_continuous_archiving": {
+   "audit_chain_verified": true,
+   "audit_problems": [],
+   "checklist_sha256": "eaadcfe9d081e07afa762cdb554e15444e219b92ff8aa99bf54b6d3347f752eb",
+   "outcomes": {
+    "PASS": 3
+   },
+   "steps": 3,
+   "unmapped_lines": 87
+  },
+  "pg_sql_dump": {
+   "audit_chain_verified": true,
+   "audit_problems": [],
+   "checklist_sha256": "4f16faff74ea890c27510b5826e894172b5cc1dba2609d7632552c789b8c8b1d",
+   "outcomes": {
+    "PASS": 26
+   },
+   "steps": 26,
+   "unmapped_lines": 64
+  },
+  "pg_upgrade": {
+   "audit_chain_verified": true,
+   "audit_problems": [],
+   "checklist_sha256": "6619857d7b215ad6e299ffd568c25d45293ce1bd96c73c691d9813074692822c",
+   "outcomes": {
+    "PASS": 37
+   },
+   "steps": 37,
+   "unmapped_lines": 53
+  },
+  "pg_verifybackup": {
+   "audit_chain_verified": true,
+   "audit_problems": [],
+   "checklist_sha256": "e3ccd8ebfadcbad840ff6a4421cb548033d7362d242f9802722786887ab3cc86",
+   "outcomes": {
+    "PASS": 3
+   },
+   "steps": 3,
+   "unmapped_lines": 1
+  },
+  "python_venv": {
+   "audit_chain_verified": true,
+   "audit_problems": [],
+   "checklist_sha256": "a664b1b9a7ea88acaa7a9492c543dc89079b31ea40223435d9bba2db666924b5",
+   "outcomes": {
+    "PASS": 53
+   },
+   "steps": 53,
+   "unmapped_lines": 37
+  },
+  "ready_floods": {
+   "audit_chain_verified": true,
+   "audit_problems": [],
+   "checklist_sha256": "903feca58fab26279ce928fd89c1665b472b904716b7c545280a751fd56e584d",
+   "outcomes": {
+    "PASS": 25
+   },
+   "steps": 25,
+   "unmapped_lines": 34
+  },
+  "ready_home_fires": {
+   "audit_chain_verified": true,
+   "audit_problems": [],
+   "checklist_sha256": "373b5ce3fec824994747afe0c8cba4cd2eef32e5422947275440820b13725c4d",
+   "outcomes": {
+    "PASS": 28
+   },
+   "steps": 28,
+   "unmapped_lines": 14
+  },
+  "ready_power_outages": {
+   "audit_chain_verified": true,
+   "audit_problems": [],
+   "checklist_sha256": "f733fe2286d7d3517d0657afb4ced8252c6e099011c4be955b1d80b0f0d28723",
+   "outcomes": {
+    "PASS": 15
+   },
+   "steps": 15,
+   "unmapped_lines": 20
+  }
+ }
+}

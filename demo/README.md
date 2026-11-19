@@ -15,7 +15,8 @@ python demo/run_demo.py                       # deterministic demo, all-pass sce
 python demo/run_demo.py --scenario one-fails  # a failing exit check: FAIL, nothing committed
 python demo/run_demo.py --scenario evidence-missing   # no evidence: INTERMEDIATE, nothing committed
 python demo/run_demo.py --compare --runs 5    # also run the plain-model baseline (needs GEMINI_API_KEY)
-pytest -q tests/demo                          # 17 tests, offline
+python demo/run_demo.py --all-sources        # all 10 public procedures (3 bundled + 7 fetched)
+pytest -q tests/demo                          # 24 tests, offline
 ```
 
 Outputs go to `demo/output/` (git-ignored): `<source>.checklist.json`, `audit/<source>/*.qson` (one hash chain per
@@ -40,8 +41,10 @@ evidence). A tool check fed human-provenance evidence does not pass (tested). Ea
 * The existing `nych3` encoder was tuned on cookbooks. On technical manuals it recognises few imperatives, so the
   demo adds a handful of regex rules (shell lines, "exit status is zero if", "do not print anything when",
   "must not be higher than N unit"). These work on the bundled sources; they are not a general parser.
-* Only 3 small sources are bundled (two PostgreSQL 18 doc excerpts under the PostgreSQL License, plus one original
-  SOP written for this demo). Counts below say nothing about large or messy documents.
+* Ten sources are bundled (PostgreSQL 18 docs under the PostgreSQL License, a Python tutorial page, three FEMA
+  Ready.gov pages, and one original SOP). `demo/tools/build_sources.py` rebuilds the 7 fetched ones and records
+  provenance. On long or messy text the rules fall down: `pg_continuous_archiving` yields 3 steps and `python_venv`
+  turns sample terminal output into dozens of bogus `$` steps (see `results/RESULTS.md`).
 * The metrics measure mechanical properties. They do **not** measure whether each step is *correct*; that needs
   human grading.
 
@@ -58,3 +61,23 @@ Also reported: numeric limits that do not appear in the cited lines (invented th
 limits) are reported separately and excluded from every metric.
 
 Results from the run recorded on 2026-11-19 are in `results/RESULTS.md`.
+
+## Bigger baseline: 10 sources, two model settings, step recall
+
+```sh
+export GEMINI_API_KEY=...        # or OPENAI_API_KEY=... (read from the environment only; never written to a file)
+python demo/run_demo.py --all-sources --compare --model gemini --runs 3 --temperature both   # default flash-lite model
+python demo/run_demo.py --all-sources --compare --model openai --runs 3 --temperature both   # default gpt-4.1-mini
+python demo/run_demo.py --all-sources --runs 3 --baseline-raw demo/results/benchmark_baseline_raw_gemini-3.1-flash-lite-preview.json   # re-score saved outputs, no model call
+python demo/tools/make_report.py                                                              # demo/results/report.html
+```
+
+* `--model gemini|openai`, `--model-name ID`, `--temperature 0|default|both` ("default" omits the parameter).
+* **Step recall** uses `demo/gold/*.json`: for 6 sources, a list of the real steps with the source lines that state
+  them. **The gold lists were written by an AI assistant, not a human expert**; treat recall as indicative until a
+  person reviews them. Matching is mechanical: a gold step is covered when a produced step cites at least one of its
+  lines; a produced step is "spurious" when it cites no gold line.
+* OpenAI path: implemented and unit-tested against a mock server. Not yet run for real because the key supplied on
+  2026-11-19 had no API credit (every completion returned HTTP 429 `insufficient_quota`); the report shows PENDING.
+* `demo/results/report.html` is a single offline file: procedure beside checklist with quotes, gate outcomes under
+  three scenarios, a tamper test (three edits, all caught) and the comparison table.

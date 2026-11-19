@@ -33,3 +33,41 @@ schema, 5 calls per source, raw outputs in `baseline_raw_gemini-3.1-flash-lite-p
 * The earlier run used a stricter traceability rule (quote must sit inside a single cited line) and scored the baseline
   35 / 45, because it joined several lines into one quote. The rule was relaxed to accept quotes spanning the cited
   lines; the numbers above use the relaxed rule.
+
+
+---
+
+# Bigger run, 2026-11-19 (10 sources, 3 reruns, two temperatures)
+
+Model: `gemini-3.1-flash-lite-preview` (a small, cheap model on a free-tier key; cost about $0). **OpenAI: not run** (key
+accepted but no API credit; every completion returned HTTP 429 `insufficient_quota`). Raw outputs:
+`benchmark_baseline_raw_gemini-3.1-flash-lite-preview.json`; scores: `benchmark_summary_2026-11-19.json`;
+visual: `report.html`. 30 runs per setting, no API errors.
+
+| Measure | Pipeline | Model, temp 0 | Model, default temp |
+| --- | --- | --- | --- |
+| Schema-valid outputs | 30/30 | 30/30 | 30/30 |
+| Sources with identical output on every rerun | 10/10 | 10/10 | **0/10** |
+| Steps whose quote is verbatim in the cited lines | 588/588 (100%) | 105/114 (92%) | 107/115 (93%) |
+| Steps with a machine-runnable exit check | 273/588 (46%) | 66/114 (58%) | 66/115 (57%) |
+| Numeric limits not in the cited line | 0 | 9 | 8 |
+| Gold steps covered (6 sources, sums over reruns) | 129/186 (69%) | 66/186 (35%) | 66/186 (35%) |
+| Produced steps matching no gold step | 147/342 (43%) | 0/66 (0%) | 0/66 (0%) |
+
+Gold lists: hand-made by an AI assistant, not a human (see `gold/*.json`). Recall is line-overlap based.
+
+Where the pipeline wins: it covers about twice the gold steps (69% vs 35%) on the long procedures (pg_upgrade 39/60
+vs 15/60; ready_power_outages 36/63 vs 12/63; python_venv 27/33 vs 12/33), never cites a line that does not support a
+step, never invents a number, and gives the same output every time at any setting.
+
+Where the model wins or ties: at temperature 0 the same small model was also schema-valid and 100% reproducible
+on these inputs (the earlier "determinism" gap only appears at default temperature). The model has zero spurious
+steps; the pipeline has 43% (python_venv: 123 of 159 steps are bogus, mostly sample terminal output read as commands;
+pg_upgrade 21 of 111). The model beat the pipeline on pg_checksums (9/9 vs 6/9) and tied on the original SOP. It
+produces more machine-runnable checks per step (58% vs 46%), but 8-9 of its numeric limits do not appear in the cited
+line, and 7-9% of its quotes are not verbatim. On `pg_continuous_archiving` (long, prose-heavy) the pipeline found
+only 3 steps (no gold list for this one; the model also found 3).
+
+What this does and does not show: it does not show better semantic accuracy than a strong model; only one small
+model was tested. The defensible claim is reproducibility and traceability by construction, plus the gate/audit
+layer that the plain model has no equivalent of.

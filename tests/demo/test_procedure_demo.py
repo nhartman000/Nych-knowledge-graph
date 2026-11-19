@@ -148,3 +148,78 @@ def test_baseline_without_key_is_pending_not_invented(monkeypatch):
     assert baseline.have_key() is False
     prompt = baseline.build_prompt(SRC / "pg_verifybackup.txt")
     assert "10| $ pg_verifybackup" in prompt and "exit_code_equals" in prompt
+
+
+# ---- provider option, sources, gold lists and recall metric (no network) ----------------------------------------------
+def test_provider_requests_never_contain_the_key_in_the_body(monkeypatch):
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-test-not-real")
+    monkeypatch.setenv("GEMINI_API_KEY", "gem-test-not-real")
+    url, body, headers = baseline._request("openai", "gpt-4.1-mini", "hi", None)
+    assert url.startswith("https://api.openai.com/") and "temperature" not in json.loads(body)
+    assert "sk-test-not-real" not in body.decode() and headers["Authorization"] == "Bearer sk-test-not-real"
+    assert json.loads(baseline._request("openai", "m", "hi", 0)[1])["temperature"] == 0
+    url, body, headers = baseline._request("gemini", "gemini-x", "hi", None)
+    assert "temperature" not in json.loads(body)["generationConfig"] and "gem-test-not-real" not in url + body.decode()
+    assert json.loads(baseline._request("gemini", "m", "hi", 0)[1])["generationConfig"]["temperature"] == 0
+
+
+def test_openai_response_parsing_and_quota_error_is_not_retried(monkeypatch):
+    import io
+    import urllib.error
+    assert baseline._extract("openai", {"choices": [{"message": {"content": "{}"}}]}) == "{}"
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-test-not-real")
+    calls = []
+
+    def fake_open(req, timeout=0):
+        calls.append(1)
+        raise urllib.error.HTTPError(req.full_url, 429, "x", {}, io.BytesIO(b'{"error":{"code":"insufficient_quota"}}'))
+
+    monkeypatch.setattr(baseline.urllib.request, "urlopen", fake_open)
+    with pytest.raises(RuntimeError, match="insufficient_quota"):
+        baseline.call_model("p", provider="openai", retries=5)
+    assert len(calls) == 1
+    out = baseline.run_baseline(SRC / "pg_checksums.txt", 2, provider="openai")
+    assert all(x.startswith("ERROR:") for x in out)
+
+
+def test_openai_path_end_to_end_with_a_mocked_server(monkeypatch):
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-test-not-real")
+    cl = build_checklist(SRC / "pg_checksums.txt")
+    steps = [{k: s[k] for k in ("step_id", "source_lines", "source_quote", "tote", "exit_checks")} for s in cl["steps"]]
+    monkeypatch.setattr(baseline, "call_model", lambda *a, **k: json.dumps({"steps": steps}))
+    raw = baseline.run_baseline(SRC / "pg_checksums.txt", 2, provider="openai")
+    assert compare.summarize({"pg_checksums": raw}, {"pg_checksums": SRC / "pg_checksums.txt"})["total"]["schema_valid_runs"] == 2
+
+
+def test_all_ten_sources_have_headers_and_a_change_notice():
+    srcs = [p for p in SRC.glob("*.txt") if "LICENSE" not in p.name]
+    assert len(srcs) == 10
+    for p in srcs:
+        text = p.read_text(encoding="utf-8")
+        assert "Rights:" in text and "Change notice:" in text, p.name
+        assert load_source(p)["body"], p.name
+
+
+def test_gold_lists_point_at_real_body_lines_and_say_who_graded():
+    gold = compare.load_gold(ROOT / "demo" / "gold")
+    assert len(gold) >= 5
+    for name, g in gold.items():
+        body = {n for n, _ in load_source(SRC / g["source"])["body"]}
+        assert "not by a human" in g["graded_by"].lower()
+        for step in g["steps"]:
+            assert step["lines"] and set(step["lines"]) <= body, (name, step)
+
+
+def test_recall_metric_on_known_inputs():
+    gold = {"steps": [{"id": "G1", "lines": [9]}, {"id": "G2", "lines": [10, 11]}, {"id": "G3", "lines": [12]}]}
+    doc = {"steps": [{"source_lines": [9]}, {"source_lines": [11]}, {"source_lines": [8]}]}
+    m = compare.recall_metrics(doc, gold)
+    assert m == {"gold_steps": 3, "gold_covered": 2, "spurious_steps": 1, "steps_on_gold_sources": 3}
+
+
+def test_summarize_with_gold_counts_invalid_runs_as_missed():
+    p = SRC / "pg_verifybackup.txt"
+    gold = compare.load_gold(ROOT / "demo" / "gold")
+    cl = build_checklist(p)
+    r = compare.summarize({"pg_verifybackup": [cl, "not json"]}, {"pg_verifybackup": p}, gold)["total"]
+    assert r["gold_steps"] == 6 and 3 <= r["gold_covered"] <= 6 and r["schema_valid_runs"] == 1

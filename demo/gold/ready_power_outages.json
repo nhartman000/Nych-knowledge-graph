@@ -1,0 +1,142 @@
+{
+ "source": "ready_power_outages.txt",
+ "graded_by": "Hand-checked by the AI assistant (Grok Bot) that built this demo, NOT by a human domain expert. A gold step is one action a person following the procedure must do or check; descriptive/background sentences are not gold steps. 'lines' are line numbers in the source file. Please review before relying on recall numbers.",
+ "steps": [
+  {
+   "id": "G1",
+   "lines": [
+    7
+   ]
+  },
+  {
+   "id": "G2",
+   "lines": [
+    8
+   ]
+  },
+  {
+   "id": "G3",
+   "lines": [
+    9
+   ]
+  },
+  {
+   "id": "G4",
+   "lines": [
+    10
+   ]
+  },
+  {
+   "id": "G5",
+   "lines": [
+    11
+   ]
+  },
+  {
+   "id": "G6",
+   "lines": [
+    12,
+    13
+   ]
+  },
+  {
+   "id": "G7",
+   "lines": [
+    14,
+    30
+   ]
+  },
+  {
+   "id": "G8",
+   "lines": [
+    16,
+    29
+   ]
+  },
+  {
+   "id": "G9",
+   "lines": [
+    17
+   ]
+  },
+  {
+   "id": "G10",
+   "lines": [
+    18,
+    19
+   ]
+  },
+  {
+   "id": "G11",
+   "lines": [
+    20
+   ]
+  },
+  {
+   "id": "G12",
+   "lines": [
+    21,
+    22,
+    23
+   ]
+  },
+  {
+   "id": "G13",
+   "lines": [
+    24
+   ]
+  },
+  {
+   "id": "G14",
+   "lines": [
+    25
+   ]
+  },
+  {
+   "id": "G15",
+   "lines": [
+    26,
+    38,
+    39
+   ]
+  },
+  {
+   "id": "G16",
+   "lines": [
+    32,
+    33
+   ]
+  },
+  {
+   "id": "G17",
+   "lines": [
+    34
+   ]
+  },
+  {
+   "id": "G18",
+   "lines": [
+    35,
+    36
+   ]
+  },
+  {
+   "id": "G19",
+   "lines": [
+    37
+   ]
+  },
+  {
+   "id": "G20",
+   "lines": [
+    40
+   ]
+  },
+  {
+   "id": "G21",
+   "lines": [
+    41
+   ]
+  }
+ ]
+}
