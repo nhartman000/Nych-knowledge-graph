@@ -1,0 +1,96 @@
+PUBLIC PROCEDURE EXCERPT - NOT A COMPLETE DOCUMENT
+pg continuous archiving
+https://www.postgresql.org/docs/18/continuous-archiving.html
+Publisher: The PostgreSQL Global Development Group
+Rights: PostgreSQL License; https://www.postgresql.org/about/licence/
+Change notice: text extracted from the web page on 2026-11-19, whitespace collapsed, split one sentence/item per line, headings and navigation removed; first 90 lines at most.
+At all times, PostgreSQL maintains a write ahead log (WAL) in the pg_wal/ subdirectory of the cluster's data directory.
+The log records every change made to the database's data files.
+This log exists primarily for crash-safety purposes: if the system crashes, the database can be restored to consistency by “ replaying ” the log entries made since the last checkpoint.
+However, the existence of the log makes it possible to use a third strategy for backing up databases: we can combine a file-system-level backup with backup of the WAL files.
+If recovery is needed, we restore the file system backup and then replay from the backed-up WAL files to bring the system to a current state.
+This approach is more complex to administer than either of the previous approaches, but it has some significant benefits:
+We do not need a perfectly consistent file system backup as the starting point.
+Any internal inconsistency in the backup will be corrected by log replay (this is not significantly different from what happens during crash recovery).
+So we do not need a file system snapshot capability, just tar or a similar archiving tool.
+Since we can combine an indefinitely long sequence of WAL files for replay, continuous backup can be achieved simply by continuing to archive the WAL files.
+This is particularly valuable for large databases, where it might not be convenient to take a full backup frequently.
+It is not necessary to replay the WAL entries all the way to the end.
+We could stop the replay at any point and have a consistent snapshot of the database as it was at that time.
+Thus, this technique supports point-in-time recovery: it is possible to restore the database to its state at any time since your base backup was taken.
+If we continuously feed the series of WAL files to another machine that has been loaded with the same base backup file, we have a warm standby system: at any point we can bring up the second machine and it will have a nearly-current copy of the database.
+pg_dump and pg_dumpall do not produce file-system-level backups and cannot be used as part of a continuous-archiving solution.
+Such dumps are logical and do not contain enough information to be used by WAL replay.
+As with the plain file-system-backup technique, this method can only support restoration of an entire database cluster, not a subset.
+Also, it requires a lot of archival storage: the base backup might be bulky, and a busy system will generate many megabytes of WAL traffic that have to be archived.
+Still, it is the preferred backup technique in many situations where high reliability is needed.
+To recover successfully using continuous archiving (also called “ online backup ” by many database vendors), you need a continuous sequence of archived WAL files that extends back at least as far as the start time of your backup.
+So to get started, you should set up and test your procedure for archiving WAL files before you take your first base backup.
+Accordingly, we first discuss the mechanics of archiving WAL files.
+In an abstract sense, a running PostgreSQL system produces an indefinitely long sequence of WAL records.
+The system physically divides this sequence into WAL segment files, which are normally 16MB apiece (although the segment size can be altered during initdb).
+The segment files are given numeric names that reflect their position in the abstract WAL sequence.
+When not using WAL archiving, the system normally creates just a few segment files and then “ recycles ” them by renaming no-longer-needed segment files to higher segment numbers.
+It's assumed that segment files whose contents precede the last checkpoint are no longer of interest and can be recycled.
+When archiving WAL data, we need to capture the contents of each segment file once it is filled, and save that data somewhere before the segment file is recycled for reuse.
+Depending on the application and the available hardware, there could be many different ways of “ saving the data somewhere ”: we could copy the segment files to an NFS-mounted directory on another machine, write them onto a tape drive (ensuring that you have a way of identifying the original name of each file), or batch them together and burn them onto CDs, or something else entirely.
+To provide the database administrator with flexibility, PostgreSQL tries not to make any assumptions about how the archiving will be done.
+Instead, PostgreSQL lets the administrator specify a shell command or an archive library to be executed to copy a completed segment file to wherever it needs to go.
+This could be as simple as a shell command that uses cp, or it could invoke a complex C function — it's all up to you.
+To enable WAL archiving, set the wal_level configuration parameter to replica or higher, archive_mode to on, specify the shell command to use in the archive_command configuration parameter or specify the library to use in the archive_library configuration parameter.
+In practice these settings will always be placed in the postgresql.conf file.
+In archive_command, %p is replaced by the path name of the file to archive, while %f is replaced by only the file name.
+(The path name is relative to the current working directory, i.e., the cluster's data directory.) Use %% if you need to embed an actual % character in the command.
+The simplest useful command is something like:
+$ archive_command = 'test ! -f /mnt/server/archivedir/%f && cp %p /mnt/server/archivedir/%f' # Unix
+$ archive_command = 'copy "%p" "C:\\server\\archivedir\\%f"' # Windows
+which will copy archivable WAL segments to the directory /mnt/server/archivedir.
+(This is an example, not a recommendation, and might not work on all platforms.) After the %p and %f parameters have been replaced, the actual command executed might look like this:
+$ test ! -f /mnt/server/archivedir/00000001000000A900000065 && cp pg_wal/00000001000000A900000065 /mnt/server/archivedir/00000001000000A900000065
+A similar command will be generated for each new file to be archived.
+The archive command will be executed under the ownership of the same user that the PostgreSQL server is running as.
+Since the series of WAL files being archived contains effectively everything in your database, you will want to be sure that the archived data is protected from prying eyes; for example, archive into a directory that does not have group or world read access.
+It is important that the archive command return zero exit status if and only if it succeeds.
+Upon getting a zero result, PostgreSQL will assume that the file has been successfully archived, and will remove or recycle it.
+However, a nonzero status tells PostgreSQL that the file was not archived; it will try again periodically until it succeeds.
+Another way to archive is to use a custom archive module as the archive_library.
+Since such modules are written in C, creating your own may require considerably more effort than writing a shell command.
+However, archive modules can be more performant than archiving via shell, and they will have access to many useful server resources.
+For more information about archive modules, see Chapter 49.
+When the archive command is terminated by a signal (other than SIGTERM that is used as part of a server shutdown) or an error by the shell with an exit status greater than 125 (such as command not found), or if the archive function emits an ERROR or FATAL, the archiver process aborts and gets restarted by the postmaster.
+In such cases, the failure is not reported in pg_stat_archiver.
+Archive commands and libraries should generally be designed to refuse to overwrite any pre-existing archive file.
+This is an important safety feature to preserve the integrity of your archive in case of administrator error (such as sending the output of two different servers to the same archive directory).
+It is advisable to test your proposed archive library to ensure that it does not overwrite an existing file.
+In rare cases, PostgreSQL may attempt to re-archive a WAL file that was previously archived.
+For example, if the system crashes before the server makes a durable record of archival success, the server will attempt to archive the file again after restarting (provided archiving is still enabled).
+When an archive command or library encounters a pre-existing file, it should return a zero status or true, respectively, if the WAL file has identical contents to the pre-existing archive and the pre-existing archive is fully persisted to storage.
+If a pre-existing file contains different contents than the WAL file being archived, the archive command or library must return a nonzero status or false, respectively.
+The example command above for Unix avoids overwriting a pre-existing archive by including a separate test step.
+On some Unix platforms, cp has switches such as -i that can be used to do the same thing less verbosely, but you should not rely on these without verifying that the right exit status is returned.
+(In particular, GNU cp will return status zero when -i is used and the target file already exists, which is not the desired behavior.)
+While designing your archiving setup, consider what will happen if the archive command or library fails repeatedly because some aspect requires operator intervention or the archive runs out of space.
+For example, this could occur if you write to tape without an autochanger; when the tape fills, nothing further can be archived until the tape is swapped.
+You should ensure that any error condition or request to a human operator is reported appropriately so that the situation can be resolved reasonably quickly.
+The pg_wal/ directory will continue to fill with WAL segment files until the situation is resolved.
+(If the file system containing pg_wal/ fills up, PostgreSQL will do a PANIC shutdown.
+No committed transactions will be lost, but the database will remain offline until you free some space.)
+The speed of the archive command or library is unimportant as long as it can keep up with the average rate at which your server generates WAL data.
+Normal operation continues even if the archiving process falls a little behind.
+If archiving falls significantly behind, this will increase the amount of data that would be lost in the event of a disaster.
+It will also mean that the pg_wal/ directory will contain large numbers of not-yet-archived segment files, which could eventually exceed available disk space.
+You are advised to monitor the archiving process to ensure that it is working as you intend.
+In writing your archive command or library, you should assume that the file names to be archived can be up to 64 characters long and can contain any combination of ASCII letters, digits, and dots.
+It is not necessary to preserve the original relative path ( %p) but it is necessary to preserve the file name ( %f).
+Note that although WAL archiving will allow you to restore any modifications made to the data in your PostgreSQL database, it will not restore changes made to configuration files (that is, postgresql.conf, pg_hba.conf and pg_ident.conf), since those are edited manually rather than through SQL operations.
+You might wish to keep the configuration files in a location that will be backed up by your regular file system backup procedures.
+See Section 19.2 for how to relocate the configuration files.
+The archive command or function is only invoked on completed WAL segments.
+Hence, if your server generates only little WAL traffic (or has slack periods where it does so), there could be a long delay between the completion of a transaction and its safe recording in archive storage.
+To put a limit on how old unarchived data can be, you can set archive_timeout to force the server to switch to a new WAL segment file at least that often.
+Note that archived files that are archived early due to a forced switch are still the same length as completely full files.
+It is therefore unwise to set a very short archive_timeout — it will bloat your archive storage. archive_timeout settings of a minute or so are usually reasonable.
+Also, you can force a segment switch manually with pg_switch_wal if you want to ensure that a just-finished transaction is archived as soon as possible.
+Other utility functions related to WAL management are listed in Table 9.97.
+When wal_level is minimal some SQL commands are optimized to avoid WAL logging, as described in Section 14.4.7.
+If archiving or streaming replication were turned on during execution of one of these statements, WAL would not contain enough information for archive recovery.

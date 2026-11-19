@@ -1,0 +1,96 @@
+PUBLIC PROCEDURE EXCERPT - NOT A COMPLETE DOCUMENT
+pg upgrade
+https://www.postgresql.org/docs/18/pgupgrade.html
+Publisher: The PostgreSQL Global Development Group
+Rights: PostgreSQL License; https://www.postgresql.org/about/licence/
+Change notice: text extracted from the web page on 2026-11-19, whitespace collapsed, split one sentence/item per line, headings and navigation removed; first 90 lines at most.
+These are the steps to perform an upgrade with pg_upgrade:
+The steps to upgrade logical replication clusters are not covered here; refer to Section 29.13 for details.
+Optionally move the old cluster If you are using a version-specific installation directory, e.g., /opt/PostgreSQL/18, you do not need to move the old cluster.
+The graphical installers all use version-specific installation directories.
+If your installation directory is not version-specific, e.g., /usr/local/pgsql, it is necessary to move the current PostgreSQL install directory so it does not interfere with the new PostgreSQL installation.
+Once the current PostgreSQL server is shut down, it is safe to rename the PostgreSQL installation directory; assuming the old directory is /usr/local/pgsql, you can do: to rename the directory.
+$ mv /usr/local/pgsql /usr/local/pgsql.old
+For source installs, build the new version Build the new PostgreSQL source with configure flags that are compatible with the old cluster. pg_upgrade will check pg_controldata to make sure all settings are compatible before starting the upgrade.
+Install the new PostgreSQL binaries Install the new server's binaries and support files. pg_upgrade is included in a default installation.
+For source installs, if you wish to install the new server in a custom location, use the prefix variable:
+$ make prefix=/usr/local/pgsql.new install
+Initialize the new PostgreSQL cluster Initialize the new cluster using initdb.
+Again, use compatible initdb flags that match the old cluster.
+Many prebuilt installers do this step automatically.
+There is no need to start the new cluster.
+Install extension shared object files Many extensions and custom modules, whether from contrib or another source, use shared object files (or DLLs), e.g., pgcrypto.so.
+If the old cluster used these, shared object files matching the new server binary must be installed in the new cluster, usually via operating system commands.
+Do not load the schema definitions, e.g., CREATE EXTENSION pgcrypto, because these will be duplicated from the old cluster.
+If extension updates are available, pg_upgrade will report this and create a script that can be run later to update them.
+Copy custom full-text search files Copy any custom full text search files (dictionary, synonym, thesaurus, stop words) from the old to the new cluster.
+Adjust authentication pg_upgrade will connect to the old and new servers several times, so you might want to set authentication to peer in pg_hba.conf or use a ~/.pgpass file (see Section 32.16).
+Stop both servers Make sure both database servers are stopped using, on Unix, e.g.: or on Windows, using the proper service names: Streaming replication and log-shipping standby servers must be running during this shutdown so they receive all changes.
+$ pg_ctl -D /opt/PostgreSQL/12 stop
+$ pg_ctl -D /opt/PostgreSQL/18 stop
+$ NET STOP postgresql-12
+$ NET STOP postgresql-18
+Prepare for standby server upgrades If you are upgrading standby servers using methods outlined in section Step 11, verify that the old standby servers are caught up by running pg_controldata against the old primary and standby clusters.
+Verify that the “ Latest checkpoint location ” values match in all clusters.
+Also, make sure wal_level is not set to minimal in the postgresql.conf file on the new primary cluster.
+Run pg_upgrade Always run the pg_upgrade binary of the new server, not the old one. pg_upgrade requires the specification of the old and new cluster's data and executable ( bin) directories.
+You can also specify user and port values, and whether you want the data files linked, cloned, or swapped instead of the default copy behavior.
+If you use link mode, the upgrade will be much faster (no file copying) and use less disk space, but you will not be able to access your old cluster once you start the new cluster after the upgrade.
+Link mode also requires that the old and new cluster data directories be in the same file system.
+(Tablespaces and pg_wal can be on different file systems.) Clone mode provides the same speed and disk space advantages but does not cause the old cluster to be unusable once the new cluster is started.
+Clone mode also requires that the old and new data directories be in the same file system.
+This mode is only available on certain operating systems and file systems.
+Swap mode may be the fastest if there are many relations, but you will not be able to access your old cluster once the file transfer step begins.
+Swap mode also requires that the old and new cluster data directories be in the same file system.
+Setting --jobs to 2 or higher allows pg_upgrade to process multiple databases and tablespaces in parallel.
+A good starting point is the number of CPU cores on the machine.
+This option can substantially reduce the upgrade time for multi-database and multi-tablespace servers.
+For Windows users, you must be logged into an administrative account, and then run pg_upgrade with quoted directories, e.g.: Once started, pg_upgrade will verify the two clusters are compatible and then do the upgrade.
+You can use pg_upgrade --check to perform only the checks, even if the old server is still running. pg_upgrade --check will also outline any manual adjustments you will need to make after the upgrade.
+If you are going to be using link, clone, copy-file-range, or swap mode, you should use the option --link, --clone, --copy-file-range, or --swap with --check to enable mode-specific checks. pg_upgrade requires write permission in the current directory.
+Obviously, no one should be accessing the clusters during the upgrade. pg_upgrade defaults to running servers on port 50432 to avoid unintended client connections.
+You can use the same port number for both clusters when doing an upgrade because the old and new clusters will not be running at the same time.
+However, when checking an old running server, the old and new port numbers must be different.
+If an error occurs while restoring the database schema, pg_upgrade will exit and you will have to revert to the old cluster as outlined in Step 17 below.
+To try pg_upgrade again, you will need to modify the old cluster so the pg_upgrade schema restore succeeds.
+If the problem is a contrib module, you might need to uninstall the contrib module from the old cluster and install it in the new cluster after the upgrade, assuming the module is not being used to store user data.
+$ pg_upgrade.exe
+$ --old-datadir "C:/Program Files/PostgreSQL/12/data"
+$ --new-datadir "C:/Program Files/PostgreSQL/18/data"
+$ --old-bindir "C:/Program Files/PostgreSQL/12/bin"
+$ --new-bindir "C:/Program Files/PostgreSQL/18/bin"
+Upgrade streaming replication and log-shipping standby servers If you used link mode and have Streaming Replication (see Section 26.2.5) or Log-Shipping (see Section 26.2) standby servers, you can follow these steps to quickly upgrade them.
+You will not be running pg_upgrade on the standby servers, but rather rsync on the primary.
+Do not start any servers yet.
+If you did not use link mode, do not have or do not want to use rsync, or want an easier solution, skip the instructions in this section and simply recreate the standby servers once pg_upgrade completes and the new primary is running.
+Install the new PostgreSQL binaries on standby servers Make sure the new binaries and support files are installed on all standby servers.
+Make sure the new standby data directories do not exist Make sure the new standby data directories do not exist or are empty.
+If initdb was run, delete the standby servers' new data directories.
+Install extension shared object files Install the same extension shared object files on the new standbys that you installed in the new primary cluster.
+Stop standby servers If the standby servers are still running, stop them now using the above instructions.
+Save configuration files Save any configuration files from the old standbys' configuration directories you need to keep, e.g., postgresql.conf (and any files included by it), postgresql.auto.conf, pg_hba.conf, because these will be overwritten or removed in the next step.
+Run rsync When using link mode, standby servers can be quickly upgraded using rsync.
+To accomplish this, from a directory on the primary server that is above the old and new database cluster directories, run this on the primary for each standby server: where old_cluster and new_cluster are relative to the current directory on the primary, and remote_dir is above the old and new cluster directories on the standby.
+The directory structure under the specified directories on the primary and standbys must match.
+Consult the rsync manual page for details on specifying the remote directory, e.g., You can verify what the command will do using rsync 's --dry-run option.
+While rsync must be run on the primary for at least one standby, it is possible to run rsync on an upgraded standby to upgrade other standbys, as long as the upgraded standby has not been started.
+What this does is to record the links created by pg_upgrade 's link mode that connect files in the old and new clusters on the primary server.
+It then finds matching files in the standby's old cluster and creates links for them in the standby's new cluster.
+Files that were not linked on the primary are copied from the primary to the standby.
+(They are usually small.) This provides rapid standby upgrades.
+Unfortunately, rsync needlessly copies files associated with temporary and unlogged tables because these files don't normally exist on standby servers.
+If you have tablespaces, you will need to run a similar rsync command for each tablespace directory, e.g.: If you have relocated pg_wal outside the data directories, rsync must be run on those directories too.
+$ rsync --archive --delete --hard-links --size-only --no-inc-recursive old_cluster new_cluster remote_dir
+$ rsync --archive --delete --hard-links --size-only --no-inc-recursive /opt/PostgreSQL/12 \
+$ /opt/PostgreSQL/18 standby.example.com:/opt/PostgreSQL
+$ rsync --archive --delete --hard-links --size-only --no-inc-recursive /vol1/pg_tblsp/PG_12_201909212 \
+$ /vol1/pg_tblsp/PG_18_202307071 standby.example.com:/vol1/pg_tblsp
+Configure streaming replication and log-shipping standby servers Configure the servers for log shipping.
+(You do not need to run pg_backup_start() and pg_backup_stop() or take a file system backup as the standbys are still synchronized with the primary.) If the old primary is prior to version 17.0, then no slots on the primary are copied to the new standby, so all the slots on the old standby must be recreated manually.
+If the old primary is version 17.0 or later, then only logical slots on the primary are copied to the new standby, but other slots on the old standby are not copied, so must be recreated manually.
+Restore pg_hba.conf If you modified pg_hba.conf, restore its original settings.
+It might also be necessary to adjust other configuration files in the new cluster to match the old cluster, e.g., postgresql.conf (and any files included by it), postgresql.auto.conf.
+Start the new server The new server can now be safely started, and then any rsync 'ed standby servers.
+Post-upgrade processing If any post-upgrade processing is required, pg_upgrade will issue warnings as it completes.
+It will also generate script files that must be run by the administrator.
+The script files will connect to each database that needs post-upgrade processing.

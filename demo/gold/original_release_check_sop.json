@@ -1,0 +1,33 @@
+{
+ "source": "original_release_check_sop.txt",
+ "graded_by": "Hand-checked by the AI assistant (Grok Bot) that built this demo, NOT by a human domain expert. A gold step is one action a person following the procedure must do or check; descriptive/background sentences are not gold steps. 'lines' are line numbers in the source file. Please review before relying on recall numbers.",
+ "steps": [
+  {
+   "id": "G1",
+   "lines": [
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "id": "G2",
+   "lines": [
+    9
+   ]
+  },
+  {
+   "id": "G3",
+   "lines": [
+    10
+   ]
+  },
+  {
+   "id": "G4",
+   "lines": [
+    11,
+    12
+   ]
+  }
+ ]
+}

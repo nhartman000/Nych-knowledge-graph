@@ -1,0 +1,12 @@
+REVIEWED EVIDENCE EXCERPT — NOT A COMPLETE MANUAL OR A NETWORK SCAN
+PostgreSQL 18: pg_checksums
+https://www.postgresql.org/docs/18/app-pgchecksums.html
+Publisher: The PostgreSQL Global Development Group
+Sections: Description; Options --check, --enable, --pgdata
+Rights: PostgreSQL License; https://www.postgresql.org/about/licence/
+Change notice: selected excerpts; whitespace normalized. See THIRD_PARTY_NOTICES.txt and licenses/.
+The server must be shut down cleanly before running pg_checksums.
+When verifying checksums, the exit status is zero if there are no checksum errors, and nonzero if at least one checksum failure is detected.
+When enabling checksums, each relation file block with a changed checksum is rewritten in-place.
+--enable Enables checksums.
+--check Checks checksums. This is the default mode if nothing else is specified.

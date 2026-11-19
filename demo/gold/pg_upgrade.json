@@ -1,0 +1,157 @@
+{
+ "source": "pg_upgrade.txt",
+ "graded_by": "Hand-checked by the AI assistant (Grok Bot) that built this demo, NOT by a human domain expert. A gold step is one action a person following the procedure must do or check; descriptive/background sentences are not gold steps. 'lines' are line numbers in the source file. Please review before relying on recall numbers.",
+ "steps": [
+  {
+   "id": "G1",
+   "lines": [
+    9,
+    11,
+    12,
+    13
+   ]
+  },
+  {
+   "id": "G2",
+   "lines": [
+    14
+   ]
+  },
+  {
+   "id": "G3",
+   "lines": [
+    15,
+    16,
+    17
+   ]
+  },
+  {
+   "id": "G4",
+   "lines": [
+    18,
+    19,
+    21
+   ]
+  },
+  {
+   "id": "G5",
+   "lines": [
+    22,
+    23,
+    24
+   ]
+  },
+  {
+   "id": "G6",
+   "lines": [
+    26
+   ]
+  },
+  {
+   "id": "G7",
+   "lines": [
+    27
+   ]
+  },
+  {
+   "id": "G8",
+   "lines": [
+    28,
+    29,
+    30,
+    31,
+    32
+   ]
+  },
+  {
+   "id": "G9",
+   "lines": [
+    33,
+    34,
+    35
+   ]
+  },
+  {
+   "id": "G10",
+   "lines": [
+    36,
+    48,
+    49,
+    57,
+    58,
+    59,
+    60,
+    61
+   ]
+  },
+  {
+   "id": "G11",
+   "lines": [
+    66
+   ]
+  },
+  {
+   "id": "G12",
+   "lines": [
+    67,
+    68
+   ]
+  },
+  {
+   "id": "G13",
+   "lines": [
+    69
+   ]
+  },
+  {
+   "id": "G14",
+   "lines": [
+    70
+   ]
+  },
+  {
+   "id": "G15",
+   "lines": [
+    71
+   ]
+  },
+  {
+   "id": "G16",
+   "lines": [
+    72,
+    73,
+    75,
+    83,
+    84,
+    85
+   ]
+  },
+  {
+   "id": "G17",
+   "lines": [
+    88
+   ]
+  },
+  {
+   "id": "G18",
+   "lines": [
+    91,
+    92
+   ]
+  },
+  {
+   "id": "G19",
+   "lines": [
+    93
+   ]
+  },
+  {
+   "id": "G20",
+   "lines": [
+    94,
+    95,
+    96
+   ]
+  }
+ ]
+}

@@ -17,4 +17,8 @@ jobs:
       - name: optional mg8-engine
         continue-on-error: true
         run: pip install --no-deps -r requirements-mg8.txt
+      # demo/ tests need the runtime; without it they are skipped, never failed.
+      - name: optional mg8-runtime (demo tests)
+        continue-on-error: true
+        run: pip install 'mg8-runtime @ git+https://github.com/nhartman000/mg8-runtime@main'
       - run: pytest -q
