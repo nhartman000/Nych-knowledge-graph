@@ -1,0 +1,12 @@
+ORIGINAL EXAMPLE SOP (written for this demo, MIT licensed like this repository; not a third-party document)
+Release check for the demo service
+Source: this repository
+Rights: MIT
+Change notice: authored for demo; not an excerpt.
+Run the unit tests before tagging a release.
+$ python -m unittest discover -s tests
+The test run must exit with status zero.
+The p95 latency must not be higher than 250 milliseconds.
+Confirm that the changelog describes every user-visible change.
+$ sha256sum --check --quiet release.sha256
+Do not print anything when the archive is successfully verified.

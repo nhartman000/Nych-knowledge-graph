@@ -16,3 +16,4 @@ stages/05-nych3-encoder/*/output/*
 *.whl
 *.tar.gz
 REVIEW/_run/
+demo/output/

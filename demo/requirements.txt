@@ -1,0 +1,3 @@
+# Nych-knowledge-graph requirements (spaCy etc.) plus the runtime that provides gates, permits and the QSON log.
+-r ../requirements.txt
+mg8-runtime @ git+https://github.com/nhartman000/mg8-runtime@main
