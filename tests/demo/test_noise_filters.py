@@ -86,3 +86,17 @@ def test_python_venv_sample_output_is_gone():
     cl = build_checklist(ROOT / "demo" / "sources" / "python_venv.txt")
     quotes = [st["source_quote"] for st in cl["steps"]]
     assert not any("Collecting" in q or "Successfully installed" in q or "Metadata-Version" in q for q in quotes)
+
+
+def test_obligation_wording_in_prose_becomes_a_review_step(tmp_path):
+    cl = build(tmp_path, ["It is important that the archive command return zero exit status if and only if it succeeds.",
+                          "This log exists primarily for crash-safety purposes."])
+    assert [st["source_lines"] for st in cl["steps"]] == [[6]]
+    assert cl["steps"][0]["exit_checks"][0]["type"] == "human_review"
+
+
+def test_pg_continuous_archiving_finds_more_than_config_lines():
+    cl = build_checklist(ROOT / "demo" / "sources" / "pg_continuous_archiving.txt")
+    kinds = [st["kind"] for st in cl["steps"]]
+    assert kinds.count("instruction") >= 6
+    assert {53, 82} <= {n for st in cl["steps"] for n in st["source_lines"]}

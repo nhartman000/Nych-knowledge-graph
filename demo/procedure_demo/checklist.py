@@ -28,6 +28,10 @@ _NESTED_PROMPT = re.compile(r"^(?:\$|#|\(\S+\)\s*\$|\S+@\S+[^\s$#]*\s*[$#])\s+(?
 _REPL_PROMPT = re.compile(r"^(?:>>>|\.\.\.)(?:\s|$)")
 _CROSS_REF = re.compile(
     r"\bnot covered here\b|^(?:for (?:more )?(?:details|information),?\s+)?(?:see|refer to)\b[^.]*\.?$", re.I)
+# Requirement sentences the cookbook-tuned encoder misses (long prose guides): explicit obligation wording only.
+_OBLIGATION = re.compile(
+    r"\b(?:you (?:must|should|need to|will want to)|you are advised to|it is (?:important|advisable) (?:that|to)|"
+    r"be sure (?:that|to))\b", re.I)
 _CHECK_THAT = re.compile(r"^(?:check|confirm|verify|ensure)\s+that\s+.+", re.I)
 _CONFIRM = re.compile(r"^(?:confirm|verify|ensure)\s+.+", re.I)
 
@@ -150,6 +154,11 @@ def build_checklist(source_path, use_nych3=True):
             steps.append(_step(sid, lineno, text, "instruction", t.rstrip("."),
                                [{"type": "human_review", "params": {}, "basis": "human_judgement",
                                  "note": "no machine-checkable predicate in the source"}], extra=meta))
+            continue
+        if _OBLIGATION.search(t):
+            steps.append(_step(sid, lineno, text, "instruction", t.rstrip("."),
+                               [{"type": "human_review", "params": {}, "basis": "human_judgement",
+                                 "note": "obligation wording in the source; no machine-checkable predicate"}]))
             continue
         unmapped.append({"line": lineno, "text": text, "reason": "no rule or encoder action matched"})
     doc = {
