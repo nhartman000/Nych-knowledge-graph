@@ -13,7 +13,7 @@ import re
 
 from .common import canonical, load_source, sha256_text
 
-RULES_VERSION = "procedure-rules-1"
+RULES_VERSION = "procedure-rules-2"
 
 _CMD = re.compile(r"^\$\s+(?P<cmd>\S.*)$")
 _NO_OUTPUT = re.compile(r"^(?:do not|don't)\s+print anything when\s+(?P<when>.+?)\.?$", re.I)
@@ -23,6 +23,15 @@ _MUST_EXIT_ZERO = re.compile(r"^(?P<what>.+?)\s+must exit with status zero\.?$",
 _THRESHOLD = re.compile(
     r"^(?P<subject>.+?)\s+(?:should|must)\s+not\s+be\s+(?:higher|greater|more|larger)\s+than\s+"
     r"(?P<limit>\d+(?:\.\d+)?)\s*(?P<unit>[A-Za-z%]+)\b.*$", re.I)
+# Noise filters (rules-2). A "$ " line is only a command to run when it is not sample terminal output.
+_NESTED_PROMPT = re.compile(r"^(?:\$|#|\(\S+\)\s*\$|\S+@\S+[^\s$#]*\s*[$#])\s+(?P<cmd>\S.*)$")
+_REPL_PROMPT = re.compile(r"^(?:>>>|\.\.\.)(?:\s|$)")
+_CROSS_REF = re.compile(
+    r"\bnot covered here\b|^(?:for (?:more )?(?:details|information),?\s+)?(?:see|refer to)\b[^.]*\.?$", re.I)
+# Requirement sentences the cookbook-tuned encoder misses (long prose guides): explicit obligation wording only.
+_OBLIGATION = re.compile(
+    r"\b(?:you (?:must|should|need to|will want to)|you are advised to|it is (?:important|advisable) (?:that|to)|"
+    r"be sure (?:that|to))\b", re.I)
 _CHECK_THAT = re.compile(r"^(?:check|confirm|verify|ensure)\s+that\s+.+", re.I)
 _CONFIRM = re.compile(r"^(?:confirm|verify|ensure)\s+.+", re.I)
 
@@ -63,12 +72,36 @@ def build_checklist(source_path, use_nych3=True):
     src = load_source(source_path)
     steps, unmapped = [], []
     last_cmd = None
+    in_transcript = False   # inside a block that shows an echoed prompt; its plain "$ " lines are sample output
+    continuing = False      # previous command line ended with a backslash, so this "$ " line continues it
     for lineno, text in src["body"]:
         t = text.strip()
         sid = f"S{lineno}"
         m = _CMD.match(t)
+        if not m:
+            in_transcript = continuing = False
         if m:
-            cmd = m.group("cmd")
+            payload = m.group("cmd")
+            if continuing and last_cmd is not None:
+                last_cmd["source_lines"].append(lineno)
+                last_cmd["tote"]["operate"] += " " + payload.rstrip("\\").strip()
+                continuing = payload.endswith("\\")
+                continue
+            nested = _NESTED_PROMPT.match(payload)
+            if _REPL_PROMPT.match(payload):
+                unmapped.append({"line": lineno, "text": text,
+                                 "reason": "interactive-interpreter line (sample session), not a shell command"})
+                continue
+            if nested is None and in_transcript:
+                unmapped.append({"line": lineno, "text": text,
+                                 "reason": "sample terminal output after an echoed prompt, not a step"})
+                continue
+            cmd = nested.group("cmd") if nested else payload
+            if nested:
+                in_transcript = True
+            continuing = cmd.endswith("\\")
+            if continuing:
+                cmd = cmd[:-1].rstrip()
             last_cmd = _step(
                 sid, lineno, text, "command", cmd,
                 [{"type": "exit_code_equals", "params": {"value": 0}, "basis": "convention_default",
@@ -113,11 +146,19 @@ def build_checklist(source_path, use_nych3=True):
                                [{"type": "human_review", "params": {}, "basis": "human_judgement",
                                  "note": "no machine-checkable predicate in the source"}]))
             continue
+        if _CROSS_REF.search(t):
+            unmapped.append({"line": lineno, "text": text, "reason": "cross-reference or scope note, not an action"})
+            continue
         meta = _nych3_action(t) if use_nych3 else None
         if meta:
             steps.append(_step(sid, lineno, text, "instruction", t.rstrip("."),
                                [{"type": "human_review", "params": {}, "basis": "human_judgement",
                                  "note": "no machine-checkable predicate in the source"}], extra=meta))
+            continue
+        if _OBLIGATION.search(t):
+            steps.append(_step(sid, lineno, text, "instruction", t.rstrip("."),
+                               [{"type": "human_review", "params": {}, "basis": "human_judgement",
+                                 "note": "obligation wording in the source; no machine-checkable predicate"}]))
             continue
         unmapped.append({"line": lineno, "text": text, "reason": "no rule or encoder action matched"})
     doc = {
