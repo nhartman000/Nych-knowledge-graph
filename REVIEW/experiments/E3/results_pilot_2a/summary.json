@@ -1,0 +1,316 @@
+{
+ "gemini:gemini-3.5-flash-lite|next": {
+  "n": 1,
+  "mean_A": 0.0,
+  "mean_B": 0.0,
+  "mean_C": 0.0,
+  "B-C": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "B-A": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "C-A": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "loop_helps (pre-registered: B-C CI lower bound > 0)": false
+ },
+ "gemini:gemini-3.5-flash-lite|steps": {
+  "n": 2,
+  "mean_A": 0.835,
+  "wrong_A": 0.0,
+  "mean_B": 0.835,
+  "wrong_B": 0.0,
+  "mean_C": 0.8333333333333333,
+  "wrong_C": 0.0,
+  "B-C": {
+   "mean": 0.0016666666666667052,
+   "ci95": [
+    0.0,
+    0.0033333333333334103
+   ],
+   "win": 0.5,
+   "tie": 0.5,
+   "loss": 0.0
+  },
+  "B-A": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "C-A": {
+   "mean": -0.0016666666666667052,
+   "ci95": [
+    -0.0033333333333334103,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 0.5,
+   "loss": 0.5
+  },
+  "loop_helps (pre-registered: B-C CI lower bound > 0)": false
+ },
+ "gemini:gemini-3.6-flash|next": {
+  "n": 1,
+  "mean_A": 0.0,
+  "mean_B": 0.0,
+  "mean_C": 0.0,
+  "B-C": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "B-A": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "C-A": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "loop_helps (pre-registered: B-C CI lower bound > 0)": false
+ },
+ "gemini:gemini-3.6-flash|steps": {
+  "n": 1,
+  "mean_A": 1.0,
+  "wrong_A": 0.0,
+  "mean_B": 1.0,
+  "wrong_B": 0.0,
+  "mean_C": 1.0,
+  "wrong_C": 0.0,
+  "B-C": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "B-A": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "C-A": {
+   "mean": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "win": 0.0,
+   "tie": 1.0,
+   "loss": 0.0
+  },
+  "loop_helps (pre-registered: B-C CI lower bound > 0)": false
+ },
+ "_secondary_well_matched (B_score >= median 4.08)": {
+  "gemini:gemini-3.5-flash-lite|next": {
+   "n": 1,
+   "mean_A": 0.0,
+   "mean_B": 0.0,
+   "mean_C": 0.0,
+   "B-C": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "B-A": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "C-A": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "loop_helps (pre-registered: B-C CI lower bound > 0)": false
+  },
+  "gemini:gemini-3.5-flash-lite|steps": {
+   "n": 2,
+   "mean_A": 0.835,
+   "wrong_A": 0.0,
+   "mean_B": 0.835,
+   "wrong_B": 0.0,
+   "mean_C": 0.8333333333333333,
+   "wrong_C": 0.0,
+   "B-C": {
+    "mean": 0.0016666666666667052,
+    "ci95": [
+     0.0,
+     0.0033333333333334103
+    ],
+    "win": 0.5,
+    "tie": 0.5,
+    "loss": 0.0
+   },
+   "B-A": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "C-A": {
+    "mean": -0.0016666666666667052,
+    "ci95": [
+     -0.0033333333333334103,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 0.5,
+    "loss": 0.5
+   },
+   "loop_helps (pre-registered: B-C CI lower bound > 0)": false
+  },
+  "gemini:gemini-3.6-flash|next": {
+   "n": 1,
+   "mean_A": 0.0,
+   "mean_B": 0.0,
+   "mean_C": 0.0,
+   "B-C": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "B-A": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "C-A": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "loop_helps (pre-registered: B-C CI lower bound > 0)": false
+  },
+  "gemini:gemini-3.6-flash|steps": {
+   "n": 1,
+   "mean_A": 1.0,
+   "wrong_A": 0.0,
+   "mean_B": 1.0,
+   "wrong_B": 0.0,
+   "mean_C": 1.0,
+   "wrong_C": 0.0,
+   "B-C": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "B-A": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "C-A": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "win": 0.0,
+    "tie": 1.0,
+    "loss": 0.0
+   },
+   "loop_helps (pre-registered: B-C CI lower bound > 0)": false
+  }
+ },
+ "_unparseable_grades": 0,
+ "_cost_usd_this_invocation": {},
+ "_stop_reason": "gemini:gemini-3-flash-preview DAILY quota exhausted ['GenerateRequestsPerDayPerProjectPerModel-FreeTier']",
+ "_records_total": 17
+}

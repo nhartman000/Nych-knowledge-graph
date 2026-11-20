@@ -1,0 +1,902 @@
+{
+ "E3-000": {
+  "B": "TL-CORE-ACC_SIGN_IN",
+  "B_score": 4.8541787639561935,
+  "C": "TL-CORE-FILE_SAVE"
+ },
+ "E3-001": {
+  "B": "TL-CORE-SET_UPDATE",
+  "B_score": 5.373134513805434,
+  "C": "TL-CORE-ACC_CHANGE_PASSWORD"
+ },
+ "E3-002": {
+  "B": "TL-CORE-MAIL_COMPOSE",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-AI_GENERATE_IMAGE"
+ },
+ "E3-003": {
+  "B": "TL-CORE-FILE_MOVE",
+  "B_score": 6.5569046108138505,
+  "C": "TL-CORE-FILE_DELETE"
+ },
+ "E3-004": {
+  "B": "TL-CORE-SET_BACKUP",
+  "B_score": 11.150901496203819,
+  "C": "TL-CORE-MAIL_COMPOSE"
+ },
+ "E3-005": {
+  "B": "TL-CORE-AI_NEW_CHAT",
+  "B_score": 4.610994461758537,
+  "C": "TL-CORE-MAIL_ARCHIVE"
+ },
+ "E3-006": {
+  "B": "TL-CORE-FILE_SHARE_LINK",
+  "B_score": 5.132458483729584,
+  "C": "TL-CORE-FILE_DELETE"
+ },
+ "E3-007": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_CREATE_FOLDER"
+ },
+ "E3-008": {
+  "B": "TL-CORE-TEXT_FIND",
+  "B_score": 3.572345637857985,
+  "C": "TL-CORE-TEXT_INSERT_LINK"
+ },
+ "E3-009": {
+  "B": "TL-CORE-SET_UPDATE",
+  "B_score": 8.166342523247952,
+  "C": "TL-CORE-ACC_CHANGE_PASSWORD"
+ },
+ "E3-010": {
+  "B": "TL-CORE-AI_CUSTOM_INSTRUCTIONS",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-SET_APP_UNINSTALL"
+ },
+ "E3-011": {
+  "B": "TL-CORE-TEXT_UNDO",
+  "B_score": 2.984558972955866,
+  "C": "TL-CORE-BR_CLOSE_TAB"
+ },
+ "E3-012": {
+  "B": "TL-CORE-SET_BACKUP",
+  "B_score": 10.303603635816614,
+  "C": "TL-CORE-MAIL_COMPOSE"
+ },
+ "E3-013": {
+  "B": "TL-CORE-BR_DEFAULT_BROWSER",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-AI_RENAME_CHAT"
+ },
+ "E3-014": {
+  "B": "TL-CORE-SET_WIFI",
+  "B_score": 3.572345637857985,
+  "C": "TL-CORE-TEXT_INSERT_LINK"
+ },
+ "E3-015": {
+  "B": "TL-CORE-AI_CUSTOM_INSTRUCTIONS",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-SET_BATTERY_SAVER"
+ },
+ "E3-016": {
+  "B": "TL-CORE-BR_SAVE_PASSWORD",
+  "B_score": 5.709606750426646,
+  "C": "TL-CORE-SET_UPDATE"
+ },
+ "E3-017": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_CREATE_FOLDER"
+ },
+ "E3-018": {
+  "B": "TL-CORE-SET_DARK_MODE",
+  "B_score": 3.572345637857985,
+  "C": "TL-CORE-AI_RENAME_CHAT"
+ },
+ "E3-019": {
+  "B": "TL-CORE-AI_EXPORT_DATA",
+  "B_score": 5.709606750426647,
+  "C": "TL-CORE-BR_NEW_TAB"
+ },
+ "E3-020": {
+  "B": "TL-CORE-SET_BRIGHTNESS",
+  "B_score": 4.8623088900394436,
+  "C": "TL-CORE-AI_MEMORY_TOGGLE"
+ },
+ "E3-021": {
+  "B": "TL-CORE-TEXT_INSERT_LINK",
+  "B_score": 2.348570206235869,
+  "C": "TL-CORE-BR_CLEAR_DATA"
+ },
+ "E3-022": {
+  "B": "TL-CORE-ACC_DELETE",
+  "B_score": 7.471012956786741,
+  "C": "TL-CORE-SET_BACKUP"
+ },
+ "E3-023": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_DELETE"
+ },
+ "E3-024": {
+  "B": "TL-CORE-SET_APP_FORCE_STOP",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-AI_RENAME_CHAT"
+ },
+ "E3-025": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 1.5182219041624387,
+  "C": "TL-CORE-MAIL_LABEL"
+ },
+ "E3-026": {
+  "B": "TL-CORE-BR_DEFAULT_BROWSER",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-SET_DARK_MODE"
+ },
+ "E3-027": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_MOVE"
+ },
+ "E3-028": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_DELETE"
+ },
+ "E3-029": {
+  "B": "TL-CORE-SET_UPDATE",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-ACC_CHANGE_PASSWORD"
+ },
+ "E3-030": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_MOVE"
+ },
+ "E3-031": {
+  "B": "TL-CORE-ACC_CHANGE_PASSWORD",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-SET_LANGUAGE"
+ },
+ "E3-032": {
+  "B": "TL-CORE-TEXT_FONT_SIZE",
+  "B_score": 2.984558972955866,
+  "C": "TL-CORE-FILE_CREATE_FOLDER"
+ },
+ "E3-033": {
+  "B": "TL-CORE-SET_UPDATE",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-SET_LANGUAGE"
+ },
+ "E3-034": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-MAIL_LABEL"
+ },
+ "E3-035": {
+  "B": "TL-CORE-TEXT_INSERT_LINK",
+  "B_score": 2.348570206235869,
+  "C": "TL-CORE-FILE_CREATE_FOLDER"
+ },
+ "E3-036": {
+  "B": "TL-CORE-BR_CLEAR_DATA",
+  "B_score": 5.601393165786414,
+  "C": "TL-CORE-MAIL_SEND"
+ },
+ "E3-037": {
+  "B": "TL-CORE-AI_VOICE_INPUT",
+  "B_score": 6.825216615463328,
+  "C": "TL-CORE-MSG_UNSEND"
+ },
+ "E3-038": {
+  "B": "TL-CORE-BR_DEFAULT_BROWSER",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-ACC_SWITCH"
+ },
+ "E3-039": {
+  "B": "TL-CORE-FILE_SHARE_LINK",
+  "B_score": 2.348570206235869,
+  "C": "TL-CORE-MAIL_LABEL"
+ },
+ "E3-040": {
+  "B": "TL-CORE-ACC_DELETE",
+  "B_score": 7.471012956786741,
+  "C": "TL-CORE-AI_MEMORY_TOGGLE"
+ },
+ "E3-041": {
+  "B": "TL-CORE-SET_APP_UNINSTALL",
+  "B_score": 6.700005454454525,
+  "C": "TL-CORE-AI_CUSTOM_INSTRUCTIONS"
+ },
+ "E3-042": {
+  "B": "TL-CORE-SET_BLUETOOTH",
+  "B_score": 7.067730234579842,
+  "C": "TL-CORE-TEXT_INSERT_IMAGE"
+ },
+ "E3-043": {
+  "B": "TL-CORE-BR_BOOKMARK",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-FILE_PASTE"
+ },
+ "E3-044": {
+  "B": "TL-CORE-AI_SEARCH_CHATS",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-BR_NEW_TAB"
+ },
+ "E3-045": {
+  "B": "TL-CORE-AI_NEW_CHAT",
+  "B_score": 5.601441183841212,
+  "C": "TL-CORE-AI_PROJECT"
+ },
+ "E3-046": {
+  "B": "TL-CORE-BR_SAVE_PASSWORD",
+  "B_score": 5.709606750426646,
+  "C": "TL-CORE-SET_UPDATE"
+ },
+ "E3-047": {
+  "B": "TL-CORE-TEXT_FIND",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-BR_CLEAR_DATA"
+ },
+ "E3-048": {
+  "B": "TL-CORE-BR_CLEAR_DATA",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-SET_WIFI"
+ },
+ "E3-049": {
+  "B": "TL-CORE-MAIL_COMPOSE",
+  "B_score": 7.067730234579842,
+  "C": "TL-CORE-AI_MEMORY_TOGGLE"
+ },
+ "E3-050": {
+  "B": "TL-CORE-AI_EDIT_PROMPT",
+  "B_score": 4.610994461758537,
+  "C": "TL-CORE-ACC_RESET_PASSWORD"
+ },
+ "E3-051": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-MAIL_LABEL"
+ },
+ "E3-052": {
+  "B": "TL-CORE-ACC_CREATE",
+  "B_score": 4.585914777361514,
+  "C": "TL-CORE-FILE_PASTE"
+ },
+ "E3-053": {
+  "B": "TL-CORE-SET_DATE_TIME",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-SET_UPDATE"
+ },
+ "E3-054": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_CREATE_FOLDER"
+ },
+ "E3-055": {
+  "B": "TL-CORE-TEXT_FIND",
+  "B_score": 3.2358734012367716,
+  "C": "TL-CORE-SET_WIFI"
+ },
+ "E3-056": {
+  "B": "TL-CORE-BR_SAVE_PASSWORD",
+  "B_score": 5.709606750426646,
+  "C": "TL-CORE-ACC_CHANGE_PASSWORD"
+ },
+ "E3-057": {
+  "B": "TL-CORE-SET_BACKUP",
+  "B_score": 4.274522225137325,
+  "C": "TL-CORE-AI_GENERATE_IMAGE"
+ },
+ "E3-058": {
+  "B": "TL-CORE-SET_WIFI",
+  "B_score": 3.572345637857985,
+  "C": "TL-CORE-MAIL_SEND"
+ },
+ "E3-059": {
+  "B": "TL-CORE-MAIL_COMPOSE",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-AI_GENERATE_IMAGE"
+ },
+ "E3-060": {
+  "B": "TL-CORE-MAIL_COMPOSE",
+  "B_score": 6.431741467859845,
+  "C": "TL-CORE-SET_BACKUP"
+ },
+ "E3-061": {
+  "B": "TL-CORE-SET_DARK_MODE",
+  "B_score": 3.572345637857985,
+  "C": "TL-CORE-ACC_SIGN_OUT"
+ },
+ "E3-062": {
+  "B": "TL-CORE-SCREENSHOT",
+  "B_score": 3.572345637857985,
+  "C": "TL-CORE-ACC_2SV_ON"
+ },
+ "E3-063": {
+  "B": "TL-CORE-ACC_SIGN_IN",
+  "B_score": 8.426524401814177,
+  "C": "TL-CORE-TEXT_FONT_SIZE"
+ },
+ "E3-064": {
+  "B": "TL-CORE-TEXT_INSERT_LINK",
+  "B_score": 2.348570206235869,
+  "C": "TL-CORE-FILE_CREATE_FOLDER"
+ },
+ "E3-065": {
+  "B": "TL-CORE-SCREENSHOT",
+  "B_score": 3.572345637857985,
+  "C": "TL-CORE-MAIL_FORWARD"
+ },
+ "E3-066": {
+  "B": "TL-CORE-FILE_DELETE",
+  "B_score": 8.23546916505147,
+  "C": "TL-CORE-MAIL_LABEL"
+ },
+ "E3-067": {
+  "B": "TL-CORE-SET_APP_INSTALL",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-FILE_PASTE"
+ },
+ "E3-068": {
+  "B": "TL-CORE-BR_CLEAR_DATA",
+  "B_score": 5.85270759406732,
+  "C": "TL-CORE-FILE_CREATE_FOLDER"
+ },
+ "E3-069": {
+  "B": "TL-CORE-MAIL_COMPOSE",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-AI_GENERATE_IMAGE"
+ },
+ "E3-070": {
+  "B": "TL-CORE-AI_GENERATE_IMAGE",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-SET_BRIGHTNESS"
+ },
+ "E3-071": {
+  "B": "TL-CORE-SET_LANGUAGE",
+  "B_score": 4.274522225137325,
+  "C": "TL-CORE-BR_SAVE_PASSWORD"
+ },
+ "E3-072": {
+  "B": "TL-CORE-AI_NEW_CHAT",
+  "B_score": 1.6264354888026713,
+  "C": "TL-CORE-MAIL_ARCHIVE"
+ },
+ "E3-073": {
+  "B": "TL-CORE-FILE_CUT",
+  "B_score": 1.8859466842877561,
+  "C": "TL-CORE-ACC_CREATE"
+ },
+ "E3-074": {
+  "B": "TL-CORE-SCREENSHOT",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-AI_SEND_PROMPT"
+ },
+ "E3-075": {
+  "B": "TL-CORE-AI_EDIT_PROMPT",
+  "B_score": 4.610994461758537,
+  "C": "TL-CORE-FILE_COPY"
+ },
+ "E3-076": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_MOVE"
+ },
+ "E3-077": {
+  "B": "TL-CORE-AI_NEW_CHAT",
+  "B_score": 1.6264354888026713,
+  "C": "TL-CORE-SET_VOLUME"
+ },
+ "E3-078": {
+  "B": "TL-CORE-BR_CLEAR_DATA",
+  "B_score": 2.984558972955866,
+  "C": "TL-CORE-MAIL_SEND"
+ },
+ "E3-079": {
+  "B": "TL-CORE-SCREENSHOT",
+  "B_score": 3.572345637857985,
+  "C": "TL-CORE-ACC_2SV_ON"
+ },
+ "E3-080": {
+  "B": "TL-CORE-BR_BOOKMARK",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-FILE_CUT"
+ },
+ "E3-081": {
+  "B": "TL-CORE-AI_NEW_CHAT",
+  "B_score": 3.2528709776053426,
+  "C": "TL-CORE-MAIL_BLOCK"
+ },
+ "E3-082": {
+  "B": "TL-CORE-FILE_PASTE",
+  "B_score": 3.572345637857985,
+  "C": "TL-CORE-SCREENSHOT"
+ },
+ "E3-083": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_DELETE"
+ },
+ "E3-084": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_MOVE"
+ },
+ "E3-085": {
+  "B": "TL-CORE-ACC_SIGN_IN",
+  "B_score": 11.998870039672163,
+  "C": "TL-CORE-TEXT_FONT_SIZE"
+ },
+ "E3-086": {
+  "B": "TL-CORE-BR_EXTENSION_ADD",
+  "B_score": 3.2358734012367716,
+  "C": "TL-CORE-SET_BRIGHTNESS"
+ },
+ "E3-087": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-MAIL_LABEL"
+ },
+ "E3-088": {
+  "B": "TL-CORE-AI_CUSTOM_INSTRUCTIONS",
+  "B_score": 5.709606750426647,
+  "C": "TL-CORE-SET_APP_UNINSTALL"
+ },
+ "E3-089": {
+  "B": "TL-CORE-FILE_PRINT",
+  "B_score": 1.2899632521814586,
+  "C": "TL-CORE-TEXT_SPELLCHECK"
+ },
+ "E3-090": {
+  "B": "TL-CORE-MAIL_SEND",
+  "B_score": 2.348570206235869,
+  "C": "TL-CORE-FILE_CREATE_FOLDER"
+ },
+ "E3-091": {
+  "B": "TL-CORE-FILE_SHARE_LINK",
+  "B_score": 5.897658981929587,
+  "C": "TL-CORE-MAIL_LABEL"
+ },
+ "E3-092": {
+  "B": "TL-CORE-ACC_SIGN_IN",
+  "B_score": 12.746084441502385,
+  "C": "TL-CORE-FILE_CREATE_FOLDER"
+ },
+ "E3-093": {
+  "B": "TL-CORE-TEXT_FIND",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-MAIL_SEND"
+ },
+ "E3-094": {
+  "B": "TL-CORE-BR_HISTORY",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-AI_DELETE_CHAT"
+ },
+ "E3-095": {
+  "B": "TL-CORE-ACC_2SV_ON",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-AI_SEND_PROMPT"
+ },
+ "E3-096": {
+  "B": "TL-CORE-ACC_RESET_PASSWORD",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-AI_VOICE_INPUT"
+ },
+ "E3-097": {
+  "B": "TL-CORE-SET_WIFI",
+  "B_score": 6.5569046108138505,
+  "C": "TL-CORE-BR_CLEAR_DATA"
+ },
+ "E3-098": {
+  "B": "TL-CORE-TEXT_FIND",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-FILE_CREATE_FOLDER"
+ },
+ "E3-099": {
+  "B": "TL-CORE-ACC_SIGN_IN",
+  "B_score": 5.85270759406732,
+  "C": "TL-CORE-FILE_SAVE"
+ },
+ "E3-100": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_MOVE"
+ },
+ "E3-101": {
+  "B": "TL-CORE-MAIL_SEND",
+  "B_score": 4.697140412471738,
+  "C": "TL-CORE-BR_CLEAR_DATA"
+ },
+ "E3-102": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_MOVE"
+ },
+ "E3-103": {
+  "B": "TL-CORE-FILE_CREATE_FOLDER",
+  "B_score": 2.348570206235869,
+  "C": "TL-CORE-FILE_SAVE"
+ },
+ "E3-104": {
+  "B": "TL-CORE-AI_UPLOAD_SCREENSHOT",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-FILE_COPY"
+ },
+ "E3-105": {
+  "B": "TL-CORE-SET_UPDATE",
+  "B_score": 12.249513784871928,
+  "C": "TL-CORE-ACC_CHANGE_PASSWORD"
+ },
+ "E3-106": {
+  "B": "TL-CORE-FILE_SHARE_LINK",
+  "B_score": 6.5569046108138505,
+  "C": "TL-CORE-MAIL_LABEL"
+ },
+ "E3-107": {
+  "B": "TL-CORE-TEXT_SPELLCHECK",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-FILE_PRINT"
+ },
+ "E3-108": {
+  "B": "TL-CORE-FILE_SHARE_LINK",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-FILE_OPEN"
+ },
+ "E3-109": {
+  "B": "TL-CORE-AI_EDIT_PROMPT",
+  "B_score": 4.610994461758537,
+  "C": "TL-CORE-MSG_UNSEND"
+ },
+ "E3-110": {
+  "B": "TL-CORE-BR_DEFAULT_BROWSER",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-ACC_SIGN_OUT"
+ },
+ "E3-111": {
+  "B": "TL-CORE-MAIL_COMPOSE",
+  "B_score": 2.984558972955866,
+  "C": "TL-CORE-AI_GENERATE_IMAGE"
+ },
+ "E3-112": {
+  "B": "TL-CORE-AI_NEW_CHAT",
+  "B_score": 1.6264354888026713,
+  "C": "TL-CORE-BR_PRIVATE"
+ },
+ "E3-113": {
+  "B": "TL-CORE-SCREENSHOT",
+  "B_score": 3.572345637857985,
+  "C": "TL-CORE-MAIL_FORWARD"
+ },
+ "E3-114": {
+  "B": "TL-CORE-TEXT_FIND",
+  "B_score": 7.655516899481961,
+  "C": "TL-CORE-TEXT_INSERT_LINK"
+ },
+ "E3-115": {
+  "B": "TL-CORE-MAIL_COMPOSE",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-ACC_DELETE"
+ },
+ "E3-116": {
+  "B": "TL-CORE-SET_NOTIFICATIONS",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-SET_DARK_MODE"
+ },
+ "E3-117": {
+  "B": "TL-CORE-SET_RESTART",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-TEXT_UNDO"
+ },
+ "E3-118": {
+  "B": "TL-CORE-AI_GENERATE_IMAGE",
+  "B_score": 5.709606750426647,
+  "C": "TL-CORE-SET_BACKUP"
+ },
+ "E3-119": {
+  "B": "TL-CORE-SET_APP_FORCE_STOP",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-ACC_SWITCH"
+ },
+ "E3-120": {
+  "B": "TL-CORE-TEXT_FIND",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-MAIL_SEND"
+ },
+ "E3-121": {
+  "B": "TL-CORE-SET_AIRPLANE",
+  "B_score": 3.2358734012367716,
+  "C": "TL-CORE-SET_BLUETOOTH"
+ },
+ "E3-122": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_CREATE_FOLDER"
+ },
+ "E3-123": {
+  "B": "TL-CORE-BR_SAVE_PASSWORD",
+  "B_score": 5.709606750426646,
+  "C": "TL-CORE-SET_UPDATE"
+ },
+ "E3-124": {
+  "B": "TL-CORE-TEXT_INSERT_LINK",
+  "B_score": 2.348570206235869,
+  "C": "TL-CORE-FILE_CREATE_FOLDER"
+ },
+ "E3-125": {
+  "B": "TL-CORE-MAIL_REPLY",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-TEXT_FIND"
+ },
+ "E3-126": {
+  "B": "TL-CORE-SET_AIRPLANE",
+  "B_score": 3.2358734012367716,
+  "C": "TL-CORE-FILE_PRINT"
+ },
+ "E3-127": {
+  "B": "TL-CORE-MAIL_LABEL",
+  "B_score": 6.5569046108138505,
+  "C": "TL-CORE-ACC_SIGN_IN"
+ },
+ "E3-128": {
+  "B": "TL-CORE-SET_BLUETOOTH",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-MAIL_VACATION"
+ },
+ "E3-129": {
+  "B": "TL-CORE-AI_FEEDBACK",
+  "B_score": 4.862308890039443,
+  "C": "TL-CORE-SET_APP_INSTALL"
+ },
+ "E3-130": {
+  "B": "TL-CORE-SET_APP_FORCE_STOP",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-ACC_SWITCH"
+ },
+ "E3-131": {
+  "B": "TL-CORE-SET_APP_FORCE_STOP",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-SET_DARK_MODE"
+ },
+ "E3-132": {
+  "B": "TL-CORE-TEXT_FIND",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-SET_WIFI"
+ },
+ "E3-133": {
+  "B": "TL-CORE-BR_SAVE_PASSWORD",
+  "B_score": 5.709606750426646,
+  "C": "TL-CORE-SET_UPDATE"
+ },
+ "E3-134": {
+  "B": "TL-CORE-MAIL_FORWARD",
+  "B_score": 6.431741467859845,
+  "C": "TL-CORE-AI_SEND_PROMPT"
+ },
+ "E3-135": {
+  "B": "TL-CORE-SET_DARK_MODE",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-AI_RENAME_CHAT"
+ },
+ "E3-136": {
+  "B": "TL-CORE-TEXT_INSERT_LINK",
+  "B_score": 2.348570206235869,
+  "C": "TL-CORE-SET_WIFI"
+ },
+ "E3-137": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_CREATE_FOLDER"
+ },
+ "E3-138": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_UPLOAD"
+ },
+ "E3-139": {
+  "B": "TL-CORE-SET_BACKUP",
+  "B_score": 3.2358734012367716,
+  "C": "TL-CORE-SET_BRIGHTNESS"
+ },
+ "E3-140": {
+  "B": "TL-CORE-AI_NEW_CHAT",
+  "B_score": 1.6264354888026713,
+  "C": "TL-CORE-SET_VOLUME"
+ },
+ "E3-141": {
+  "B": "TL-CORE-SET_BRIGHTNESS",
+  "B_score": 4.8623088900394436,
+  "C": "TL-CORE-AI_GENERATE_IMAGE"
+ },
+ "E3-142": {
+  "B": "TL-CORE-MAIL_COMPOSE",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-ACC_DELETE"
+ },
+ "E3-143": {
+  "B": "TL-CORE-AI_NEW_CHAT",
+  "B_score": 3.97500569503854,
+  "C": "TL-CORE-MAIL_BLOCK"
+ },
+ "E3-144": {
+  "B": "TL-CORE-AI_PROJECT",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-SET_VOLUME"
+ },
+ "E3-145": {
+  "B": "TL-CORE-AI_UPLOAD_SCREENSHOT",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-AI_EDIT_PROMPT"
+ },
+ "E3-146": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_CREATE_FOLDER"
+ },
+ "E3-147": {
+  "B": "TL-CORE-TEXT_FIND",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-BR_CLEAR_DATA"
+ },
+ "E3-148": {
+  "B": "TL-CORE-TEXT_INSERT_LINK",
+  "B_score": 2.348570206235869,
+  "C": "TL-CORE-TEXT_FIND"
+ },
+ "E3-149": {
+  "B": "TL-CORE-ACC_SIGN_IN",
+  "B_score": 4.8541787639561935,
+  "C": "TL-CORE-TEXT_FONT_SIZE"
+ },
+ "E3-150": {
+  "B": "TL-CORE-SET_WIFI",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-MAIL_SEND"
+ },
+ "E3-151": {
+  "B": "TL-CORE-SET_DND",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-ACC_CREATE"
+ },
+ "E3-152": {
+  "B": "TL-CORE-AI_SHARE_CHAT",
+  "B_score": 4.862308890039443,
+  "C": "TL-CORE-SET_BACKUP"
+ },
+ "E3-153": {
+  "B": "TL-CORE-BR_SAVE_PASSWORD",
+  "B_score": 2.473733349189875,
+  "C": "TL-CORE-ACC_CHANGE_PASSWORD"
+ },
+ "E3-154": {
+  "B": "TL-CORE-SET_BACKUP",
+  "B_score": 5.969117945911732,
+  "C": "TL-CORE-MAIL_COMPOSE"
+ },
+ "E3-155": {
+  "B": "TL-CORE-SET_WIFI",
+  "B_score": 3.572345637857985,
+  "C": "TL-CORE-MAIL_SEND"
+ },
+ "E3-156": {
+  "B": "TL-CORE-BR_SAVE_PASSWORD",
+  "B_score": 5.709606750426646,
+  "C": "TL-CORE-FILE_EMPTY_TRASH"
+ },
+ "E3-157": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_CREATE_FOLDER"
+ },
+ "E3-158": {
+  "B": "TL-CORE-AI_MODEL_SELECT",
+  "B_score": 4.75409530539921,
+  "C": "TL-CORE-SCREENSHOT"
+ },
+ "E3-159": {
+  "B": "TL-CORE-MAIL_REPLY",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-FILE_CREATE_FOLDER"
+ },
+ "E3-160": {
+  "B": "TL-CORE-FILE_CREATE_FOLDER",
+  "B_score": 2.348570206235869,
+  "C": "TL-CORE-ACC_SIGN_IN"
+ },
+ "E3-161": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_UPLOAD"
+ },
+ "E3-162": {
+  "B": "TL-CORE-TEXT_FIND",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-MAIL_SEND"
+ },
+ "E3-163": {
+  "B": "TL-CORE-BR_EXTENSION_ADD",
+  "B_score": 2.6168341928305483,
+  "C": "TL-CORE-SET_DARK_MODE"
+ },
+ "E3-164": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_CREATE_FOLDER"
+ },
+ "E3-165": {
+  "B": "TL-CORE-SET_APP_FORCE_STOP",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-AI_RENAME_CHAT"
+ },
+ "E3-166": {
+  "B": "TL-CORE-AI_FEEDBACK",
+  "B_score": 4.862308890039443,
+  "C": "TL-CORE-SET_APP_INSTALL"
+ },
+ "E3-167": {
+  "B": "TL-CORE-ACC_SIGN_OUT",
+  "B_score": 12.173223426816941,
+  "C": "TL-CORE-SET_DARK_MODE"
+ },
+ "E3-168": {
+  "B": "TL-CORE-BR_DEFAULT_BROWSER",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-ACC_SIGN_OUT"
+ },
+ "E3-169": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 1.5182219041624387,
+  "C": "TL-CORE-FILE_DELETE"
+ },
+ "E3-170": {
+  "B": "TL-CORE-FILE_OPEN",
+  "B_score": 0,
+  "C": "TL-CORE-FILE_UPLOAD"
+ },
+ "E3-171": {
+  "B": "TL-CORE-ACC_2SV_ON",
+  "B_score": 8.662913179878409,
+  "C": "TL-CORE-AI_SEND_PROMPT"
+ },
+ "E3-172": {
+  "B": "TL-CORE-AI_FEEDBACK",
+  "B_score": 6.591839887869089,
+  "C": "TL-CORE-FILE_PASTE"
+ },
+ "E3-173": {
+  "B": "TL-CORE-BR_SAVE_PASSWORD",
+  "B_score": 5.709606750426646,
+  "C": "TL-CORE-SET_DATE_TIME"
+ },
+ "E3-174": {
+  "B": "TL-CORE-FILE_SHARE_LINK",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-FILE_MOVE"
+ },
+ "E3-175": {
+  "B": "TL-CORE-SET_BACKUP",
+  "B_score": 3.2358734012367716,
+  "C": "TL-CORE-AI_MEMORY_TOGGLE"
+ },
+ "E3-176": {
+  "B": "TL-CORE-MAIL_COMPOSE",
+  "B_score": 6.2204323741926375,
+  "C": "TL-CORE-SET_BRIGHTNESS"
+ },
+ "E3-177": {
+  "B": "TL-CORE-TEXT_UNDO",
+  "B_score": 2.984558972955866,
+  "C": "TL-CORE-BR_HISTORY"
+ },
+ "E3-178": {
+  "B": "TL-CORE-SET_WIFI",
+  "B_score": 3.572345637857985,
+  "C": "TL-CORE-FILE_CREATE_FOLDER"
+ },
+ "E3-179": {
+  "B": "TL-CORE-BR_DEFAULT_BROWSER",
+  "B_score": 4.083171261623976,
+  "C": "TL-CORE-SET_APP_FORCE_STOP"
+ }
+}
