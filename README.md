@@ -99,4 +99,4 @@ Review r2 responses: `REVIEW/RESPONSE_TO_REVIEW.md`. See `REVIEW/LIMITATIONS.md`
 See `CITATION.cff` (also in `REVIEW/`; GitHub shows a "Cite this repository" button). Suggested:
 Hartman, N. C. (American Milestone Inc). *NYCH 3.0 TOTE-Loop Knowledge Graph (MG8 family)*, version nych3-2026.11.02, released 2026-11-02.
 https://github.com/nhartman000/knowledge-graph
-No LICENSE file is present yet; citation does not grant a license.
+All rights reserved. The source is publicly viewable for evaluation only; see [LICENSE](LICENSE). Citation does not grant a license.
