@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!-- Copyright (c) 2026 American Milestone Inc. All rights reserved. -->
+<html lang="en"><head><meta charset="utf-8"><title>Edge-device footprint benchmark</title><style>body{font-family:system-ui,sans-serif;max-width:1100px;margin:2em auto;padding:0 1em;line-height:1.5;color:#1d1d1f}table{border-collapse:collapse;margin:1em 0;font-size:.85em}th,td{border:1px solid #ccc;padding:4px 8px;text-align:left}th{background:#f3f3f3}blockquote{border-left:4px solid #e0a800;background:#fff8e1;margin:1em 0;padding:.6em 1em}code{background:#f3f3f3;padding:0 3px}</style></head><body>
+<h1>Edge-device footprint: can NYCH run on a gumball-machine computer?</h1>
+<p>Generated 2026-11-21T09:08:03-05:00 on Intel(R) Xeon(R) Processor (x86_64), Python 3.13.5, NumPy 2.5.5, PyTorch 2.7.0+cpu.</p>
+<blockquote><strong>Read this first.</strong> Every number here comes from an x86 server with <strong>simulated</strong> limits: CPU cores pinned with <code>taskset</code>, memory policed by a watchdog, and SD-card reads simulated in software. It is not a Raspberry Pi or any ARM board. Treat these as a sizing guide, not device results.</blockquote>
+<p>Model weights used: <strong>PLACEHOLDER weights</strong> (trained by this benchmark on synthetic token IDs; real size and speed for this shape, meaningless outputs). Shape: the approved V1 decoder (d_model 128, 2 layers, 4 heads, SwiGLU 512, vocab 10,000) = <strong>1,804,928 parameters</strong>, the low end of the D14 size band.</p>
+<h2>The short version</h2>
+<ul>
+<li><strong>The checklist pipeline needs no model.</strong> On 1 CPU / 512 MB it took about <strong>112.8 ms per procedure</strong> to build the checklist and <strong>1.94 s</strong> to run the gates and write the hash-chained audit log (<strong>2.05 s total</strong>). Peak memory was <strong>293 MiB</strong> for the whole process tree; the main process alone peaked at 156 MiB, and the rest is the isolated subprocess mg8-runtime starts for each gate check. The first procedure is slower (662.3 ms) because it loads the encoder and spaCy.</li>
+<li><strong>Do not ship PyTorch next to spaCy.</strong> If PyTorch is installed, spaCy's backend imports it, and the main pipeline process peaks at <strong>320 MiB</strong> instead of 156 MiB, and its first procedure takes 1.56 s instead of 662.3 ms.</li>
+<li><strong>The model is small; the runtime is not.</strong> The weights are 7.22 MB as trained (float32), 1.86 MB as int8 and 1.02 MB as 4-bit. Running them with PyTorch peaks at <strong>236 MiB</strong>, mostly PyTorch itself. The NumPy runtime in this branch runs the same model from an int8 file memory-mapped off the simulated SD card at <strong>43 MiB</strong> peak.</li>
+<li><strong>Speed:</strong> one new token takes about <strong>0.7 ms</strong> (NumPy, int8, memory-mapped, 1 CPU, with a KV cache) versus <strong>2.1 ms</strong> for the PyTorch reference decoder, which has no KV cache and re-reads the whole window for every token.</li>
+<li><strong>Everything fits on any SD card.</strong> Our code, symbol tables (including the 15 MB spaCy English model) and gate files total about <strong>28.75 MB</strong>; the int8 weights add 1.86 MB. The large items are third-party libraries (see the footprint table).</li>
+<li><strong>No ambiguous-symbol hook exists yet</strong>, so the model is not wired into the checklist pipeline. Model speed is measured on its own, and the combined run below uses a stand-in (one short model call per checklist step).</li>
+</ul>
+<h2>1. Installed footprint (what goes on the SD card)</h2>
+<p>Sizes are bytes on disk. Code counts <code>.py</code> files only. Library sizes are this box's x86 wheels; ARM wheels differ.</p>
+<table><thead><tr><th>Group</th><th>Item</th><th>Size</th><th>Files</th></tr></thead><tbody>
+<tr><td>code</td><td>checklist pipeline (demo/procedure_demo)</td><td>0.03 MB</td><td>8</td></tr>
+<tr><td>code</td><td>NYCH3 encoder (shared/nych3)</td><td>0.23 MB</td><td>32</td></tr>
+<tr><td>code</td><td>vendored nych tokenizer (shared/vendor)</td><td>0.30 MB</td><td>55</td></tr>
+<tr><td>code</td><td>edge runtime: numpy decoder + loader (demo/edge_bench)</td><td>0.07 MB</td><td>11</td></tr>
+<tr><td>code</td><td>mg8-runtime (gates, permits, QSON log)</td><td>0.11 MB</td><td>13</td></tr>
+<tr><td>code</td><td>nych-language-model package (.py only)</td><td>0.14 MB</td><td>30</td></tr>
+<tr><td>symbol tables</td><td>_config (NYCH3 registries, BONIT config)</td><td>0.04 MB</td><td>9</td></tr>
+<tr><td>symbol tables</td><td>shared/data (sense registry, TOTE seed, how-to tables)</td><td>10.29 MB</td><td>14</td></tr>
+<tr><td>symbol tables</td><td>NYCH emoji inventory + dictionaries (nych-language-model data)</td><td>2.28 MB</td><td>5</td></tr>
+<tr><td>symbol tables</td><td>spaCy English model (en_core_web_sm)</td><td>15.24 MB</td><td>28</td></tr>
+<tr><td>gate / context files</td><td>.qson / .gst / .g8son files in the repo</td><td>0.01 MB</td><td>3</td></tr>
+<tr><td>model weights</td><td>float32 package model.pt (as trained, D16)</td><td>7.22 MB</td><td>1</td></tr>
+<tr><td>model weights</td><td>f32 flat file for numpy/memmap</td><td>7.22 MB</td><td>1</td></tr>
+<tr><td>model weights</td><td>int8 flat file for numpy/memmap</td><td>1.86 MB</td><td>1</td></tr>
+<tr><td>model weights</td><td>int4 flat file for numpy/memmap</td><td>1.02 MB</td><td>1</td></tr>
+<tr><td>model weights</td><td>torch dynamic int8 state_dict (Linear layers only)</td><td>5.66 MB</td><td>1</td></tr>
+<tr><td>runtime libraries (not ours, x86 wheels)</td><td>numpy</td><td>28.73 MB</td><td>902</td></tr>
+<tr><td>runtime libraries (not ours, x86 wheels)</td><td>torch</td><td>658.12 MB</td><td>10948</td></tr>
+<tr><td>runtime libraries (not ours, x86 wheels)</td><td>spacy</td><td>122.22 MB</td><td>1032</td></tr>
+<tr><td>runtime libraries (not ours, x86 wheels)</td><td>thinc</td><td>15.18 MB</td><td>192</td></tr>
+<tr><td>runtime libraries (not ours, x86 wheels)</td><td>kuzu</td><td>21.45 MB</td><td>12</td></tr>
+</tbody></table>
+<p>Group totals: code: 0.88 MB; symbol tables: 27.86 MB; gate / context files: 0.01 MB; model weights: 22.98 MB; runtime libraries (not ours, x86 wheels): 845.70 MB.</p>
+<h2>2. Model weight size: actual files and estimates</h2>
+<p>Actual files are listed above under <em>model weights</em>. The int8 file keeps one float32 scale per matrix row; the 4-bit file packs two weights per byte with a float16 scale for every 32 weights (llama.cpp Q4_0 style). PyTorch dynamic int8 quantizes only the linear layers; the tied embedding, most of this model, stays float32.</p>
+<table><thead><tr><th>Model</th><th>Parameters</th><th>float32</th><th>int8</th><th>4-bit</th></tr></thead><tbody>
+<tr><td>this model</td><td>1,804,928</td><td>7.22 MB</td><td>1.86 MB</td><td>1.02 MB</td></tr>
+<tr><td>D14 band low (vocab 10,000)</td><td>1,804,928</td><td>7.22 MB</td><td>1.86 MB</td><td>1.02 MB</td></tr>
+<tr><td>D14 band high (vocab 50,257)</td><td>6,957,824</td><td>27.83 MB</td><td>7.18 MB</td><td>3.92 MB</td></tr>
+<tr><td>30M-parameter what-if (shape not chosen)</td><td>30,000,000</td><td>120.00 MB</td><td>30.94 MB</td><td>16.88 MB</td></tr>
+</tbody></table>
+<h2>3. Checklist pipeline, no model (seconds per procedure)</h2>
+<p>All 10 bundled public procedures, one pass, evidence simulated (<code>all-pass</code>). <em>Checklist</em> is text to T.O.T.E. steps; <em>gates + log</em> is mg8-runtime evaluating every exit check (each in its own isolated subprocess) and writing the hash-chained QSON log, then verifying it. <em>Tree peak</em> includes those subprocesses.</p>
+<table><thead><tr><th>Profile</th><th>Install</th><th>First procedure (cold)</th><th>Checklist / procedure</th><th>Gates + log / procedure</th><th>Total / procedure</th><th>Peak RSS (main)</th><th>Tree peak</th><th>Audit log / procedure</th><th>Status</th></tr></thead><tbody>
+<tr><td>1cpu-512mb</td><td>device install (no PyTorch)</td><td>662.3 ms</td><td>112.8 ms</td><td>1.94 s</td><td>2.05 s</td><td>156 MiB</td><td>293 MiB</td><td>0.31 MB</td><td>ok</td></tr>
+<tr><td>1cpu-512mb</td><td>as installed here (PyTorch present)</td><td>1.56 s</td><td>115.0 ms</td><td>1.91 s</td><td>2.02 s</td><td>320 MiB</td><td>323 MiB</td><td>0.31 MB</td><td>ok</td></tr>
+<tr><td>4cpu-1gb</td><td>device install (no PyTorch)</td><td>655.3 ms</td><td>119.0 ms</td><td>2.08 s</td><td>2.20 s</td><td>156 MiB</td><td>292 MiB</td><td>0.31 MB</td><td>ok</td></tr>
+<tr><td>4cpu-1gb</td><td>as installed here (PyTorch present)</td><td>1.67 s</td><td>115.1 ms</td><td>1.98 s</td><td>2.10 s</td><td>320 MiB</td><td>565 MiB</td><td>0.31 MB</td><td>ok</td></tr>
+</tbody></table>
+<h2>4. Model on its own</h2>
+<p>Prompt of 32 token IDs, then 32 new tokens, greedy. <em>Per token</em> is the warm average. <em>Runtime baseline</em> is memory after imports, before any weights. <em>Peak</em> is the larger of the main process's high-water mark and the sampled process-tree total. <em>Time to first answer</em> = integrity check + load + first call, plus the modeled SD-card time for memory-mapped pages.</p>
+<table><thead><tr><th>Profile</th><th>Engine</th><th>Weights</th><th>Load</th><th>Storage</th><th>Time to first answer</th><th>Per token (warm)</th><th>Runtime baseline</th><th>Peak RSS</th><th>Weights resident</th><th>Read from SD</th><th>Status</th></tr></thead><tbody>
+<tr><td>1cpu-512mb</td><td>torch</td><td>f32</td><td>fully in RAM</td><td>page-cache</td><td>38.3 ms</td><td>1.9 ms</td><td>203 MiB</td><td>236 MiB</td><td>7.23 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>1cpu-512mb</td><td>torch</td><td>f32</td><td>fully in RAM</td><td>sd-card</td><td>326.4 ms</td><td>2.1 ms</td><td>202 MiB</td><td>236 MiB</td><td>7.23 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>1cpu-512mb</td><td>torch</td><td>f32</td><td>memory-mapped</td><td>page-cache</td><td>28.4 ms</td><td>2.0 ms</td><td>203 MiB</td><td>236 MiB</td><td>7.23 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>1cpu-512mb</td><td>torch</td><td>f32</td><td>memory-mapped</td><td>sd-card</td><td>627.2 ms</td><td>1.9 ms</td><td>202 MiB</td><td>236 MiB</td><td>7.23 MB</td><td>7.23 MB</td><td>ok</td></tr>
+<tr><td>1cpu-512mb</td><td>torch</td><td>torch-int8</td><td>fully in RAM</td><td>page-cache</td><td>35.9 ms</td><td>1.9 ms</td><td>203 MiB</td><td>240 MiB</td><td>5.66 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>1cpu-512mb</td><td>torch</td><td>torch-int8</td><td>fully in RAM</td><td>sd-card</td><td>264.8 ms</td><td>2.1 ms</td><td>202 MiB</td><td>239 MiB</td><td>5.66 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>1cpu-512mb</td><td>numpy</td><td>f32</td><td>fully in RAM</td><td>page-cache</td><td>25.5 ms</td><td>0.4 ms</td><td>32 MiB</td><td>46 MiB</td><td>7.22 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>1cpu-512mb</td><td>numpy</td><td>f32</td><td>fully in RAM</td><td>sd-card</td><td>314.7 ms</td><td>0.4 ms</td><td>32 MiB</td><td>46 MiB</td><td>7.22 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>1cpu-512mb</td><td>numpy</td><td>f32</td><td>memory-mapped</td><td>page-cache</td><td>21.7 ms</td><td>0.4 ms</td><td>32 MiB</td><td>43 MiB</td><td>7.22 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>1cpu-512mb</td><td>numpy</td><td>f32</td><td>memory-mapped</td><td>sd-card</td><td>609.4 ms</td><td>0.4 ms</td><td>32 MiB</td><td>46 MiB</td><td>7.22 MB</td><td>7.22 MB</td><td>ok</td></tr>
+<tr><td>1cpu-512mb</td><td>numpy</td><td>int8</td><td>fully in RAM</td><td>page-cache</td><td>29.8 ms</td><td>0.7 ms</td><td>32 MiB</td><td>43 MiB</td><td>1.86 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>1cpu-512mb</td><td>numpy</td><td>int8</td><td>fully in RAM</td><td>sd-card</td><td>101.3 ms</td><td>0.7 ms</td><td>32 MiB</td><td>43 MiB</td><td>1.86 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>1cpu-512mb</td><td>numpy</td><td>int8</td><td>memory-mapped</td><td>page-cache</td><td>27.6 ms</td><td>0.7 ms</td><td>32 MiB</td><td>43 MiB</td><td>1.86 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>1cpu-512mb</td><td>numpy</td><td>int8</td><td>memory-mapped</td><td>sd-card</td><td>186.2 ms</td><td>0.7 ms</td><td>32 MiB</td><td>43 MiB</td><td>1.86 MB</td><td>1.86 MB</td><td>ok</td></tr>
+<tr><td>1cpu-512mb</td><td>numpy</td><td>int4</td><td>fully in RAM</td><td>page-cache</td><td>33.5 ms</td><td>0.4 ms</td><td>32 MiB</td><td>47 MiB</td><td>1.02 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>1cpu-512mb</td><td>numpy</td><td>int4</td><td>fully in RAM</td><td>sd-card</td><td>70.5 ms</td><td>0.4 ms</td><td>32 MiB</td><td>47 MiB</td><td>1.02 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>4cpu-1gb</td><td>torch</td><td>f32</td><td>fully in RAM</td><td>page-cache</td><td>42.0 ms</td><td>1.1 ms</td><td>203 MiB</td><td>234 MiB</td><td>7.23 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>4cpu-1gb</td><td>torch</td><td>f32</td><td>fully in RAM</td><td>sd-card</td><td>325.3 ms</td><td>1.1 ms</td><td>202 MiB</td><td>234 MiB</td><td>7.23 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>4cpu-1gb</td><td>torch</td><td>f32</td><td>memory-mapped</td><td>page-cache</td><td>27.3 ms</td><td>1.2 ms</td><td>203 MiB</td><td>233 MiB</td><td>7.23 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>4cpu-1gb</td><td>torch</td><td>f32</td><td>memory-mapped</td><td>sd-card</td><td>624.8 ms</td><td>1.1 ms</td><td>203 MiB</td><td>233 MiB</td><td>7.23 MB</td><td>7.23 MB</td><td>ok</td></tr>
+<tr><td>4cpu-1gb</td><td>torch</td><td>torch-int8</td><td>fully in RAM</td><td>page-cache</td><td>41.8 ms</td><td>1.5 ms</td><td>203 MiB</td><td>239 MiB</td><td>5.66 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>4cpu-1gb</td><td>torch</td><td>torch-int8</td><td>fully in RAM</td><td>sd-card</td><td>269.2 ms</td><td>1.6 ms</td><td>203 MiB</td><td>239 MiB</td><td>5.66 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>4cpu-1gb</td><td>numpy</td><td>f32</td><td>fully in RAM</td><td>page-cache</td><td>23.6 ms</td><td>0.2 ms</td><td>32 MiB</td><td>46 MiB</td><td>7.22 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>4cpu-1gb</td><td>numpy</td><td>f32</td><td>fully in RAM</td><td>sd-card</td><td>310.3 ms</td><td>0.2 ms</td><td>32 MiB</td><td>46 MiB</td><td>7.22 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>4cpu-1gb</td><td>numpy</td><td>f32</td><td>memory-mapped</td><td>page-cache</td><td>17.3 ms</td><td>0.2 ms</td><td>32 MiB</td><td>43 MiB</td><td>7.22 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>4cpu-1gb</td><td>numpy</td><td>f32</td><td>memory-mapped</td><td>sd-card</td><td>605.0 ms</td><td>0.2 ms</td><td>32 MiB</td><td>46 MiB</td><td>7.22 MB</td><td>7.22 MB</td><td>ok</td></tr>
+<tr><td>4cpu-1gb</td><td>numpy</td><td>int8</td><td>fully in RAM</td><td>page-cache</td><td>29.2 ms</td><td>0.6 ms</td><td>32 MiB</td><td>43 MiB</td><td>1.86 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>4cpu-1gb</td><td>numpy</td><td>int8</td><td>fully in RAM</td><td>sd-card</td><td>103.8 ms</td><td>0.6 ms</td><td>32 MiB</td><td>43 MiB</td><td>1.86 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>4cpu-1gb</td><td>numpy</td><td>int8</td><td>memory-mapped</td><td>page-cache</td><td>27.5 ms</td><td>0.6 ms</td><td>32 MiB</td><td>43 MiB</td><td>1.86 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>4cpu-1gb</td><td>numpy</td><td>int8</td><td>memory-mapped</td><td>sd-card</td><td>178.7 ms</td><td>0.6 ms</td><td>32 MiB</td><td>43 MiB</td><td>1.86 MB</td><td>1.86 MB</td><td>ok</td></tr>
+<tr><td>4cpu-1gb</td><td>numpy</td><td>int4</td><td>fully in RAM</td><td>page-cache</td><td>26.0 ms</td><td>0.2 ms</td><td>32 MiB</td><td>46 MiB</td><td>1.02 MB</td><td>–</td><td>ok</td></tr>
+<tr><td>4cpu-1gb</td><td>numpy</td><td>int4</td><td>fully in RAM</td><td>sd-card</td><td>70.1 ms</td><td>0.2 ms</td><td>32 MiB</td><td>47 MiB</td><td>1.02 MB</td><td>–</td><td>ok</td></tr>
+</tbody></table>
+<h2>5. Fully in RAM versus memory-mapped from the SD card</h2>
+<p>Simulated SD card, same weights, both device profiles. Both paths check the sha256 of the weights first, which reads the whole file once. The mmap run then starts from a cold cache (the file is evicted after the check, as if memory pressure had pushed it out), so it pays for the reads twice: this is the worst case. The <em>no whole-file hash</em> column shows the mmap start if integrity were checked per block instead. Peak memory is the larger of the process high-water mark and the sampled tree total.</p>
+<table><thead><tr><th>Profile</th><th>Weights</th><th>First answer: RAM</th><th>First answer: mmap</th><th>mmap, no whole-file hash</th><th>Peak RSS: RAM</th><th>Peak RSS: mmap</th><th>Per token: RAM</th><th>Per token: mmap</th></tr></thead><tbody>
+<tr><td>1cpu-512mb</td><td>numpy f32</td><td>314.7 ms</td><td>609.4 ms</td><td>310.2 ms</td><td>46 MiB</td><td>46 MiB</td><td>0.4 ms</td><td>0.4 ms</td></tr>
+<tr><td>1cpu-512mb</td><td>numpy int8</td><td>101.3 ms</td><td>186.2 ms</td><td>108.5 ms</td><td>43 MiB</td><td>43 MiB</td><td>0.7 ms</td><td>0.7 ms</td></tr>
+<tr><td>1cpu-512mb</td><td>torch f32</td><td>326.4 ms</td><td>627.2 ms</td><td>308.2 ms</td><td>236 MiB</td><td>236 MiB</td><td>2.1 ms</td><td>1.9 ms</td></tr>
+<tr><td>4cpu-1gb</td><td>numpy f32</td><td>310.3 ms</td><td>605.0 ms</td><td>306.0 ms</td><td>46 MiB</td><td>46 MiB</td><td>0.2 ms</td><td>0.2 ms</td></tr>
+<tr><td>4cpu-1gb</td><td>numpy int8</td><td>103.8 ms</td><td>178.7 ms</td><td>101.2 ms</td><td>43 MiB</td><td>43 MiB</td><td>0.6 ms</td><td>0.6 ms</td></tr>
+<tr><td>4cpu-1gb</td><td>torch f32</td><td>325.3 ms</td><td>624.8 ms</td><td>302.5 ms</td><td>234 MiB</td><td>233 MiB</td><td>1.1 ms</td><td>1.1 ms</td></tr>
+</tbody></table>
+<p>What this means: on this small model, loading fully into RAM is the faster start, because one sequential read beats page-by-page faults and the whole file is needed anyway. Memory-mapping lets the operating system load weight pages only when they are touched and drop them again under memory pressure, so the weights do not have to fit in RAM up front. For this model the saving is small, because the output layer is tied to the embedding table, so every token touches the whole table: after the first token essentially all weights are resident either way. Memory-mapping pays off when the model is larger than RAM, or when an untied or sparse lookup touches only a few rows per token. Separately, the NumPy runtime dequantizes int8 weights on every use, so int8 is smaller but slightly slower per token than float32; the 4-bit file is unpacked to float32 at load.</p>
+<h2>6. Pipeline and model in one process (stand-in for ambiguous-symbol calls)</h2>
+<p>No hook exists yet for the model to resolve ambiguous symbols inside the checklist pipeline. As a stand-in, this run loads the int8 model memory-mapped from the simulated SD card, runs the pipeline on 3 procedures, and makes one 32-token model call per checklist step. It shows the combined memory and a rough time budget, not real disambiguation quality.</p>
+<table><thead><tr><th>Profile</th><th>Model calls</th><th>Pipeline / procedure</th><th>Model / procedure</th><th>Total / procedure</th><th>Peak RSS (main)</th><th>Tree peak</th><th>Status</th></tr></thead><tbody>
+<tr><td>1cpu-512mb</td><td>18</td><td>822.9 ms</td><td>132.4 ms</td><td>1.17 s</td><td>159 MiB</td><td>168 MiB</td><td>ok</td></tr>
+<tr><td>4cpu-1gb</td><td>18</td><td>827.6 ms</td><td>142.0 ms</td><td>1.20 s</td><td>159 MiB</td><td>292 MiB</td><td>ok</td></tr>
+</tbody></table>
+<h2>How the constraints were simulated</h2>
+<ul>
+<li><strong>CPUs:</strong> <code>taskset -c</code> pins each run, and its child processes, to 1 or 4 cores; BLAS/OpenMP/PyTorch thread pools are set to the same number.</li>
+<li><strong>Memory:</strong> the box has no writable cgroup, Docker or user systemd, so a watchdog samples the resident memory of the whole process tree (PSS, so pages shared with forked children count once) every 10 ms and kills the run if it passes 512 MB or 1 GB. RLIMIT_AS was not used because it caps reserved address space, which PyTorch and OpenBLAS reserve far beyond what they use. <em>Peak RSS (main)</em> is the kernel's high-water mark for the main process (<code>VmHWM</code>). A real cgroup counts page cache too but can reclaim it; very short spikes between samples could be missed.</li>
+<li><strong>SD card:</strong> a simulated A1 microSD: 25 MB/s sequential, 1,500 random-read IOPS profile. Weights loaded fully into RAM are read through a throttled reader that sleeps so the rate never beats 25 MB/s (a real delay in the read path). Memory-mapped weights fault in inside the kernel, where an unprivileged program cannot add delay, so the file is evicted from the page cache first (<code>posix_fadvise DONTNEED</code>), and afterwards <code>mincore</code> reports exactly which pages were read from storage, readahead included. Their SD time (bytes / 25 MB/s plus 0.67 ms per contiguous read) is added to the measured time.</li>
+<li>Code, Python and libraries are always loaded from the page cache, so start-up from a real SD card will be slower.</li>
+</ul>
+<h2>Caveats</h2>
+<ul>
+<li>Simulated constraints on an x86 server CPU, not ARM hardware. A Cortex-A53 (Pi Zero 2 W / Pi 3) is several times slower per core than this CPU; expect proportionally longer times.</li>
+<li>The model is a placeholder trained on synthetic IDs: memory, size and speed are real for this shape, its outputs are meaningless. Re-run with <code>--package</code> once real weights exist.</li>
+<li>Gate evidence is simulated, as in the main demo.</li>
+<li>One run per configuration; timings on a shared server vary by a few percent.</li>
+</ul>
+<h2>Still needed before a real Raspberry Pi run</h2>
+<ol>
+<li>Real hardware: a Pi Zero 2 W (512 MB) and a Pi 4 / Pi 5 (1 GB+), 64-bit Raspberry Pi OS, an A1/A2 microSD card.</li>
+<li>Install without PyTorch: NumPy, spaCy and the <code>en_core_web_sm</code> model have aarch64 wheels; <code>kuzu</code> aarch64 support needs checking. Export the flat weight files on a PC (that step needs PyTorch), copy <code>demo/output/edge/weights/</code> to the device, then run <code>python demo/run_edge_benchmark.py --package &lt;weights&gt; --no-torch</code>.</li>
+<li>Use real limits: a cgroup (<code>systemd-run --scope -p MemoryMax=512M -p AllowedCPUs=0</code>) instead of the watchdog, and the real card instead of the simulated profile (drop caches with <code>echo 3 &gt; /proc/sys/vm/drop_caches</code> between runs).</li>
+<li>Trained NYCH weights from the stage 2 run, and an ambiguous-symbol hook so the model is called only where the deterministic rules cannot decide.</li>
+<li>Optional: a per-block hash manifest, so a memory-mapped model can be verified without reading the whole file at boot.</li>
+</ol>
+<p><sub>Copyright (c) 2026 American Milestone Inc. All rights reserved. Raw numbers: <code>edge-footprint.json</code>. Re-run: <code>python demo/run_edge_benchmark.py</code>.</sub></p>
+</body></html>
