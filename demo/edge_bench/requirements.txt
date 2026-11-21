@@ -1,0 +1,8 @@
+# Copyright (c) 2026 American Milestone Inc. All rights reserved.
+# Edge footprint benchmark, on top of demo/requirements.txt.
+numpy>=1.26
+# Needed on the PC that trains the placeholder / exports flat weight files, and for the torch rows.
+# Not needed on the device when running with --no-torch.
+torch==2.7.0
+# nych-language-model (private repo): pip install -e <checkout>, or set NYCH_LM_SRC=<checkout>/src,
+# or keep a sibling checkout at ../nych-language-model.

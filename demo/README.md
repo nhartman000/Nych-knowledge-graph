@@ -81,3 +81,18 @@ python demo/tools/make_report.py                                                
   2026-11-19 had no API credit (every completion returned HTTP 429 `insufficient_quota`); the report shows PENDING.
 * `demo/results/report.html` is a single offline file: procedure beside checklist with quotes, gate outcomes under
   three scenarios, a tamper test (three edits, all caught) and the comparison table.
+
+## Edge-device footprint benchmark ("gumball machine")
+
+```sh
+pip install -r demo/edge_bench/requirements.txt      # numpy + torch; plus nych-language-model (see that file)
+python demo/run_edge_benchmark.py                     # trains a clearly labelled PLACEHOLDER model if no weights
+python demo/run_edge_benchmark.py --package <D16 dir> # real trained weights (or NYCH_WEIGHTS=<dir>)
+pytest -q tests/demo/test_edge_bench.py
+```
+
+Measures installed footprint (code, symbol tables, gate files, weights as float32 / int8 / 4-bit), peak memory,
+seconds per procedure for the checklist pipeline, and model load and per-token latency, under two simulated device
+profiles (1 CPU / 512 MB, 4 CPUs / 1 GB), with weights fully in RAM or memory-mapped from a simulated SD card.
+Includes a NumPy-only runtime for the V1 decoder (`demo/edge_bench/npdecoder.py`) so a device needs no PyTorch.
+Results: `results/edge-footprint.md` / `.html` / `.json`. Constraints are simulated on x86; see the page for how.
