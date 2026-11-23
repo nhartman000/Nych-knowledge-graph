@@ -6,6 +6,7 @@
 | 03-ontology | Maintain ontology map | 02 output | output/ONTOLOGY.md, output/ontology.json | output/GATE.md |
 | 04-kg-run | Run sentences end-to-end: NYCH 3.0 encoder -> TOTE loop -> KG gate -> Permit/GST -> QSON hash-chain trace (replaces retired 04-poc-run/poc.py) | 02 output, 05 encoder, shared/ | output/kg.kuzu, output/traces/*.qson | output/GATE.md |
 | 05-nych3-encoder | NYCH 3.0 Pro encoder sub-stages 01_boot … 12_mg8_handoff (own CONTEXT.md; GATE.md at 10 and 11) + batch TOTE harvester (HARVEST.md) | _config/, shared/nych3, shared/data | NN_*/output/ (gitignored), shared/data/harvest/ (gitignored) | 10_gestalt_llm/GATE.md, 11_paths/GATE.md |
+| 06-domain-graph | Domain taxonomy + vernacular: CIP areas of study > NAICS domains > O*NET functions/techniques/tasks > TOTE loops; Term associations; `resolve` shortcut | 02 output, _config/registries/taxonomy_sources.json, shared/data/taxonomy | shared store tables (StudyArea, Domain[naics], Profession, WorkFunction, Technique, Task, Term, SubjectTLD) | output/GATE.md |
 Rule: a stage may start only when the previous stage's `output/GATE.md` says `status: APPROVED` (human edits this line). Inside 05, follow `stages/05-nych3-encoder/CONTEXT.md`.
 
 ## Shared store

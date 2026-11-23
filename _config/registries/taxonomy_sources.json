@@ -1,0 +1,69 @@
+{
+ "_doc": "Stage 06 inputs, pinned by SHA-256. 'fetch' files are downloaded by `python -m nych3.taxonomy.cli fetch` into shared/data/taxonomy/ (gitignored); 'committed' files are in git. bls_matrix is optional and not yet obtained (bls.gov refuses scripted downloads).",
+ "inputs": {
+  "naics_codes": {
+   "file": "2-6_digit_2022_Codes.xlsx",
+   "url": "https://www.census.gov/naics/2022NAICS/2-6%20digit_2022_Codes.xlsx",
+   "source": "US Census Bureau, NAICS 2022",
+   "how": "fetch",
+   "sha256": "be12ba41002803359f49181c9bf33a03fbd08578f4f4a4c0bbad7aadaaea0316"
+  },
+  "naics_descriptions": {
+   "file": "2022_NAICS_Descriptions.xlsx",
+   "url": "https://www.census.gov/naics/2022NAICS/2022_NAICS_Descriptions.xlsx",
+   "source": "US Census Bureau, NAICS 2022",
+   "how": "fetch",
+   "sha256": "6222c4d87dcf984970e0ff8a49862ed54b546b089d03956be3f285900cd3d66c"
+  },
+  "onet_zip": {
+   "file": "db_30_3_text.zip",
+   "url": "https://www.onetcenter.org/dl_files/database/db_30_3_text.zip",
+   "source": "O*NET 30.3 Database, USDOL/ETA, CC BY 4.0 (attribution required)",
+   "how": "fetch",
+   "sha256": "7758ec966fd91895b3d290b83c9f1f1d46730d37fdda4faac67104d1c0d2a780"
+  },
+  "cip_csv": {
+   "file": "CIPCode2020.csv",
+   "url": "https://nces.ed.gov/ipeds/cipcode/Files/CIPCode2020.csv",
+   "source": "NCES, Classification of Instructional Programs 2020 (public domain)",
+   "how": "fetch",
+   "sha256": "6cf0882c1f5beb94981d0a1a72285ab5cf633759f45433fb909afbfb6d6b2657"
+  },
+  "cip_soc_xlsx": {
+   "file": "CIP2020_SOC2018_Crosswalk.xlsx",
+   "url": "https://nces.ed.gov/ipeds/cipcode/Files/CIP2020_SOC2018_Crosswalk.xlsx",
+   "source": "NCES/BLS CIP 2020 - SOC 2018 crosswalk (public domain)",
+   "how": "fetch",
+   "sha256": "ba3d59a191b9d977a5c457a66b9348c4f2f7963aafacf72c0b80113b46bf0ab8"
+  },
+  "vocab_tsv": {
+   "file": "d4-domain-vocabulary.v1.tsv.gz",
+   "url": null,
+   "source": "nhartman000/mg8-model-builder icm/MG8PK/lexicons (PR #63)",
+   "how": "committed",
+   "sha256": "0b3e89c247938e059cda557f201897706b417252122bf4f252266dcba83adfb1"
+  },
+  "glossary_tsv": {
+   "file": "d4-domain-glossary.v1.tsv.gz",
+   "url": null,
+   "source": "nhartman000/mg8-model-builder icm/MG8PK/lexicons (PR #64)",
+   "how": "committed",
+   "sha256": "d552535840e8c5cdebfc5d6b0d463161e690fad80b6944d350a152ca3734d9ba"
+  },
+  "tld_tsv": {
+   "file": "b4-subject-tlds-naics.v1.tsv",
+   "url": null,
+   "source": "nhartman000/mg8-model-builder icm/MG8PK/lexicons (D4 approved 2026-11-19)",
+   "how": "committed",
+   "sha256": "49714a4a7ee0e88c1ac328352dd87ba3b500b22c9f741d4aa6c60a29b8d69a95"
+  },
+  "bls_matrix": {
+   "file": "bls-national-employment-matrix.xlsx",
+   "url": "https://www.bls.gov/emp/data/occupational-data.htm",
+   "source": "BLS National Employment Matrix (public domain)",
+   "how": "manual",
+   "sha256": null,
+   "optional": true
+  }
+ }
+}

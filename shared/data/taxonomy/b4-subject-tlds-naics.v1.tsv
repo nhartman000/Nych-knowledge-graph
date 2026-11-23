@@ -1,0 +1,351 @@
+tld	naics_codes	naics_titles	sector_codes	english_meaning	note
+abogado	541110	Offices of Lawyers	54	lawyer (Spanish)	
+academy	611	Educational Services	61		
+accountant	5412	Accounting, Tax Preparation, Bookkeeping, and Payroll Services	54		
+accountants	5412	Accounting, Tax Preparation, Bookkeeping, and Payroll Services	54		
+actor	711510;7111	Independent Artists, Writers, and Performers | Performing Arts Companies	71		
+ads	5418	Advertising, Public Relations, and Related Services	54		
+adult					adult content: excluded from B4 for now (owner-approved 2026-11-19)
+aero	481;3364	Air Transportation | Aerospace Product and Parts Manufacturing	48-49;31-33		
+airforce	928110	National Security	92		
+analytics	5182;54161	Computing Infrastructure Providers, Data Processing, Web Hosting, and Related Services | Management Consulting Services	51;54		
+anquan	5616	Investigation and Security Services	56	security (Chinese pinyin)	
+apartments	531110	Lessors of Residential Buildings and Dwellings	53		
+app	513210	Software Publishers	51		
+archi	541310	Architectural Services	54		
+army	928110	National Security	92		
+art	711510;712110	Independent Artists, Writers, and Performers | Museums	71		
+attorney	541110	Offices of Lawyers	54		
+auction	425120;459510	Wholesale Trade Agents and Brokers | Used Merchandise Retailers	42;44-45		
+audio	512240;5161	Sound Recording Studios | Radio and Television Broadcasting Stations	51		
+author	711510;513130	Independent Artists, Writers, and Performers | Book Publishers	71;51		
+auto	441110;8111	New Car Dealers | Automotive Repair and Maintenance	44-45;81		
+autos	441110;8111	New Car Dealers | Automotive Repair and Maintenance	44-45;81		
+baby	458110;624410	Clothing and Clothing Accessories Retailers | Child Care Services	44-45;62		
+band	711130	Musical Groups and Artists	71		
+bank	522110	Commercial Banking	52		
+bar	722410	Drinking Places (Alcoholic Beverages)	72		
+bargains	455	General Merchandise Retailers	44-45		
+baseball	711211;713940	Sports Teams and Clubs | Fitness and Recreational Sports Centers	71		
+basketball	711211;713940	Sports Teams and Clubs | Fitness and Recreational Sports Centers	71		
+beauty	812112;456120	Beauty Salons | Cosmetics, Beauty Supplies, and Perfume Retailers	81;44-45		
+beer	312120;722410	Breweries | Drinking Places (Alcoholic Beverages)	31-33;72		
+bet	7132	Gambling Industries	71		
+bible	813110	Religious Organizations	81		
+bid	425120	Wholesale Trade Agents and Brokers	42		
+bike	459110;336991	Sporting Goods Retailers | Motorcycle, Bicycle, and Parts Manufacturing	44-45;31-33		
+bingo	713290	Other Gambling Industries	71		
+bio	5417;111	Scientific Research and Development Services | Crop Production	54;11		
+blackfriday	455	General Merchandise Retailers	44-45		
+blog	516210	Media Streaming Distribution Services, Social Networks, and Other Media Networks and Content Providers	51		
+boats	441222;336612	Boat Dealers | Boat Building	44-45;31-33		
+bond	5231	Securities and Commodity Contracts Intermediation and Brokerage	52		
+book	513130;459210	Book Publishers | Book Retailers and News Dealers	51;44-45		
+bot	541511	Custom Computer Programming Services	54		
+boutique	458110	Clothing and Clothing Accessories Retailers	44-45		
+broadway	711110	Theater Companies and Dinner Theaters	71		
+broker	5231;524210	Securities and Commodity Contracts Intermediation and Brokerage | Insurance Agencies and Brokerages	52		
+build	236	Construction of Buildings	23		
+builders	236	Construction of Buildings	23		
+buy	455	General Merchandise Retailers	44-45		
+cab	485310	Taxi and Ridesharing Services	48-49		
+cafe	722515	Snack and Nonalcoholic Beverage Bars	72		
+camera	54192	Photographic Services	54		
+camp	721214	Recreational and Vacation Camps (except Campgrounds)	72		
+capital	523	Securities, Commodity Contracts, and Other Financial Investments and Related Activities	52		
+car	441110	New Car Dealers	44-45		
+cards	459420;713290	Gift, Novelty, and Souvenir Retailers | Other Gambling Industries	44-45;71		
+care	621610;624120	Home Health Care Services | Services for the Elderly and Persons with Disabilities	62		
+career	561311	Employment Placement Agencies	56		
+careers	561311	Employment Placement Agencies	56		
+cars	441110	New Car Dealers	44-45		
+casa	531110;236115	Lessors of Residential Buildings and Dwellings | New Single-Family Housing Construction (except For-Sale Builders)	53;23	house (Spanish, Italian, Portuguese)	
+cash	522	Credit Intermediation and Related Activities	52		
+casino	713210	Casinos (except Casino Hotels)	71		
+catering	722320	Caterers	72		
+catholic	813110	Religious Organizations	81		
+ceo	551114;541611	Corporate, Subsidiary, and Regional Managing Offices | Administrative Management and General Management Consulting Services	55;54		
+cfd	5231	Securities and Commodity Contracts Intermediation and Brokerage	52		
+charity	8132	Grantmaking and Giving Services	81		
+cheap	455	General Merchandise Retailers	44-45		
+church	813110	Religious Organizations	81		
+claims	524291	Claims Adjusting	52		
+cleaning	561720	Janitorial Services	56		
+clinic	6214	Outpatient Care Centers	62		
+clothing	4581	Clothing and Clothing Accessories Retailers	44-45		
+cloud	5182	Computing Infrastructure Providers, Data Processing, Web Hosting, and Related Services	51		
+coach	611430;611620;485510	Professional and Management Development Training | Sports and Recreation Instruction | Charter Bus Industry	61;48-49		
+codes	541511	Custom Computer Programming Services	54		
+coffee	722515	Snack and Nonalcoholic Beverage Bars	72		
+college	6113;6112	Colleges, Universities, and Professional Schools | Junior Colleges	61		
+community	813410	Civic and Social Organizations	81		
+computer	5415;3341	Computer Systems Design and Related Services | Computer and Peripheral Equipment Manufacturing	54;31-33		
+comsec	5415	Computer Systems Design and Related Services	54		
+condos	531110	Lessors of Residential Buildings and Dwellings	53		
+construction	23	Construction	23		
+consulting	5416	Management, Scientific, and Technical Consulting Services	54		
+contractors	238	Specialty Trade Contractors	23		
+cooking	611610;722	Fine Arts Schools | Food Services and Drinking Places	61;72		
+coop	813410	Civic and Social Organizations	81		
+coupon	455	General Merchandise Retailers	44-45		
+coupons	455	General Merchandise Retailers	44-45		
+courses	611	Educational Services	61		
+cpa	541211	Offices of Certified Public Accountants	54		
+credit	522	Credit Intermediation and Related Activities	52		
+creditcard	522210	Credit Card Issuing	52		
+creditunion	522130	Credit Unions	52		
+cricket	711211;713940	Sports Teams and Clubs | Fitness and Recreational Sports Centers	71		
+cruise	483112;561520	Deep Sea Passenger Transportation | Tour Operators	48-49;56		
+cruises	483112;561520	Deep Sea Passenger Transportation | Tour Operators	48-49;56		
+dance	711120;611610	Dance Companies | Fine Arts Schools	71;61		
+data	5182	Computing Infrastructure Providers, Data Processing, Web Hosting, and Related Services	51		
+date	812990	All Other Personal Services	81		
+dating	812990	All Other Personal Services	81		
+dds	621210	Offices of Dentists	62		
+deal	455	General Merchandise Retailers	44-45		
+dealer	4411	Automobile Dealers	44-45		
+deals	455	General Merchandise Retailers	44-45		
+degree	6113	Colleges, Universities, and Professional Schools	61		
+delivery	492	Couriers and Messengers	48-49		
+democrat	813940	Political Organizations	81		
+dental	621210	Offices of Dentists	62		
+dentist	621210	Offices of Dentists	62		
+design	5414	Specialized Design Services	54		
+dev	541511	Custom Computer Programming Services	54		
+diamonds	458310	Jewelry Retailers	44-45		
+diet	812191	Diet and Weight Reducing Centers	81		
+discount	455	General Merchandise Retailers	44-45		
+doctor	6211	Offices of Physicians	62		
+dog	812910;541940	Pet Care (except Veterinary) Services | Veterinary Services	81;54		
+domains	518210	Computing Infrastructure Providers, Data Processing, Web Hosting, and Related Services	51		
+eat	722	Food Services and Drinking Places	72		
+eco	5622;221114	Waste Treatment and Disposal | Solar Electric Power Generation	56;22		
+edu	611	Educational Services	61		
+education	611	Educational Services	61		
+energy	221	Utilities	22		
+engineer	541330	Engineering Services	54		
+engineering	541330	Engineering Services	54		
+equipment	532;333	Rental and Leasing Services | Machinery Manufacturing	53;31-33		
+esq	541110	Offices of Lawyers	54		
+estate	531	Real Estate	53		
+events	711310;711320	Promoters of Performing Arts, Sports, and Similar Events with Facilities | Promoters of Performing Arts, Sports, and Similar Events without Facilities	71		
+exchange	523210	Securities and Commodity Exchanges	52		
+faith	813110	Religious Organizations	81		
+family	624190;621330	Other Individual and Family Services | Offices of Mental Health Practitioners (except Physicians)	62		
+farm	111;112	Crop Production | Animal Production and Aquaculture	11		
+fashion	4581;315	Clothing and Clothing Accessories Retailers | Apparel Manufacturing	44-45;31-33		
+film	512110	Motion Picture and Video Production	51		
+finance	52	Finance and Insurance	52		
+financial	52	Finance and Insurance	52		
+fish	1141;112511	Fishing | Finfish Farming and Fish Hatcheries	11		
+fishing	1141;713990	Fishing | All Other Amusement and Recreation Industries	11;71		
+fit	713940	Fitness and Recreational Sports Centers	71		
+fitness	713940	Fitness and Recreational Sports Centers	71		
+flights	481111;561510	Scheduled Passenger Air Transportation | Travel Agencies	48-49;56		
+florist	459310	Florists	44-45		
+flowers	459310;111422	Florists | Floriculture Production	44-45;11		
+fly	481	Air Transportation	48-49		
+football	711211;713940	Sports Teams and Clubs | Fitness and Recreational Sports Centers	71		
+forex	523160	Commodity Contracts Intermediation	52		
+forsale	455	General Merchandise Retailers	44-45		
+foundation	813211	Grantmaking Foundations	81		
+fund	525	Funds, Trusts, and Other Financial Vehicles	52		
+furniture	449110;3371	Furniture Retailers | Household and Institutional Furniture and Kitchen Cabinet Manufacturing	44-45;31-33		
+futbol	711211;713940	Sports Teams and Clubs | Fitness and Recreational Sports Centers	71	football (Spanish)	
+gallery	712110;459920	Museums | Art Dealers	71;44-45		
+game	513210;713120	Software Publishers | Amusement Arcades	51;71		
+games	513210;713120	Software Publishers | Amusement Arcades	51;71		
+garden	444240;561730	Nursery, Garden Center, and Farm Supply Retailers | Landscaping Services	44-45;56		
+gay	813410	Civic and Social Organizations	81		
+gift	459420	Gift, Novelty, and Souvenir Retailers	44-45		
+gifts	459420	Gift, Novelty, and Souvenir Retailers	44-45		
+gives	8132	Grantmaking and Giving Services	81		
+giving	8132	Grantmaking and Giving Services	81		
+glass	238150;3272	Glass and Glazing Contractors | Glass and Glass Product Manufacturing	23;31-33		
+gold	523160;458310	Commodity Contracts Intermediation | Jewelry Retailers	52;44-45		
+golf	713910	Golf Courses and Country Clubs	71		
+gop	813940	Political Organizations	81		
+gov	92	Public Administration	92		
+graphics	541430	Graphic Design Services	54		
+grocery	445110	Supermarkets and Other Grocery Retailers (except Convenience Retailers)	44-45		
+guitars	459140;339992	Musical Instrument and Supplies Retailers | Musical Instrument Manufacturing	44-45;31-33		
+hair	812111;812112	Barber Shops | Beauty Salons	81		
+haus	531110;236115	Lessors of Residential Buildings and Dwellings | New Single-Family Housing Construction (except For-Sale Builders)	53;23	house (German)	
+health	62	Health Care and Social Assistance	62		
+healthcare	62	Health Care and Social Assistance	62		
+hiphop	512250;711130	Record Production and Distribution | Musical Groups and Artists	51;71		
+hiv	6214;923120	Outpatient Care Centers | Administration of Public Health Programs	62;92		
+hockey	711211;713940	Sports Teams and Clubs | Fitness and Recreational Sports Centers	71		
+holdings	551112	Offices of Other Holding Companies	55		
+holiday	561520;721110	Tour Operators | Hotels (except Casino Hotels) and Motels	56;72		
+homes	236115;531210	New Single-Family Housing Construction (except For-Sale Builders) | Offices of Real Estate Agents and Brokers	23;53		
+horse	112920;711212	Horses and Other Equine Production | Racetracks	11;71		
+hospital	622	Hospitals	62		
+host	518210	Computing Infrastructure Providers, Data Processing, Web Hosting, and Related Services	51		
+hosting	518210	Computing Infrastructure Providers, Data Processing, Web Hosting, and Related Services	51		
+hotels	721110	Hotels (except Casino Hotels) and Motels	72		
+house	236115;531210	New Single-Family Housing Construction (except For-Sale Builders) | Offices of Real Estate Agents and Brokers	23;53		
+immo	531	Real Estate	53	real estate (French, German short form)	
+immobilien	531	Real Estate	53	real estate (German)	
+industries	31-33	Manufacturing	31-33		
+ink	323111;812199	Commercial Printing (except Screen and Books) | Other Personal Care Services	31-33;81		
+insurance	524	Insurance Carriers and Related Activities	52		
+insure	524	Insurance Carriers and Related Activities	52		
+int	928120	International Affairs	92		
+investments	5239	Other Financial Investment Activities	52		
+jewelry	458310;339910	Jewelry Retailers | Jewelry and Silverware Manufacturing	44-45;31-33		
+jobs	561311	Employment Placement Agencies	56		
+juegos	713120;513210	Amusement Arcades | Software Publishers	71;51	games (Spanish)	
+kaufen	455	General Merchandise Retailers	44-45	buy (German)	
+kids	624410;459120	Child Care Services | Hobby, Toy, and Game Retailers	62;44-45		
+kitchen	722;337110	Food Services and Drinking Places | Wood Kitchen Cabinet and Countertop Manufacturing	72;31-33		
+kosher	311;813110	Food Manufacturing | Religious Organizations	31-33;81		
+land	531190;531210	Lessors of Other Real Estate Property | Offices of Real Estate Agents and Brokers	53		
+law	541110	Offices of Lawyers	54		
+lawyer	541110	Offices of Lawyers	54		
+lease	531;532	Real Estate | Rental and Leasing Services	53		
+legal	5411	Legal Services	54		
+lgbt	813410	Civic and Social Organizations	81		
+lifeinsurance	524113	Direct Life Insurance Carriers	52		
+lighting	335131;238210	Residential Electric Lighting Fixture Manufacturing | Electrical Contractors and Other Wiring Installation Contractors	31-33;23		
+limo	485320	Limousine Service	48-49		
+loan	5222	Nondepository Credit Intermediation	52		
+loans	5222	Nondepository Credit Intermediation	52		
+lotto	713290	Other Gambling Industries	71		
+maison	531110;236115	Lessors of Residential Buildings and Dwellings | New Single-Family Housing Construction (except For-Sale Builders)	53;23	house (French)	
+makeup	456120;812112	Cosmetics, Beauty Supplies, and Perfume Retailers | Beauty Salons	44-45;81		
+management	5416	Management, Scientific, and Technical Consulting Services	54		
+market	455	General Merchandise Retailers	44-45		
+marketing	5418;541613	Advertising, Public Relations, and Related Services | Marketing Consulting Services	54		
+markets	523	Securities, Commodity Contracts, and Other Financial Investments and Related Activities	52		
+mba	6113	Colleges, Universities, and Professional Schools	61		
+med	62	Health Care and Social Assistance	62		
+media	516;513	Broadcasting and Content Providers | Publishing Industries	51		
+memorial	812210;812220	Funeral Homes and Funeral Services | Cemeteries and Crematories	81		
+menu	722	Food Services and Drinking Places	72		
+mil	928110	National Security	92		
+mls	531210	Offices of Real Estate Agents and Brokers	53		
+mma	711219;611620	Other Spectator Sports | Sports and Recreation Instruction	71;61		
+moda	4581;315	Clothing and Clothing Accessories Retailers | Apparel Manufacturing	44-45;31-33	fashion (Italian, Spanish, Portuguese)	
+money	522	Credit Intermediation and Related Activities	52		
+mortgage	522310	Mortgage and Nonmortgage Loan Brokers	52		
+motorcycles	441227	Motorcycle, ATV, and All Other Motor Vehicle Dealers	44-45		
+movie	512110;512131	Motion Picture and Video Production | Motion Picture Theaters (except Drive-Ins)	51		
+museum	712110	Museums	71		
+music	512250;711130	Record Production and Distribution | Musical Groups and Artists	51;71		
+navy	928110	National Security	92		
+news	513110;516210	Newspaper Publishers | Media Streaming Distribution Services, Social Networks, and Other Media Networks and Content Providers	51		
+ngo	8133	Social Advocacy Organizations	81		
+ong	8133	Social Advocacy Organizations	81	NGO (Spanish, French)	
+organic	111;445110	Crop Production | Supermarkets and Other Grocery Retailers (except Convenience Retailers)	11;44-45		
+parts	441330;811	Automotive Parts and Accessories Retailers | Repair and Maintenance	44-45;81		
+pet	812910;459910	Pet Care (except Veterinary) Services | Pet and Pet Supplies Retailers	81;44-45		
+pharmacy	456110	Pharmacies and Drug Retailers	44-45		
+phd	6113	Colleges, Universities, and Professional Schools	61		
+phone	517	Telecommunications	51		
+photo	54192	Photographic Services	54		
+photography	54192	Photographic Services	54		
+photos	54192	Photographic Services	54		
+physio	621340	Offices of Physical, Occupational and Speech Therapists, and Audiologists	62		
+pics	54192	Photographic Services	54		
+pictures	54192;512110	Photographic Services | Motion Picture and Video Production	54;51		
+pizza	722513	Limited-Service Restaurants	72		
+plumbing	238220	Plumbing, Heating, and Air-Conditioning Contractors	23		
+poker	713290	Other Gambling Industries	71		
+porn					adult content: excluded from B4 for now (owner-approved 2026-11-19)
+post	491110	Postal Service	48-49		
+press	513110	Newspaper Publishers	51		
+productions	512110	Motion Picture and Video Production	51		
+promo	5418	Advertising, Public Relations, and Related Services	54		
+properties	531	Real Estate	53		
+property	531	Real Estate	53		
+protection	5616	Investigation and Security Services	56		
+pub	722410	Drinking Places (Alcoholic Beverages)	72		
+racing	711212;711219	Racetracks | Other Spectator Sports	71		
+radio	516110	Radio Broadcasting Stations	51		
+realestate	531	Real Estate	53		
+realtor	531210	Offices of Real Estate Agents and Brokers	53		
+realty	531210	Offices of Real Estate Agents and Brokers	53		
+recipes	722	Food Services and Drinking Places	72		
+rehab	621420;6214	Outpatient Mental Health and Substance Abuse Centers | Outpatient Care Centers	62		
+reise	561510	Travel Agencies	56	travel (German)	
+reisen	561510	Travel Agencies	56	travel (German)	
+reit	525990	Other Financial Vehicles	52		
+rent	531110;532	Lessors of Residential Buildings and Dwellings | Rental and Leasing Services	53		
+rentals	531110;532	Lessors of Residential Buildings and Dwellings | Rental and Leasing Services	53		
+repair	811	Repair and Maintenance	81		
+republican	813940	Political Organizations	81		
+rest	7225	Restaurants and Other Eating Places	72		
+restaurant	7225	Restaurants and Other Eating Places	72		
+rodeo	711219	Other Spectator Sports	71		
+rugby	711211;713940	Sports Teams and Clubs | Fitness and Recreational Sports Centers	71		
+safety	5616;922	Investigation and Security Services | Justice, Public Order, and Safety Activities	56;92		
+sale	455	General Merchandise Retailers	44-45		
+salon	812112	Beauty Salons	81		
+scholarships	611710	Educational Support Services	61		
+school	6111	Elementary and Secondary Schools	61		
+schule	6111	Elementary and Secondary Schools	61	school (German)	
+science	5417	Scientific Research and Development Services	54		
+security	5616;541519	Investigation and Security Services | Other Computer Related Services	56;54		
+sex					adult content: excluded from B4 for now (owner-approved 2026-11-19)
+sexy					adult content: excluded from B4 for now (owner-approved 2026-11-19)
+shiksha	611	Educational Services	61	education (Hindi)	
+shoes	458210	Shoe Retailers	44-45		
+shop	455	General Merchandise Retailers	44-45		
+shopping	455	General Merchandise Retailers	44-45		
+shouji	517;449210	Telecommunications | Electronics and Appliance Retailers	51;44-45	mobile phone (Chinese pinyin)	
+singles	812990	All Other Personal Services	81		
+ski	713920	Skiing Facilities	71		
+skin	812112;456120	Beauty Salons | Cosmetics, Beauty Supplies, and Perfume Retailers	81;44-45		
+soccer	711211;713940	Sports Teams and Clubs | Fitness and Recreational Sports Centers	71		
+software	513210	Software Publishers	51		
+solar	221114;238210	Solar Electric Power Generation | Electrical Contractors and Other Wiring Installation Contractors	22;23		
+spa	812199;721110	Other Personal Care Services | Hotels (except Casino Hotels) and Motels	81;72		
+sport	711211;713940	Sports Teams and Clubs | Fitness and Recreational Sports Centers	71		
+storage	493;531130	Warehousing and Storage | Lessors of Miniwarehouses and Self-Storage Units	48-49;53		
+store	455	General Merchandise Retailers	44-45		
+study	611	Educational Services	61		
+supplies	423	Merchant Wholesalers, Durable Goods	42		
+supply	423	Merchant Wholesalers, Durable Goods	42		
+surf	713990;459110	All Other Amusement and Recreation Industries | Sporting Goods Retailers	71;44-45		
+surgery	622;621111	Hospitals | Offices of Physicians (except Mental Health Specialists)	62		
+tattoo	812199	Other Personal Care Services	81		
+tax	541213	Tax Preparation Services	54		
+taxi	485310	Taxi and Ridesharing Services	48-49		
+tech	5415	Computer Systems Design and Related Services	54		
+technology	5415	Computer Systems Design and Related Services	54		
+tennis	713940;711211	Fitness and Recreational Sports Centers | Sports Teams and Clubs	71		
+theater	711110	Theater Companies and Dinner Theaters	71		
+theatre	711110	Theater Companies and Dinner Theaters	71		
+tickets	561599;711310	All Other Travel Arrangement and Reservation Services | Promoters of Performing Arts, Sports, and Similar Events with Facilities	56;71		
+tienda	455	General Merchandise Retailers	44-45	store (Spanish)	
+tires	441340;811198	Tire Dealers | All Other Automotive Repair and Maintenance	44-45;81		
+tools	444140;332216	Hardware Retailers | Saw Blade and Handtool Manufacturing	44-45;31-33		
+tours	561520	Tour Operators	56		
+toys	459120	Hobby, Toy, and Game Retailers	44-45		
+trade	42	Wholesale Trade	42		
+trading	523	Securities, Commodity Contracts, and Other Financial Investments and Related Activities	52		
+training	6114;611430	Business Schools and Computer and Management Training | Professional and Management Development Training	61		
+travel	561510	Travel Agencies	56		
+university	6113	Colleges, Universities, and Professional Schools	61		
+vacations	561520;721199	Tour Operators | All Other Traveler Accommodation	56;72		
+ventures	523910	Miscellaneous Intermediation	52		
+versicherung	524	Insurance Carriers and Related Activities	52	insurance (German)	
+vet	541940	Veterinary Services	54		
+viajes	561510	Travel Agencies	56	travel (Spanish)	
+video	512110	Motion Picture and Video Production	51		
+villas	531110;721199	Lessors of Residential Buildings and Dwellings | All Other Traveler Accommodation	53;72		
+vin	312130;445320	Wineries | Beer, Wine, and Liquor Retailers	31-33;44-45		
+vision	621320;456130	Offices of Optometrists | Optical Goods Retailers	62;44-45		
+vodka	312140;445320	Distilleries | Beer, Wine, and Liquor Retailers	31-33;44-45		
+vote	813940;921120	Political Organizations | Legislative Bodies	81;92		
+voting	813940;921120	Political Organizations | Legislative Bodies	81;92		
+voto	813940;921120	Political Organizations | Legislative Bodies	81;92	vote (Spanish, Italian, Portuguese)	
+voyage	561510	Travel Agencies	56	journey (French)	
+watches	458310	Jewelry Retailers	44-45		
+weather	5417;92	Scientific Research and Development Services | Public Administration	54;92		
+wedding	812990;711310	All Other Personal Services | Promoters of Performing Arts, Sports, and Similar Events with Facilities	81;71		
+wine	312130;445320	Wineries | Beer, Wine, and Liquor Retailers	31-33;44-45		
+xxx					adult content: excluded from B4 for now (owner-approved 2026-11-19)
+yachts	441222;713930	Boat Dealers | Marinas	44-45;71		
+yoga	713940;611620	Fitness and Recreational Sports Centers | Sports and Recreation Instruction	71;61		

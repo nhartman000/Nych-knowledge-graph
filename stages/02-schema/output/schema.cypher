@@ -56,9 +56,33 @@ CREATE REL TABLE CELL_GESTALT(FROM TOTELoop TO Gestalt, cell STRING, word STRING
 CREATE REL TABLE CELL_SENSE(FROM TOTELoop TO Sense, cell STRING, word STRING, provenance STRING);
 
 // ---- domain partitions + cross-domain links (commonality: one loop IN_DOMAIN of >1 domain) ----
-CREATE NODE TABLE Domain(domain_id STRING, name STRING, PRIMARY KEY(domain_id));
+CREATE NODE TABLE Domain(domain_id STRING, name STRING, kind STRING /* NULL = loop/harvest domain; 'naics' = NAICS 2022 node */, code STRING, level INT64, description STRING, PRIMARY KEY(domain_id));
 CREATE REL TABLE IN_DOMAIN(FROM TOTELoop TO Domain, role STRING, evidence STRING, provenance STRING);
 CREATE REL TABLE DOMAIN_LINK(FROM Domain TO Domain, kind STRING, shared_loops INT64, evidence STRING, provenance STRING);
+
+// ---- domain taxonomy + vernacular (stage 06-domain-graph; owner 2026-11-23). Hierarchy:
+// StudyArea (CIP 2020 family > series > program) -> Domain (NAICS sector > ... > industry) -> WorkFunction (O*NET GWA > IWA)
+// -> Technique (O*NET DWA) -> Task (O*NET task statement) -> TOTELoop. Professions = O*NET occupations. Terms = vernacular,
+// tier expert|intermediate|novice from general-English Zipf (van Heuven et al. 2014). No LLM; every row carries its source.
+CREATE NODE TABLE StudyArea(study_id STRING, code STRING, level INT64, title STRING, definition STRING, PRIMARY KEY(study_id));
+CREATE NODE TABLE Profession(profession_id STRING, soc_code STRING, title STRING, description STRING, PRIMARY KEY(profession_id));
+CREATE NODE TABLE WorkFunction(function_id STRING, level STRING, title STRING, PRIMARY KEY(function_id));
+CREATE NODE TABLE Technique(technique_id STRING, title STRING, PRIMARY KEY(technique_id));
+CREATE NODE TABLE Task(task_id STRING, text STRING, task_type STRING, action_lemma STRING, object_lemma STRING, PRIMARY KEY(task_id));
+CREATE NODE TABLE Term(term STRING, zipf DOUBLE, tier STRING, PRIMARY KEY(term));
+CREATE NODE TABLE SubjectTLD(tld STRING, PRIMARY KEY(tld));
+CREATE REL TABLE STUDY_PARENT(FROM StudyArea TO StudyArea);
+CREATE REL TABLE DOMAIN_PARENT(FROM Domain TO Domain);
+CREATE REL TABLE FUNCTION_PARENT(FROM WorkFunction TO WorkFunction);
+CREATE REL TABLE TECHNIQUE_OF(FROM Technique TO WorkFunction);
+CREATE REL TABLE STUDY_LEADS_TO(FROM StudyArea TO Profession, source STRING);
+CREATE REL TABLE WORKS_IN(FROM Profession TO Domain, employment DOUBLE, share DOUBLE, source STRING);
+CREATE REL TABLE PERFORMS(FROM Profession TO Task);
+CREATE REL TABLE TASK_TECHNIQUE(FROM Task TO Technique);
+CREATE REL TABLE TASK_LOOP(FROM Task TO TOTELoop, match_method STRING);
+CREATE REL TABLE TLD_OF(FROM SubjectTLD TO Domain, source STRING);
+CREATE REL TABLE TERM_DOMAIN(FROM Term TO Domain, tier STRING, weight DOUBLE, source STRING);
+CREATE REL TABLE TERM_PROFESSION(FROM Term TO Profession, tier STRING, weight DOUBLE, source STRING);
 
 // ---- measures invariants (_config/invariants/measures.json; weights are ordered classes, weight_source assumed_prior, never calibrated) ----
 CREATE NODE TABLE Measure(word STRING, kind STRING, sense_weight STRING, weight_source STRING, PRIMARY KEY(word));
