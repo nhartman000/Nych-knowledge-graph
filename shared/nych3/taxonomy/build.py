@@ -13,8 +13,8 @@ Hierarchy (edges point child -> parent):
   Technique  O*NET DWA                                                     TECHNIQUE_OF -> IWA
   Task       O*NET task statement                                          TASK_TECHNIQUE -> DWA
   TOTELoop   existing loops, linked only by exact action/object lemma      TASK_LOOP (never nearest)
-Professions (O*NET occupations) join StudyArea (CIP->SOC crosswalk), Task (PERFORMS) and, when the BLS
-occupation x industry matrix is supplied, Domain (WORKS_IN). Terms join Domain and Profession with their tier.
+Professions (O*NET occupations) join StudyArea (CIP->SOC crosswalk), Task (PERFORMS) and Domain (WORKS_IN, BLS OEWS
+May 2025 national industry-by-occupation employment and share at every industry level). Terms join Domain and Profession with their tier.
 
 Term tiers: expert / intermediate / novice by everyday-English Zipf frequency from wordfreq 3.1.1 (pinned),
 recomputed here for every term; the upstream vocabulary's own tier column is not used.
@@ -165,7 +165,7 @@ class Loader:
 
 def build(conn, src: dict, nlp=None) -> dict:
     """src keys: naics_codes, naics_descriptions, onet_zip, cip_csv, cip_soc_xlsx, vocab_tsv, glossary_tsv, tld_tsv,
-    optional bls_matrix (rows of (soc, naics, employment))."""
+    oews_tsv (BLS OEWS profession x industry, from nych3.taxonomy.oews)."""
     L = Loader(conn)
     # Domains (NAICS)
     naics = naics_nodes(Path(src["naics_codes"]), Path(src["naics_descriptions"]))
@@ -261,14 +261,19 @@ def build(conn, src: dict, nlp=None) -> dict:
                        "source": "d4-glossary.v1 " + r["sources"].split(" ")[0]}
     L.rels("TERM_DOMAIN", ("Term", "term"), ("Domain", "domain_id"), list(td.values()))
     L.rels("TERM_PROFESSION", ("Term", "term"), ("Profession", "profession_id"), list(tp.values()))
-    # Profession -> industry (BLS National Employment Matrix), optional
-    if src.get("bls_matrix"):
-        rows = []
-        for soc, code, emp, share in src["bls_matrix"]:
-            if f"naics:{code}" in domains:
-                rows += [{"a": p, "b": f"naics:{code}", "employment": emp, "share": share,
-                          "source": "BLS National Employment Matrix"} for p in by_soc.get(soc, [])]
+    # Profession -> industry: BLS OEWS May 2025 national industry-by-occupation estimates (all industry levels)
+    if src.get("oews_tsv"):
+        rows, missing = [], set()
+        for r in read_terms(Path(src["oews_tsv"])):
+            if f"naics:{r['naics_code']}" not in domains:
+                missing.add(r["naics_code"])
+                continue
+            emp = float(r["tot_emp"]) if r["tot_emp"] else None
+            share = float(r["pct_total"]) if r["pct_total"] else None
+            rows += [{"a": p, "b": f"naics:{r['naics_code']}", "employment": emp, "share": share,
+                      "source": "BLS OEWS May 2025 national"} for p in by_soc.get(r["soc_code"], [])]
         L.rels("WORKS_IN", ("Profession", "profession_id"), ("Domain", "domain_id"), rows)
+        L.counts["oews_industry_codes_not_in_naics_2022"] = len(missing)
     return dict(L.counts)
 
 

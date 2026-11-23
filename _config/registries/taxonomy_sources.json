@@ -1,5 +1,5 @@
 {
- "_doc": "Stage 06 inputs, pinned by SHA-256. 'fetch' files are downloaded by `python -m nych3.taxonomy.cli fetch` into shared/data/taxonomy/ (gitignored); 'committed' files are in git. bls_matrix is optional and not yet obtained (bls.gov refuses scripted downloads).",
+ "_doc": "Stage 06 inputs, pinned by SHA-256. 'fetch' files are downloaded by `python -m nych3.taxonomy.cli fetch` into shared/data/taxonomy/ (gitignored); 'committed' files are in git. oews_zip is optional (only to regenerate oews_tsv).",
  "inputs": {
   "naics_codes": {
    "file": "2-6_digit_2022_Codes.xlsx",
@@ -57,13 +57,21 @@
    "how": "committed",
    "sha256": "49714a4a7ee0e88c1ac328352dd87ba3b500b22c9f741d4aa6c60a29b8d69a95"
   },
-  "bls_matrix": {
-   "file": "bls-national-employment-matrix.xlsx",
-   "url": "https://www.bls.gov/emp/data/occupational-data.htm",
-   "source": "BLS National Employment Matrix (public domain)",
+  "oews_zip": {
+   "file": "oesm25in4.zip",
+   "url": "https://www.bls.gov/oes/special-requests/oesm25in4.zip",
+   "source": "BLS OEWS May 2025 national industry-specific estimates (public domain)",
    "how": "manual",
-   "sha256": null,
+   "note": "bls.gov serves scripted requests only with a registered contact in the User-Agent; downloaded 2026-11-23 under the owner's BLS registration. Only needed to regenerate oews_tsv.",
+   "sha256": "3ef0e42fab1b42a7dac8a3a9b3e7024f5d7a07eff308bff5fc91808061ec08e1",
    "optional": true
+  },
+  "oews_tsv": {
+   "file": "oews-m2025-works-in.tsv.gz",
+   "url": null,
+   "source": "derived from oews_zip by nych3.taxonomy.oews.convert (detailed occupations, all national industry levels)",
+   "how": "committed",
+   "sha256": "dd9edaf89f5d1585183059d15351135cacbe3a54b2858146d778aeac00d8067d"
   }
  }
 }

@@ -18,7 +18,7 @@ Owner, 2026-11-23, verbatim:
 | Vernacular | `Term` (tier expert/intermediate/novice) | D4 vocabulary v1 + glossary layer (mg8-model-builder PR #63, #64) | 88,158 |
 | Web-domain endings | `SubjectTLD` | D4 TLD layer (approved 2026-11-19) | 345 |
 
-Edges: `STUDY_PARENT`, `DOMAIN_PARENT`, `FUNCTION_PARENT`, `TECHNIQUE_OF` (child → parent); `STUDY_LEADS_TO` (CIP→profession, NCES CIP–SOC crosswalk, 8,324); `PERFORMS`, `TASK_TECHNIQUE` (23,850), `TASK_LOOP`; `TERM_DOMAIN` (109,053), `TERM_PROFESSION` (58,800); `TLD_OF`; `WORKS_IN` (profession → industry) once the BLS National Employment Matrix is supplied.
+Edges: `STUDY_PARENT`, `DOMAIN_PARENT`, `FUNCTION_PARENT`, `TECHNIQUE_OF` (child → parent); `STUDY_LEADS_TO` (CIP→profession, NCES CIP–SOC crosswalk, 8,324); `PERFORMS`, `TASK_TECHNIQUE` (23,850), `TASK_LOOP`; `TERM_DOMAIN` (109,053), `TERM_PROFESSION` (58,800); `TLD_OF`; `WORKS_IN` (profession → industry, BLS OEWS May 2025 national estimates: employment and share of the industry, every industry level).
 
 Tiers come from everyday-English Zipf frequency (wordfreq 3.1.1; data CC BY-SA 4.0, Robyn Speer et al.) in the van Heuven et al. (2014) bands: < 3 expert, 3–4 intermediate, ≥ 4 novice.
 
@@ -34,7 +34,7 @@ python -m nych3.taxonomy.cli resolve "The plaintiff moved for summary judgment."
 ## Open (owner)
 1. Gate approval of the schema additions (stage 02) and of this stage.
 2. Plural "s": D4's approved suffix rule covers ing/ion/ed/er only, so "dentist" does not match "dentists". Allow plurals in `resolve`?
-3. BLS National Employment Matrix: bls.gov refuses scripted downloads (HTTP 403). Download it in a browser to `shared/data/taxonomy/bls-national-employment-matrix.xlsx` to add `WORKS_IN`.
+3. (done 2026-11-23) BLS OEWS profession x industry loaded as `WORKS_IN`; the source zip is pinned but gitignored, the derived table is committed.
 4. Science vocabulary is thin (e.g. "supramolecular" is absent): journal / OpenAlex terms are the next layer.
 5. The existing informal loop domains (`cooking`, `craft.knitting`, …) are not yet mapped to NAICS or CIP nodes.
 
