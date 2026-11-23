@@ -9,8 +9,8 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "shared"))
 
 from nych3.store.tote_db import schema_statements  # noqa: E402
-from nych3.taxonomy.build import Loader, cip_nodes, tier  # noqa: E402
-from nych3.taxonomy.resolve import resolve, singulars  # noqa: E402
+from nych3.taxonomy.build import Loader, cip_nodes, home_industries, most_specific, tier  # noqa: E402
+from nych3.taxonomy.resolve import in_context, resolve, singulars  # noqa: E402
 
 
 def test_cip_levels_parents_and_reserved(tmp_path):
@@ -91,3 +91,33 @@ def test_resolve_matches_plurals(graph):
     r = resolve(graph, "Plaintiffs filed for summary judgments.", k=3)
     assert [(t["term"], t.get("as_written")) for t in r["terms"]] == [("plaintiff", "plaintiffs"), ("summary judgment", "summary judgments")]
     assert r["professions"][0]["title"] == "Lawyers"
+
+
+def test_most_specific_drops_ancestors_only():
+    parent = {"naics:621210": "naics:62121", "naics:62121": "naics:6212", "naics:6212": "naics:621"}
+    links = [("dentists", "naics:6212"), ("dentists", "naics:621210"), ("dentists", "naics:339114"), ("x", "naics:6212")]
+    assert most_specific(links, parent) == {("dentists", "naics:621210"), ("dentists", "naics:339114"), ("x", "naics:6212")}
+
+
+def test_home_industries_share_cut_and_largest_kept():
+    rows = [{"soc_code": "29-1021", "naics_code": "62", "i_group": "sector", "tot_emp": "100", "pct_total": ""},
+            {"soc_code": "29-1021", "naics_code": "6212", "i_group": "4-digit", "tot_emp": "92", "pct_total": ""},
+            {"soc_code": "29-1021", "naics_code": "6214", "i_group": "4-digit", "tot_emp": "8", "pct_total": ""},
+            {"soc_code": "11-1111", "naics_code": "52", "i_group": "sector", "tot_emp": "100", "pct_total": ""},
+            {"soc_code": "11-1111", "naics_code": "5221", "i_group": "4-digit", "tot_emp": "6", "pct_total": ""},
+            {"soc_code": "11-1111", "naics_code": "5222", "i_group": "4-digit", "tot_emp": "5", "pct_total": ""}]
+    h = home_industries(rows)
+    assert h["29-1021"] == [("6212", 0.92)]
+    assert h["11-1111"] == [("5221", 0.06)]  # nothing reaches 10%: largest kept
+
+
+def test_in_context_picks_sense_and_sets_aside():
+    area = lambda d: d.split("/")[0]  # noqa: E731
+    links = [{"term": "plaintiff", "d": "541/legal"}, {"term": "summary judgment", "d": "541/legal"},
+             {"term": "motion", "d": "512/film"}, {"term": "motion", "d": "541/legal"},
+             {"term": "cavity", "d": "238/drywall"}]
+    kept, off = in_context(links, "d", area)
+    assert {(r["term"], r["d"]) for r in kept} == {("plaintiff", "541/legal"), ("summary judgment", "541/legal"), ("motion", "541/legal")}
+    assert off == ["cavity"]
+    kept, off = in_context([{"term": "a", "d": "1/x"}, {"term": "b", "d": "2/y"}], "d", area)
+    assert len(kept) == 2 and off == []  # no shared context: nothing chosen

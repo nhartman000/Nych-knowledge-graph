@@ -18,8 +18,12 @@ Method (deterministic, no LLM; interpretations flagged R1-R4):
    the label is the tier with the largest share. R4 Ties keep every tied item (D4 tie policy).
 7. Plurals (owner, 2026-11-23: "yes add plurals"): when a phrase as written is not a Term, its last word is tried in
    singular form (-ies -> -y, -es -> drop, -s -> drop; not -ss, words of 4+ letters), e.g. "dentists" -> "dentist",
-   "summary judgments" -> "summary judgment". The written form is kept as `as_written`. R6 these exact endings and the
+   "summary judgments" -> "summary judgment". When both the written and the singular form are Terms, the match
+   carries the links of both (`forms`). The written form is kept as `as_written`. R6 these exact endings and the
    full weight of a plural match are my interpretation.
+8. Word sense from the other words (owner, 2026-11-23: "use the other words it works for humans"): see
+   `in_context` (R8: leave-one-out context at subsector level, the ">= 2 other words" cut, and dropping an
+   off-context word are my interpretation). Set-aside words are listed under `off_context`.
 No match at all returns "unresolved domain".
 """
 from __future__ import annotations
@@ -65,9 +69,12 @@ def match_terms(conn, text: str) -> list[dict]:
     while i < len(ws):
         for n in (3, 2, 1):
             g = " ".join(ws[i:i + n])
-            hit = next((f for f in _forms(g) if f in known), None) if len(ws[i:i + n]) == n else None
-            if hit:
-                out.append(known[hit] if hit == g else {**known[hit], "as_written": g})
+            hits = [f for f in _forms(g) if f in known] if len(ws[i:i + n]) == n else []
+            if hits:
+                t = dict(known[hits[0]], forms=hits)
+                if hits[0] != g:
+                    t["as_written"] = g
+                out.append(t)
                 i += n
                 break
         else:
@@ -85,13 +92,54 @@ def _top(scores: dict, k: int, support: dict | None = None) -> list[dict]:
     return [{"id": i, "score": round(scores[i], 4), "terms": len(support.get(i, ()))} for i in ranked if key(i) >= cut]  # R4
 
 
+def in_context(links: list[dict], key: str, area) -> tuple[list[dict], list[str]]:
+    """R8 leave-one-out sense choice. For each term, the context is the areas (subsector, or sector when no
+    subsector) that the OTHER matched terms link to.
+      - links that agree with the context are kept and the rest dropped ("motions" next to "plaintiff": legal, not film);
+      - a term agreeing with nothing, while at least two other terms agree on one area, is set aside as off-context
+        (a reader takes "cavities" next to "dentists" and "teeth" in the dental sense; the graph has no dental "cavity",
+        so the word is simply not counted);
+      - otherwise the term keeps all its links (no context to choose by)."""
+    by_term = defaultdict(list)
+    for r in links:
+        by_term[r["term"]].append(r)
+    areas = {t: {area(r[key]) for r in rs} for t, rs in by_term.items()}
+    kept, off = [], []
+    for t, rs in by_term.items():
+        ctx = Counter(a for u, s in areas.items() if u != t for a in s)
+        agree = [r for r in rs if ctx[area(r[key])]]
+        if agree:
+            kept += agree
+        elif ctx and max(ctx.values()) >= 2:
+            off.append(t)
+        else:
+            kept += rs
+    return kept, off
+
+
 def resolve(conn, text: str, k: int = 5) -> dict:
     terms = match_terms(conn, text)
     if not terms:
         return {"domains": ["unresolved domain"], "terms": [], "competency": None}
-    names = [t["term"] for t in terms]
-    td = _q(conn, "UNWIND $t AS t MATCH (x:Term {term: t})-[r:TERM_DOMAIN]->(d:Domain) RETURN x.term AS term, d.domain_id AS d", {"t": names})
-    tp = _q(conn, "UNWIND $t AS t MATCH (x:Term {term: t})-[r:TERM_PROFESSION]->(p:Profession) RETURN x.term AS term, p.profession_id AS p", {"t": names})
+    form_of = {f: t["term"] for t in terms for f in t["forms"]}
+    td = [{"term": form_of[r["f"]], "d": r["d"]} for r in {(r["f"], r["d"]): r for r in _q(conn,
+          "UNWIND $t AS t MATCH (x:Term {term: t})-[r:TERM_DOMAIN]->(d:Domain) RETURN x.term AS f, d.domain_id AS d",
+          {"t": list(form_of)})}.values()]
+    tp = [{"term": form_of[r["f"]], "p": r["p"]} for r in _q(conn,
+          "UNWIND $t AS t MATCH (x:Term {term: t})-[r:TERM_PROFESSION]->(p:Profession) RETURN x.term AS f, p.profession_id AS p",
+          {"t": list(form_of)})]
+    td = list({(r["term"], r["d"]): r for r in td}.values())
+    tp = list({(r["term"], r["p"]): r for r in tp}.values())
+    # 8. word sense from the other words (owner: "use the other words it works for humans")
+    up = defaultdict(dict)  # domain -> {level: self-or-ancestor}
+    if td:
+        for r in _q(conn, "UNWIND $d AS d MATCH (x:Domain {domain_id: d}) OPTIONAL MATCH (x)-[:DOMAIN_PARENT*1..5]->(a:Domain) "
+                          "RETURN x.domain_id AS d, x.level AS xl, a.domain_id AS a, a.level AS al", {"d": list({r["d"] for r in td})}):
+            up[r["d"]][r["xl"]] = r["d"]
+            if r["a"]:
+                up[r["d"]][r["al"]] = r["a"]
+    td, off_d = in_context(td, "d", lambda d: up[d].get(3) or up[d].get(2) or d)
+    tp, off_p = in_context(tp, "p", lambda p: p)
     dom, prof = defaultdict(float), defaultdict(float)
     dsup, psup = defaultdict(set), defaultdict(set)
     links_d, links_p = Counter(r["term"] for r in td), Counter(r["term"] for r in tp)
@@ -142,15 +190,18 @@ def resolve(conn, text: str, k: int = 5) -> dict:
         return [{**i, "title": t.get(i["id"])} for i in items]
     return {
         "terms": terms,
+        "off_context": sorted(set(off_d) | set(off_p)),
         "competency": {"shares": share, "label": [t for t, v in share.items() if v == best]},
         "study_areas": label(_top(study, k), "study"),
         "sectors": label(_top(by_level.get(2, {}), k, rsup), "domain"),
         "subsectors": label(_top(by_level.get(3, {}), k, rsup), "domain"),
+        "industry_groups": label(_top(by_level.get(4, {}), k, rsup), "domain"),
         "industries": label(_top(by_level.get(6, {}), k, rsup), "domain"),
         "professions": label(top_prof, "prof"),
         "techniques": tech,
         "tote_loops": loops,
         "interpretations": ["R1 evidence spread evenly over a term's links", "R2 rank by distinct supporting terms, then summed evidence",
                             "R3 competency = largest tier share", "R4 ties at the cut kept", "R5 single words with Zipf >= 5.0 ignored",
-                            "R6 plurals: last word tried as singular (-ies/-es/-s), full weight"],
+                            "R6 plurals: last word tried as singular (-ies/-es/-s), full weight",
+                            "R8 sense from the other words: subsector context, off-context word set aside when >= 2 others agree"],
     }
