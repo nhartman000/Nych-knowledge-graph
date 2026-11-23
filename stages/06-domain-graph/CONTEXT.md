@@ -29,11 +29,11 @@ python -m nych3.taxonomy.cli fetch            # public inputs, SHA-256 pinned in
 python -m nych3.taxonomy.cli build            # into shared/data/tote.kuzu (or --db PATH); ~4 min, spaCy for task lemmas
 python -m nych3.taxonomy.cli resolve "The plaintiff moved for summary judgment."
 ```
-`resolve` is the shortcut for the model: ranked areas of study, sectors, subsectors, industries, professions, techniques and TOTE loops, plus a competency estimate (share of expert / intermediate / novice terms). Rules R1–R5 are in `shared/nych3/taxonomy/resolve.py`; R5 (ignore single words with Zipf ≥ 5.0) is a proposal.
+`resolve` is the shortcut for the model: ranked areas of study, sectors, subsectors, industries, professions, techniques and TOTE loops, plus a competency estimate (share of expert / intermediate / novice terms). Rules R1–R6 are in `shared/nych3/taxonomy/resolve.py`; R5 (ignore single words with Zipf ≥ 5.0) is a proposal.
 
 ## Open (owner)
 1. Gate approval of the schema additions (stage 02) and of this stage.
-2. Plural "s": D4's approved suffix rule covers ing/ion/ed/er only, so "dentist" does not match "dentists". Allow plurals in `resolve`?
+2. (done 2026-11-23, owner: "yes add plurals") `resolve` tries the singular of a phrase's last word (-ies/-es/-s) when the written form is not a Term (R6; the exact endings are my interpretation).
 3. (done 2026-11-23) BLS OEWS profession x industry loaded as `WORKS_IN`; the source zip is pinned but gitignored, the derived table is committed.
 4. Science vocabulary is thin (e.g. "supramolecular" is absent): journal / OpenAlex terms are the next layer.
 5. The existing informal loop domains (`cooking`, `craft.knitting`, …) are not yet mapped to NAICS or CIP nodes.

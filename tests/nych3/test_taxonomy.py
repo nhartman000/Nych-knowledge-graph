@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / "shared"))
 
 from nych3.store.tote_db import schema_statements  # noqa: E402
 from nych3.taxonomy.build import Loader, cip_nodes, tier  # noqa: E402
-from nych3.taxonomy.resolve import resolve  # noqa: E402
+from nych3.taxonomy.resolve import resolve, singulars  # noqa: E402
 
 
 def test_cip_levels_parents_and_reserved(tmp_path):
@@ -78,3 +78,16 @@ def test_resolve_more_supporting_words_wins(graph):
 
 def test_resolve_unresolved(graph):
     assert resolve(graph, "nothing here matches")["domains"] == ["unresolved domain"]
+
+
+def test_singulars():
+    assert singulars("dentists") == ["dentist"]
+    assert singulars("liabilities")[0] == "liability"
+    assert singulars("statutes") == ["statut", "statute"]
+    assert singulars("glass") == [] and singulars("gas") == [] and singulars("law") == []
+
+
+def test_resolve_matches_plurals(graph):
+    r = resolve(graph, "Plaintiffs filed for summary judgments.", k=3)
+    assert [(t["term"], t.get("as_written")) for t in r["terms"]] == [("plaintiff", "plaintiffs"), ("summary judgment", "summary judgments")]
+    assert r["professions"][0]["title"] == "Lawyers"

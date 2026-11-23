@@ -16,6 +16,10 @@ Method (deterministic, no LLM; interpretations flagged R1-R4):
    Study-area evidence: each profession's score is split evenly over the CIP families it leads to.
 6. R3 Competency (owner: experts use expert terminology, novices novice terms) = share of matched terms per tier;
    the label is the tier with the largest share. R4 Ties keep every tied item (D4 tie policy).
+7. Plurals (owner, 2026-11-23: "yes add plurals"): when a phrase as written is not a Term, its last word is tried in
+   singular form (-ies -> -y, -es -> drop, -s -> drop; not -ss, words of 4+ letters), e.g. "dentists" -> "dentist",
+   "summary judgments" -> "summary judgment". The written form is kept as `as_written`. R6 these exact endings and the
+   full weight of a plural match are my interpretation.
 No match at all returns "unresolved domain".
 """
 from __future__ import annotations
@@ -36,17 +40,34 @@ def _q(conn, cypher, params=None):
     return out
 
 
+def singulars(word: str) -> list[str]:
+    """Regular English singular candidates for a plural word (R6), most specific first."""
+    if len(word) < 4 or word.endswith("ss") or not word.endswith("s"):
+        return []
+    out = [word[:-3] + "y"] if word.endswith("ies") else []
+    if word.endswith("es"):
+        out.append(word[:-2])
+    out.append(word[:-1])
+    return out
+
+
+def _forms(gram: str) -> list[str]:
+    head, _, last = gram.rpartition(" ")
+    return [gram] + [(head + " " + s if head else s) for s in singulars(last)]
+
+
 def match_terms(conn, text: str) -> list[dict]:
     ws = _WORD.findall(text.lower())
-    grams = sorted({" ".join(ws[i:i + n]) for n in (1, 2, 3) for i in range(len(ws) - n + 1)})
+    grams = sorted({f for n in (1, 2, 3) for i in range(len(ws) - n + 1) for f in _forms(" ".join(ws[i:i + n]))})
     known = {r["term"]: r for r in _q(conn, "UNWIND $g AS g MATCH (t:Term {term: g}) RETURN t.term AS term, t.tier AS tier, t.zipf AS zipf", {"g": grams})
              if " " in r["term"] or r["zipf"] is None or r["zipf"] < COMMON_WORD_ZIPF}
     out, i = [], 0
     while i < len(ws):
         for n in (3, 2, 1):
             g = " ".join(ws[i:i + n])
-            if len(ws[i:i + n]) == n and g in known:
-                out.append(known[g])
+            hit = next((f for f in _forms(g) if f in known), None) if len(ws[i:i + n]) == n else None
+            if hit:
+                out.append(known[hit] if hit == g else {**known[hit], "as_written": g})
                 i += n
                 break
         else:
@@ -130,5 +151,6 @@ def resolve(conn, text: str, k: int = 5) -> dict:
         "techniques": tech,
         "tote_loops": loops,
         "interpretations": ["R1 evidence spread evenly over a term's links", "R2 rank by distinct supporting terms, then summed evidence",
-                            "R3 competency = largest tier share", "R4 ties at the cut kept", "R5 single words with Zipf >= 5.0 ignored"],
+                            "R3 competency = largest tier share", "R4 ties at the cut kept", "R5 single words with Zipf >= 5.0 ignored",
+                            "R6 plurals: last word tried as singular (-ies/-es/-s), full weight"],
     }
