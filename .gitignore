@@ -17,3 +17,7 @@ stages/05-nych3-encoder/*/output/*
 *.tar.gz
 REVIEW/_run/
 demo/output/
+# stage 06 fetched inputs (pinned in _config/registries/taxonomy_sources.json)
+shared/data/taxonomy/*.xlsx
+shared/data/taxonomy/*.zip
+shared/data/taxonomy/*.csv
