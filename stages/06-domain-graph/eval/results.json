@@ -1,0 +1,3145 @@
+{
+ "summary": {
+  "n": 53,
+  "sector@1": "32/53",
+  "sector@3": "46/53",
+  "cip@1": "32/53",
+  "cip@3": "44/53",
+  "unresolved": "0/53"
+ },
+ "results": [
+  {
+   "field": "dentistry",
+   "text": "The dentists cleaned the patient's teeth and fixed two cavities.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Health Care and Social Assistance",
+     5
+    ],
+    [
+     "Manufacturing",
+     3
+    ],
+    [
+     "Professional, Scientific, and Technical Services",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Offices of Dentists",
+     4
+    ],
+    [
+     "Medical Equipment and Supplies Manufacturing",
+     3
+    ],
+    [
+     "Other Ambulatory Health Care Services",
+     2
+    ]
+   ],
+   "professions": [
+    "Dental Laboratory Technicians",
+    "Oral and Maxillofacial Surgeons",
+    "Dental Hygienists"
+   ],
+   "study_areas": [
+    "HEALTH PROFESSIONS AND RELATED PROGRAMS",
+    "HEALTH PROFESSIONS RESIDENCY/FELLOWSHIP PROGRAMS"
+   ],
+   "terms": [
+    "dentists",
+    "patient's",
+    "teeth",
+    "fixed",
+    "cavity"
+   ],
+   "off_context": [
+    "fixed"
+   ],
+   "expected_sectors": [
+    "62"
+   ],
+   "expected_cip": [
+    "51"
+   ]
+  },
+  {
+   "field": "law",
+   "text": "Plaintiffs filed motions for summary judgments.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Professional, Scientific, and Technical Services",
+     4
+    ],
+    [
+     "Public Administration",
+     3
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Legal Services",
+     2
+    ],
+    [
+     "Accounting, Tax Preparation, Bookkeeping, and Payroll Services",
+     1
+    ],
+    [
+     "Architectural, Engineering, and Related Services",
+     1
+    ]
+   ],
+   "professions": [
+    "Judges, Magistrate Judges, and Magistrates"
+   ],
+   "study_areas": [
+    "LEGAL PROFESSIONS AND STUDIES"
+   ],
+   "terms": [
+    "plaintiff",
+    "filed",
+    "motions",
+    "summary judgment"
+   ],
+   "off_context": [
+    "filed"
+   ],
+   "expected_sectors": [
+    "54"
+   ],
+   "expected_cip": [
+    "22"
+   ]
+  },
+  {
+   "field": "law",
+   "text": "The judge denied the defendant's motion to dismiss.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Professional, Scientific, and Technical Services",
+     2
+    ],
+    [
+     "Arts, Entertainment, and Recreation",
+     2
+    ],
+    [
+     "Administrative and Support and Waste Management and Remediation Services",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Legal Services",
+     2
+    ],
+    [
+     "Business Support Services",
+     1
+    ],
+    [
+     "Spectator Sports",
+     1
+    ]
+   ],
+   "professions": [
+    "Lawyers",
+    "Judicial Law Clerks",
+    "Administrative Law Judges, Adjudicators, and Hearing Officers"
+   ],
+   "study_areas": [
+    "LEGAL PROFESSIONS AND STUDIES"
+   ],
+   "terms": [
+    "judge",
+    "motion"
+   ],
+   "off_context": [],
+   "expected_sectors": [
+    "54",
+    "92"
+   ],
+   "expected_cip": [
+    "22"
+   ]
+  },
+  {
+   "field": "drywall",
+   "text": "We hung gypsum board and insulated the wall cavity.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Construction",
+     3
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Building Finishing Contractors",
+     3
+    ],
+    [
+     "Building Equipment Contractors",
+     1
+    ]
+   ],
+   "professions": [
+    "Electricians",
+    "Insulation Workers, Mechanical",
+    "Mechanical Door Repairers"
+   ],
+   "study_areas": [
+    "CONSTRUCTION TRADES"
+   ],
+   "terms": [
+    "gypsum board",
+    "insulated",
+    "wall cavity"
+   ],
+   "off_context": [],
+   "expected_sectors": [
+    "23"
+   ],
+   "expected_cip": [
+    "46"
+   ]
+  },
+  {
+   "field": "film",
+   "text": "The studio released a motion picture with a big film budget.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Information",
+     3
+    ],
+    [
+     "Professional, Scientific, and Technical Services",
+     3
+    ],
+    [
+     "Other Services (except Public Administration)",
+     3
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Motion Picture and Video Industries",
+     3
+    ],
+    [
+     "Radio and Television Broadcasting Stations",
+     3
+    ],
+    [
+     "Performing Arts Companies",
+     3
+    ]
+   ],
+   "professions": [
+    "Audio and Video Technicians",
+    "Camera Operators, Television, Video, and Film"
+   ],
+   "study_areas": [
+    "COMMUNICATIONS TECHNOLOGIES/TECHNICIANS AND SUPPORT SERVICES",
+    "AGRICULTURAL/ANIMAL/PLANT/VETERINARY SCIENCE AND RELATED FIELDS",
+    "VISUAL AND PERFORMING ARTS"
+   ],
+   "terms": [
+    "studio",
+    "motion picture",
+    "budget"
+   ],
+   "off_context": [
+    "budget"
+   ],
+   "expected_sectors": [
+    "51"
+   ],
+   "expected_cip": [
+    "50",
+    "10"
+   ]
+  },
+  {
+   "field": "nursing",
+   "text": "The nurse checked the patient's vital signs and administered the IV medication.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Health Care and Social Assistance",
+     3
+    ],
+    [
+     "Professional, Scientific, and Technical Services",
+     2
+    ],
+    [
+     "Educational Services",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Offices of Physicians",
+     3
+    ],
+    [
+     "General Medical and Surgical Hospitals",
+     3
+    ],
+    [
+     "Health and Personal Care Retailers",
+     2
+    ]
+   ],
+   "professions": [
+    "Nurse Anesthetists",
+    "Mental Health and Substance Abuse Social Workers",
+    "Respiratory Therapists"
+   ],
+   "study_areas": [
+    "HEALTH PROFESSIONS AND RELATED PROGRAMS",
+    "MEDICAL RESIDENCY/FELLOWSHIP PROGRAMS",
+    "PUBLIC ADMINISTRATION AND SOCIAL SERVICE PROFESSIONS"
+   ],
+   "terms": [
+    "nurse",
+    "checked",
+    "patient's vital signs",
+    "administered",
+    "iv",
+    "medication"
+   ],
+   "off_context": [
+    "administered",
+    "checked",
+    "iv"
+   ],
+   "expected_sectors": [
+    "62"
+   ],
+   "expected_cip": [
+    "51"
+   ]
+  },
+  {
+   "field": "surgery",
+   "text": "The surgeon performed a laparoscopic appendectomy under general anesthesia.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Health Care and Social Assistance",
+     2
+    ],
+    [
+     "Professional, Scientific, and Technical Services",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Other Professional, Scientific, and Technical Services",
+     2
+    ],
+    [
+     "Offices of Physicians",
+     2
+    ],
+    [
+     "Offices of Dentists",
+     2
+    ]
+   ],
+   "professions": [
+    "Anesthesiologists",
+    "Surgical Assistants"
+   ],
+   "study_areas": [
+    "HEALTH PROFESSIONS AND RELATED PROGRAMS",
+    "MEDICAL RESIDENCY/FELLOWSHIP PROGRAMS"
+   ],
+   "terms": [
+    "surgeon",
+    "anesthesia"
+   ],
+   "off_context": [],
+   "expected_sectors": [
+    "62"
+   ],
+   "expected_cip": [
+    "51"
+   ]
+  },
+  {
+   "field": "pharmacy",
+   "text": "The pharmacist filled the prescription and counseled the patient on drug interactions.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Health Care and Social Assistance",
+     5
+    ],
+    [
+     "Retail Trade",
+     4
+    ],
+    [
+     "Professional, Scientific, and Technical Services",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Health and Personal Care Retailers",
+     4
+    ],
+    [
+     "Offices of Other Health Practitioners",
+     4
+    ],
+    [
+     "General Medical and Surgical Hospitals",
+     4
+    ]
+   ],
+   "professions": [
+    "Pharmacists",
+    "Pharmacy Technicians",
+    "Acupuncturists"
+   ],
+   "study_areas": [
+    "HEALTH PROFESSIONS AND RELATED PROGRAMS",
+    "HEALTH PROFESSIONS RESIDENCY/FELLOWSHIP PROGRAMS"
+   ],
+   "terms": [
+    "pharmacist",
+    "filled",
+    "prescription",
+    "counseled",
+    "patient",
+    "drug interaction"
+   ],
+   "off_context": [
+    "counseled",
+    "filled"
+   ],
+   "expected_sectors": [
+    "44-45",
+    "62"
+   ],
+   "expected_cip": [
+    "51"
+   ]
+  },
+  {
+   "field": "veterinary",
+   "text": "The veterinarian vaccinated the puppy and treated the cat's ear infection.",
+   "sector@1": false,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Other Services (except Public Administration)",
+     3
+    ],
+    [
+     "Professional, Scientific, and Technical Services",
+     3
+    ],
+    [
+     "Health Care and Social Assistance",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Support Activities for Animal Production",
+     2
+    ],
+    [
+     "Farm Product Raw Material Merchant Wholesalers",
+     2
+    ],
+    [
+     "Other Miscellaneous Retailers",
+     2
+    ]
+   ],
+   "professions": [
+    "Acupuncturists",
+    "Veterinary Technologists and Technicians",
+    "Veterinary Assistants and Laboratory Animal Caretakers"
+   ],
+   "study_areas": [
+    "AGRICULTURAL/ANIMAL/PLANT/VETERINARY SCIENCE AND RELATED FIELDS",
+    "HEALTH PROFESSIONS AND RELATED PROGRAMS",
+    "MULTI/INTERDISCIPLINARY STUDIES"
+   ],
+   "terms": [
+    "veterinarian",
+    "treated",
+    "ear",
+    "infection"
+   ],
+   "off_context": [
+    "treated"
+   ],
+   "expected_sectors": [
+    "54"
+   ],
+   "expected_cip": [
+    "01",
+    "51"
+   ]
+  },
+  {
+   "field": "accounting",
+   "text": "The auditor reconciled the general ledger and reviewed accounts receivable before the quarterly close.",
+   "sector@1": false,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Educational Services",
+     3
+    ],
+    [
+     "Professional, Scientific, and Technical Services",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Accounting, Tax Preparation, Bookkeeping, and Payroll Services",
+     2
+    ]
+   ],
+   "professions": [
+    "Bookkeeping, Accounting, and Auditing Clerks"
+   ],
+   "study_areas": [
+    "BUSINESS, MANAGEMENT, MARKETING, AND RELATED SUPPORT SERVICES"
+   ],
+   "terms": [
+    "auditor",
+    "general ledger",
+    "reviewed",
+    "accounts receivable"
+   ],
+   "off_context": [
+    "auditor",
+    "reviewed"
+   ],
+   "expected_sectors": [
+    "54"
+   ],
+   "expected_cip": [
+    "52"
+   ]
+  },
+  {
+   "field": "banking",
+   "text": "The loan officer reviewed the borrower's credit score and approved the mortgage application.",
+   "sector@1": false,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Educational Services",
+     3
+    ],
+    [
+     "Real Estate and Rental and Leasing",
+     2
+    ],
+    [
+     "Finance and Insurance",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Colleges, Universities, and Professional Schools",
+     3
+    ],
+    [
+     "Nondepository Credit Intermediation",
+     2
+    ],
+    [
+     "Insurance Carriers",
+     2
+    ]
+   ],
+   "professions": [
+    "Real Estate Brokers",
+    "Loan Officers",
+    "Lawyers"
+   ],
+   "study_areas": [
+    "BUSINESS, MANAGEMENT, MARKETING, AND RELATED SUPPORT SERVICES",
+    "ARCHITECTURE AND RELATED SERVICES",
+    "LEGAL PROFESSIONS AND STUDIES"
+   ],
+   "terms": [
+    "loan officer",
+    "reviewed",
+    "credit score",
+    "approved",
+    "mortgage",
+    "application"
+   ],
+   "off_context": [
+    "approved",
+    "reviewed"
+   ],
+   "expected_sectors": [
+    "52"
+   ],
+   "expected_cip": [
+    "52"
+   ]
+  },
+  {
+   "field": "insurance",
+   "text": "The underwriter assessed the risk and set the premium for the homeowner's policy.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Finance and Insurance",
+     2
+    ],
+    [
+     "Professional, Scientific, and Technical Services",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Insurance Carriers",
+     2
+    ],
+    [
+     "Agencies, Brokerages, and Other Insurance Related Activities",
+     2
+    ],
+    [
+     "Management, Scientific, and Technical Consulting Services",
+     2
+    ]
+   ],
+   "professions": [
+    "Actuaries",
+    "Insurance Sales Agents"
+   ],
+   "study_areas": [
+    "BUSINESS, MANAGEMENT, MARKETING, AND RELATED SUPPORT SERVICES",
+    "MATHEMATICS AND STATISTICS"
+   ],
+   "terms": [
+    "underwriter",
+    "assessed",
+    "premium"
+   ],
+   "off_context": [
+    "assessed"
+   ],
+   "expected_sectors": [
+    "52"
+   ],
+   "expected_cip": [
+    "52"
+   ]
+  },
+  {
+   "field": "software",
+   "text": "The developer refactored the API, fixed the memory leak, and pushed the commit to the repository.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": false,
+   "cip@3": false,
+   "sectors": [
+    [
+     "Professional, Scientific, and Technical Services",
+     6
+    ],
+    [
+     "Manufacturing",
+     3
+    ],
+    [
+     "Information",
+     3
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Computer Systems Design and Related Services",
+     3
+    ],
+    [
+     "Semiconductor and Other Electronic Component Manufacturing",
+     3
+    ],
+    [
+     "Software Publishers",
+     2
+    ]
+   ],
+   "professions": [
+    "Bioinformatics Technicians",
+    "Non-Destructive Testing Specialists",
+    "Photographic Process Workers and Processing Machine Operators"
+   ],
+   "study_areas": [
+    "ENGINEERING/ENGINEERING-RELATED TECHNOLOGIES/TECHNICIANS",
+    "MILITARY TECHNOLOGIES AND APPLIED SCIENCES",
+    "BIOLOGICAL AND BIOMEDICAL SCIENCES"
+   ],
+   "terms": [
+    "developer",
+    "api",
+    "fixed",
+    "memory",
+    "leak",
+    "commit",
+    "repository"
+   ],
+   "off_context": [
+    "commit",
+    "fixed"
+   ],
+   "expected_sectors": [
+    "54",
+    "51"
+   ],
+   "expected_cip": [
+    "11"
+   ]
+  },
+  {
+   "field": "networking",
+   "text": "The network administrator configured the router, firewall rules, and VLANs.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": false,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Professional, Scientific, and Technical Services",
+     4
+    ],
+    [
+     "Educational Services",
+     3
+    ],
+    [
+     "Information",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Computer Systems Design and Related Services",
+     4
+    ],
+    [
+     "Colleges, Universities, and Professional Schools",
+     3
+    ],
+    [
+     "Management of Companies and Enterprises",
+     2
+    ]
+   ],
+   "professions": [
+    "Computer Network Support Specialists",
+    "Computer Network Architects",
+    "Milling and Planing Machine Setters, Operators, and Tenders, Metal and Plastic"
+   ],
+   "study_areas": [
+    "PRECISION PRODUCTION",
+    "COMPUTER AND INFORMATION SCIENCES AND SUPPORT SERVICES",
+    "ENGINEERING"
+   ],
+   "terms": [
+    "network administrator",
+    "router",
+    "firewall",
+    "rule"
+   ],
+   "off_context": [
+    "network administrator"
+   ],
+   "expected_sectors": [
+    "54",
+    "51"
+   ],
+   "expected_cip": [
+    "11"
+   ]
+  },
+  {
+   "field": "electrical",
+   "text": "The electrician pulled conduit and wired the breaker panel to code.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": false,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Construction",
+     4
+    ],
+    [
+     "Utilities",
+     4
+    ],
+    [
+     "Transportation and Warehousing",
+     3
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Electric Power Generation, Transmission and Distribution",
+     4
+    ],
+    [
+     "Building Equipment Contractors",
+     4
+    ],
+    [
+     "Rail Transportation",
+     3
+    ]
+   ],
+   "professions": [
+    "Electricians",
+    "Electrical and Electronics Installers and Repairers, Transportation Equipment",
+    "Control and Valve Installers and Repairers, Except Mechanical Door"
+   ],
+   "study_areas": [
+    "MECHANIC AND REPAIR TECHNOLOGIES/TECHNICIANS",
+    "CONSTRUCTION TRADES"
+   ],
+   "terms": [
+    "electrician",
+    "conduit",
+    "wired",
+    "breaker",
+    "panel"
+   ],
+   "off_context": [
+    "wired"
+   ],
+   "expected_sectors": [
+    "23"
+   ],
+   "expected_cip": [
+    "46"
+   ]
+  },
+  {
+   "field": "plumbing",
+   "text": "The plumber replaced the corroded pipe and installed a new water heater.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Construction",
+     3
+    ],
+    [
+     "Professional, Scientific, and Technical Services",
+     2
+    ],
+    [
+     "Administrative and Support and Waste Management and Remediation Services",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Building Equipment Contractors",
+     3
+    ],
+    [
+     "Architectural, Engineering, and Related Services",
+     2
+    ],
+    [
+     "Remediation and Other Waste Management Services",
+     2
+    ]
+   ],
+   "professions": [
+    "Plumbers, Pipefitters, and Steamfitters",
+    "Helpers--Pipelayers, Plumbers, Pipefitters, and Steamfitters",
+    "Solar Thermal Installers and Technicians"
+   ],
+   "study_areas": [
+    "CONSTRUCTION TRADES"
+   ],
+   "terms": [
+    "plumber",
+    "replaced",
+    "pipe",
+    "installed",
+    "water heater"
+   ],
+   "off_context": [
+    "installed",
+    "replaced"
+   ],
+   "expected_sectors": [
+    "23"
+   ],
+   "expected_cip": [
+    "46"
+   ]
+  },
+  {
+   "field": "roofing",
+   "text": "The crew tore off the old shingles and installed new flashing and underlayment.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Construction",
+     3
+    ],
+    [
+     "Administrative and Support and Waste Management and Remediation Services",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Foundation, Structure, and Building Exterior Contractors",
+     3
+    ],
+    [
+     "Building Equipment Contractors",
+     3
+    ],
+    [
+     "Employment Services",
+     1
+    ]
+   ],
+   "professions": [
+    "Solar Thermal Installers and Technicians",
+    "Roofers",
+    "Helpers--Roofers"
+   ],
+   "study_areas": [
+    "CONSTRUCTION TRADES"
+   ],
+   "terms": [
+    "crew",
+    "shingles",
+    "installed",
+    "flashing"
+   ],
+   "off_context": [
+    "crew",
+    "installed"
+   ],
+   "expected_sectors": [
+    "23"
+   ],
+   "expected_cip": [
+    "46"
+   ]
+  },
+  {
+   "field": "auto repair",
+   "text": "The mechanic replaced the brake pads and rotors and flushed the transmission fluid.",
+   "sector@1": false,
+   "sector@3": true,
+   "cip@1": false,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Health Care and Social Assistance",
+     4
+    ],
+    [
+     "Transportation and Warehousing",
+     4
+    ],
+    [
+     "Other Services (except Public Administration)",
+     4
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Building Equipment Contractors",
+     3
+    ],
+    [
+     "Architectural, Engineering, and Related Services",
+     3
+    ],
+    [
+     "Scientific Research and Development Services",
+     3
+    ]
+   ],
+   "professions": [
+    "Mechanical Engineering Technologists and Technicians",
+    "Home Appliance Repairers",
+    "Automotive and Watercraft Service Attendants"
+   ],
+   "study_areas": [
+    "ENGINEERING/ENGINEERING-RELATED TECHNOLOGIES/TECHNICIANS",
+    "MECHANIC AND REPAIR TECHNOLOGIES/TECHNICIANS"
+   ],
+   "terms": [
+    "mechanic",
+    "replaced",
+    "brake pads",
+    "rotor",
+    "transmission",
+    "fluid"
+   ],
+   "off_context": [
+    "brake pads",
+    "mechanic",
+    "replaced",
+    "rotor"
+   ],
+   "expected_sectors": [
+    "81"
+   ],
+   "expected_cip": [
+    "47"
+   ]
+  },
+  {
+   "field": "aviation",
+   "text": "The pilot completed the preflight checklist and requested clearance for takeoff from the tower.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Transportation and Warehousing",
+     6
+    ],
+    [
+     "Professional, Scientific, and Technical Services",
+     5
+    ],
+    [
+     "Educational Services",
+     4
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Scheduled Air Transportation",
+     6
+    ],
+    [
+     "Architectural, Engineering, and Related Services",
+     5
+    ],
+    [
+     "Nonscheduled Air Transportation",
+     4
+    ]
+   ],
+   "professions": [
+    "Airline Pilots, Copilots, and Flight Engineers",
+    "Commercial Pilots",
+    "Flight Attendants"
+   ],
+   "study_areas": [
+    "TRANSPORTATION AND MATERIALS MOVING"
+   ],
+   "terms": [
+    "pilot",
+    "preflight",
+    "checklist",
+    "requested",
+    "clearance",
+    "takeoff",
+    "tower"
+   ],
+   "off_context": [
+    "requested"
+   ],
+   "expected_sectors": [
+    "48-49"
+   ],
+   "expected_cip": [
+    "49"
+   ]
+  },
+  {
+   "field": "trucking",
+   "text": "The driver logged hours of service and secured the freight on the flatbed trailer.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Transportation and Warehousing",
+     6
+    ],
+    [
+     "Administrative and Support and Waste Management and Remediation Services",
+     3
+    ],
+    [
+     "Construction",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Rail Transportation",
+     3
+    ],
+    [
+     "General Freight Trucking",
+     2
+    ],
+    [
+     "Highway, Street, and Bridge Construction",
+     2
+    ]
+   ],
+   "professions": [
+    "Heavy and Tractor-Trailer Truck Drivers",
+    "Transit and Railroad Police",
+    "Logistics Analysts"
+   ],
+   "study_areas": [
+    "TRANSPORTATION AND MATERIALS MOVING",
+    "HOMELAND SECURITY, LAW ENFORCEMENT, FIREFIGHTING AND RELATED PROTECTIVE SERVICES",
+    "BUSINESS, MANAGEMENT, MARKETING, AND RELATED SUPPORT SERVICES"
+   ],
+   "terms": [
+    "driver",
+    "hours of service",
+    "secured",
+    "freight",
+    "flatbed",
+    "trailer"
+   ],
+   "off_context": [],
+   "expected_sectors": [
+    "48-49"
+   ],
+   "expected_cip": [
+    "49"
+   ]
+  },
+  {
+   "field": "farming",
+   "text": "The farmer planted corn, applied nitrogen fertilizer, and harvested soybeans with the combine.",
+   "sector@1": false,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Professional, Scientific, and Technical Services",
+     6
+    ],
+    [
+     "Educational Services",
+     6
+    ],
+    [
+     "Agriculture, Forestry, Fishing and Hunting",
+     5
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Scientific Research and Development Services",
+     5
+    ],
+    [
+     "Colleges, Universities, and Professional Schools",
+     5
+    ],
+    [
+     "Support Activities for Crop Production",
+     4
+    ]
+   ],
+   "professions": [
+    "Agricultural Technicians",
+    "Agricultural Equipment Operators",
+    "Precision Agriculture Technicians"
+   ],
+   "study_areas": [
+    "AGRICULTURAL/ANIMAL/PLANT/VETERINARY SCIENCE AND RELATED FIELDS",
+    "BIOLOGICAL AND BIOMEDICAL SCIENCES"
+   ],
+   "terms": [
+    "farmer",
+    "corn",
+    "applied",
+    "nitrogen",
+    "fertilizer",
+    "soybeans",
+    "combine"
+   ],
+   "off_context": [
+    "applied"
+   ],
+   "expected_sectors": [
+    "11"
+   ],
+   "expected_cip": [
+    "01"
+   ]
+  },
+  {
+   "field": "forestry",
+   "text": "The crew thinned the timber stand and replanted seedlings after the clear-cut.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Agriculture, Forestry, Fishing and Hunting",
+     3
+    ],
+    [
+     "Construction",
+     2
+    ],
+    [
+     "Other Services (except Public Administration)",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Support Activities for Crop Production",
+     2
+    ],
+    [
+     "Social Advocacy Organizations",
+     2
+    ],
+    [
+     "Residential Building Construction",
+     2
+    ]
+   ],
+   "professions": [
+    "Forest and Conservation Technicians",
+    "Foresters",
+    "Forest and Conservation Workers"
+   ],
+   "study_areas": [
+    "NATURAL RESOURCES AND CONSERVATION",
+    "CONSTRUCTION TRADES",
+    "AGRICULTURAL/ANIMAL/PLANT/VETERINARY SCIENCE AND RELATED FIELDS"
+   ],
+   "terms": [
+    "crew",
+    "timber",
+    "seedlings"
+   ],
+   "off_context": [],
+   "expected_sectors": [
+    "11"
+   ],
+   "expected_cip": [
+    "03"
+   ]
+  },
+  {
+   "field": "mining",
+   "text": "The miners drilled blast holes and hauled the ore from the open pit.",
+   "sector@1": false,
+   "sector@3": true,
+   "cip@1": false,
+   "cip@3": false,
+   "sectors": [
+    [
+     "Construction",
+     3
+    ],
+    [
+     "Mining, Quarrying, and Oil and Gas Extraction",
+     3
+    ],
+    [
+     "Professional, Scientific, and Technical Services",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Nonmetallic Mineral Mining and Quarrying",
+     3
+    ],
+    [
+     "Other Specialty Trade Contractors",
+     2
+    ],
+    [
+     "Metal Ore Mining",
+     2
+    ]
+   ],
+   "professions": [
+    "First-Line Supervisors of Construction Trades and Extraction Workers",
+    "Explosives Workers, Ordnance Handling Experts, and Blasters",
+    "Loading and Moving Machine Operators, Underground Mining"
+   ],
+   "study_areas": [
+    "CONSTRUCTION TRADES",
+    "TRANSPORTATION AND MATERIALS MOVING"
+   ],
+   "terms": [
+    "miners",
+    "drilled blast hole",
+    "ore",
+    "open pit"
+   ],
+   "off_context": [],
+   "expected_sectors": [
+    "21"
+   ],
+   "expected_cip": [
+    "15"
+   ]
+  },
+  {
+   "field": "oil and gas",
+   "text": "The rig crew drilled the well and set casing before fracking the shale formation.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": false,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Mining, Quarrying, and Oil and Gas Extraction",
+     6
+    ],
+    [
+     "Construction",
+     4
+    ],
+    [
+     "Transportation and Warehousing",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Oil and Gas Extraction",
+     6
+    ],
+    [
+     "Support Activities for Mining",
+     6
+    ],
+    [
+     "Coal Mining",
+     4
+    ]
+   ],
+   "professions": [
+    "Rotary Drill Operators, Oil and Gas",
+    "Service Unit Operators, Oil and Gas",
+    "Earth Drillers, Except Oil and Gas"
+   ],
+   "study_areas": [
+    "CONSTRUCTION TRADES",
+    "ENGINEERING/ENGINEERING-RELATED TECHNOLOGIES/TECHNICIANS",
+    "TRANSPORTATION AND MATERIALS MOVING"
+   ],
+   "terms": [
+    "rig",
+    "crew",
+    "drilled",
+    "casing",
+    "shale",
+    "formation"
+   ],
+   "off_context": [],
+   "expected_sectors": [
+    "21"
+   ],
+   "expected_cip": [
+    "15"
+   ]
+  },
+  {
+   "field": "restaurant",
+   "text": "The line cook seared the steak, plated the entree, and sent it to the dining room.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": false,
+   "cip@3": false,
+   "sectors": [
+    [
+     "Accommodation and Food Services",
+     3
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Restaurants and Other Eating Places",
+     3
+    ],
+    [
+     "Special Food Services",
+     1
+    ]
+   ],
+   "professions": [
+    "Cooks, Short Order",
+    "Fast Food and Counter Workers"
+   ],
+   "study_areas": [],
+   "terms": [
+    "cook",
+    "steak",
+    "plated",
+    "entree",
+    "dining room"
+   ],
+   "off_context": [
+    "dining room",
+    "plated"
+   ],
+   "expected_sectors": [
+    "72"
+   ],
+   "expected_cip": [
+    "12"
+   ]
+  },
+  {
+   "field": "baking",
+   "text": "The baker proofed the dough and baked sourdough loaves in the deck oven.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Manufacturing",
+     5
+    ],
+    [
+     "Accommodation and Food Services",
+     4
+    ],
+    [
+     "Construction",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Bakeries and Tortilla Manufacturing",
+     4
+    ],
+    [
+     "Restaurants and Other Eating Places",
+     4
+    ],
+    [
+     "Fruit and Vegetable Preserving and Specialty Food Manufacturing",
+     3
+    ]
+   ],
+   "professions": [
+    "Bakers",
+    "Fiberglass Laminators and Fabricators",
+    "Cooks, Fast Food"
+   ],
+   "study_areas": [
+    "CULINARY, ENTERTAINMENT, AND PERSONAL SERVICES"
+   ],
+   "terms": [
+    "baker",
+    "dough",
+    "baked",
+    "deck",
+    "oven"
+   ],
+   "off_context": [],
+   "expected_sectors": [
+    "31-33",
+    "72"
+   ],
+   "expected_cip": [
+    "12"
+   ]
+  },
+  {
+   "field": "hotel",
+   "text": "The front desk clerk checked in the guests and assigned their rooms.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": false,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Accommodation and Food Services",
+     4
+    ],
+    [
+     "Arts, Entertainment, and Recreation",
+     3
+    ],
+    [
+     "Other Services (except Public Administration)",
+     3
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Traveler Accommodation",
+     4
+    ],
+    [
+     "Gambling Industries",
+     2
+    ],
+    [
+     "Services to Buildings and Dwellings",
+     2
+    ]
+   ],
+   "professions": [
+    "Lodging Managers",
+    "Hosts and Hostesses, Restaurant, Lounge, and Coffee Shop",
+    "Concierges"
+   ],
+   "study_areas": [
+    "CULINARY, ENTERTAINMENT, AND PERSONAL SERVICES",
+    "BUSINESS, MANAGEMENT, MARKETING, AND RELATED SUPPORT SERVICES"
+   ],
+   "terms": [
+    "front desk",
+    "clerk",
+    "checked",
+    "guest",
+    "rooms"
+   ],
+   "off_context": [
+    "checked",
+    "clerk"
+   ],
+   "expected_sectors": [
+    "72"
+   ],
+   "expected_cip": [
+    "52"
+   ]
+  },
+  {
+   "field": "retail",
+   "text": "The cashier rang up the customer's purchase and restocked the shelves.",
+   "sector@1": false,
+   "sector@3": true,
+   "cip@1": false,
+   "cip@3": false,
+   "sectors": [
+    [
+     "Accommodation and Food Services",
+     3
+    ],
+    [
+     "Retail Trade",
+     3
+    ],
+    [
+     "Other Services (except Public Administration)",
+     3
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Automobile Dealers",
+     3
+    ],
+    [
+     "Health and Personal Care Retailers",
+     3
+    ],
+    [
+     "Gasoline Stations",
+     3
+    ]
+   ],
+   "professions": [
+    "Pharmacy Aides",
+    "Cashiers",
+    "Automotive and Watercraft Service Attendants"
+   ],
+   "study_areas": [],
+   "terms": [
+    "cashier",
+    "customer's",
+    "purchase",
+    "shelves"
+   ],
+   "off_context": [],
+   "expected_sectors": [
+    "44-45"
+   ],
+   "expected_cip": [
+    "52"
+   ]
+  },
+  {
+   "field": "real estate",
+   "text": "The realtor listed the house, held an open house, and negotiated the closing costs.",
+   "sector@1": false,
+   "sector@3": true,
+   "cip@1": false,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Finance and Insurance",
+     2
+    ],
+    [
+     "Real Estate and Rental and Leasing",
+     1
+    ],
+    [
+     "Professional, Scientific, and Technical Services",
+     1
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Nondepository Credit Intermediation",
+     1
+    ],
+    [
+     "Insurance Carriers",
+     1
+    ],
+    [
+     "Legal Services",
+     1
+    ]
+   ],
+   "professions": [
+    "Real Estate Sales Agents"
+   ],
+   "study_areas": [
+    "ARCHITECTURE AND RELATED SERVICES",
+    "BUSINESS, MANAGEMENT, MARKETING, AND RELATED SUPPORT SERVICES"
+   ],
+   "terms": [
+    "realtor",
+    "open house",
+    "closing costs"
+   ],
+   "off_context": [
+    "closing costs"
+   ],
+   "expected_sectors": [
+    "53"
+   ],
+   "expected_cip": [
+    "52"
+   ]
+  },
+  {
+   "field": "teaching",
+   "text": "The teacher graded the essays and prepared a lesson plan for her third grade class.",
+   "sector@1": false,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Professional, Scientific, and Technical Services",
+     3
+    ],
+    [
+     "Educational Services",
+     3
+    ],
+    [
+     "Health Care and Social Assistance",
+     3
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Employment Services",
+     3
+    ],
+    [
+     "Elementary and Secondary Schools",
+     3
+    ],
+    [
+     "Colleges, Universities, and Professional Schools",
+     3
+    ]
+   ],
+   "professions": [
+    "Self-Enrichment Teachers",
+    "Substitute Teachers, Short-Term",
+    "Adapted Physical Education Specialists"
+   ],
+   "study_areas": [
+    "EDUCATION",
+    "HEALTH PROFESSIONS AND RELATED PROGRAMS",
+    "MULTI/INTERDISCIPLINARY STUDIES"
+   ],
+   "terms": [
+    "teacher",
+    "essays",
+    "prepared",
+    "lesson plan",
+    "grade"
+   ],
+   "off_context": [
+    "essays",
+    "prepared"
+   ],
+   "expected_sectors": [
+    "61"
+   ],
+   "expected_cip": [
+    "13"
+   ]
+  },
+  {
+   "field": "university",
+   "text": "The professor taught the seminar and supervised doctoral dissertations.",
+   "sector@1": false,
+   "sector@3": false,
+   "cip@1": false,
+   "cip@3": false,
+   "sectors": [
+    [
+     "Administrative and Support and Waste Management and Remediation Services",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Services to Buildings and Dwellings",
+     1
+    ],
+    [
+     "Other Support Services",
+     1
+    ]
+   ],
+   "professions": [
+    "Cytogenetic Technologists",
+    "First-Line Supervisors of Housekeeping and Janitorial Workers",
+    "Security Managers"
+   ],
+   "study_areas": [
+    "CONSTRUCTION TRADES",
+    "HEALTH PROFESSIONS AND RELATED PROGRAMS",
+    "BIOLOGICAL AND BIOMEDICAL SCIENCES"
+   ],
+   "terms": [
+    "seminar",
+    "supervised",
+    "doctoral"
+   ],
+   "off_context": [],
+   "expected_sectors": [
+    "61"
+   ],
+   "expected_cip": [
+    "13"
+   ]
+  },
+  {
+   "field": "manufacturing",
+   "text": "The machinist set up the CNC lathe and checked the part tolerances with a micrometer.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Manufacturing",
+     4
+    ],
+    [
+     "Construction",
+     3
+    ],
+    [
+     "Other Services (except Public Administration)",
+     3
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Machine Shops; Turned Product; and Screw, Nut, and Bolt Manufacturing",
+     4
+    ],
+    [
+     "Metalworking Machinery Manufacturing",
+     3
+    ],
+    [
+     "Motor Vehicle Parts Manufacturing",
+     3
+    ]
+   ],
+   "professions": [
+    "Machinists",
+    "Lathe and Turning Machine Tool Setters, Operators, and Tenders, Metal and Plastic",
+    "Tool and Die Makers"
+   ],
+   "study_areas": [
+    "PRECISION PRODUCTION"
+   ],
+   "terms": [
+    "machinist",
+    "set up",
+    "cnc lathe",
+    "checked",
+    "tolerances",
+    "micrometer"
+   ],
+   "off_context": [
+    "checked"
+   ],
+   "expected_sectors": [
+    "31-33"
+   ],
+   "expected_cip": [
+    "15",
+    "48"
+   ]
+  },
+  {
+   "field": "welding",
+   "text": "The welder ran a bead with the MIG welder and ground the seam smooth.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Manufacturing",
+     5
+    ],
+    [
+     "Construction",
+     4
+    ],
+    [
+     "Other Services (except Public Administration)",
+     3
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Motor Vehicle Parts Manufacturing",
+     4
+    ],
+    [
+     "Nonresidential Building Construction",
+     4
+    ],
+    [
+     "Utility System Construction",
+     4
+    ]
+   ],
+   "professions": [
+    "Welders, Cutters, Solderers, and Brazers",
+    "Welding, Soldering, and Brazing Machine Setters, Operators, and Tenders",
+    "Boilermakers"
+   ],
+   "study_areas": [
+    "PRECISION PRODUCTION",
+    "ENGINEERING/ENGINEERING-RELATED TECHNOLOGIES/TECHNICIANS"
+   ],
+   "terms": [
+    "welder",
+    "ran",
+    "bead",
+    "mig welder",
+    "seam",
+    "smooth"
+   ],
+   "off_context": [
+    "ran"
+   ],
+   "expected_sectors": [
+    "31-33",
+    "23"
+   ],
+   "expected_cip": [
+    "48"
+   ]
+  },
+  {
+   "field": "chemistry",
+   "text": "The chemist titrated the solution and recorded the pH and molarity.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Professional, Scientific, and Technical Services",
+     3
+    ],
+    [
+     "Manufacturing",
+     2
+    ],
+    [
+     "Administrative and Support and Waste Management and Remediation Services",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Pharmaceutical and Medicine Manufacturing",
+     2
+    ],
+    [
+     "Medical Equipment and Supplies Manufacturing",
+     2
+    ],
+    [
+     "Architectural, Engineering, and Related Services",
+     2
+    ]
+   ],
+   "professions": [
+    "Chemists",
+    "Chemical Technicians"
+   ],
+   "study_areas": [
+    "PHYSICAL SCIENCES",
+    "SCIENCE TECHNOLOGIES/TECHNICIANS",
+    "HEALTH PROFESSIONS AND RELATED PROGRAMS"
+   ],
+   "terms": [
+    "chemist",
+    "solution",
+    "recorded",
+    "ph"
+   ],
+   "off_context": [
+    "ph",
+    "recorded"
+   ],
+   "expected_sectors": [
+    "54",
+    "31-33"
+   ],
+   "expected_cip": [
+    "40"
+   ]
+  },
+  {
+   "field": "physics",
+   "text": "The physicist measured the particle's momentum in the accelerator experiment.",
+   "sector@1": false,
+   "sector@3": true,
+   "cip@1": false,
+   "cip@3": false,
+   "sectors": [
+    [
+     "Utilities",
+     3
+    ],
+    [
+     "Professional, Scientific, and Technical Services",
+     3
+    ],
+    [
+     "Educational Services",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Electric Power Generation, Transmission and Distribution",
+     3
+    ],
+    [
+     "Scientific Research and Development Services",
+     3
+    ],
+    [
+     "Colleges, Universities, and Professional Schools",
+     2
+    ]
+   ],
+   "professions": [
+    "Biochemists and Biophysicists",
+    "Physicists"
+   ],
+   "study_areas": [
+    "HEALTH PROFESSIONS AND RELATED PROGRAMS",
+    "BIOLOGICAL AND BIOMEDICAL SCIENCES",
+    "ENGINEERING"
+   ],
+   "terms": [
+    "physicist",
+    "measured",
+    "accelerator",
+    "experiment"
+   ],
+   "off_context": [
+    "measured"
+   ],
+   "expected_sectors": [
+    "54"
+   ],
+   "expected_cip": [
+    "40"
+   ]
+  },
+  {
+   "field": "biology",
+   "text": "The biologist sequenced the genome and analyzed gene expression with PCR.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Professional, Scientific, and Technical Services",
+     3
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Scientific Research and Development Services",
+     3
+    ],
+    [
+     "Architectural, Engineering, and Related Services",
+     1
+    ],
+    [
+     "Management, Scientific, and Technical Consulting Services",
+     1
+    ]
+   ],
+   "professions": [
+    "Bioinformatics Scientists",
+    "Molecular and Cellular Biologists",
+    "Geneticists"
+   ],
+   "study_areas": [
+    "BIOLOGICAL AND BIOMEDICAL SCIENCES",
+    "MATHEMATICS AND STATISTICS",
+    "MULTI/INTERDISCIPLINARY STUDIES"
+   ],
+   "terms": [
+    "biologist",
+    "genome",
+    "gene expression",
+    "pcr"
+   ],
+   "off_context": [
+    "pcr"
+   ],
+   "expected_sectors": [
+    "54"
+   ],
+   "expected_cip": [
+    "26"
+   ]
+  },
+  {
+   "field": "journalism",
+   "text": "The reporter interviewed sources and filed the story before the editor's deadline.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Information",
+     3
+    ],
+    [
+     "Professional, Scientific, and Technical Services",
+     2
+    ],
+    [
+     "Educational Services",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Radio and Television Broadcasting Stations",
+     2
+    ],
+    [
+     "Motion Picture and Video Industries",
+     2
+    ],
+    [
+     "Newspaper, Periodical, Book, and Directory Publishers",
+     2
+    ]
+   ],
+   "professions": [
+    "Editors"
+   ],
+   "study_areas": [
+    "COMMUNICATION, JOURNALISM, AND RELATED PROGRAMS",
+    "ENGLISH LANGUAGE AND LITERATURE/LETTERS",
+    "BUSINESS, MANAGEMENT, MARKETING, AND RELATED SUPPORT SERVICES"
+   ],
+   "terms": [
+    "reporter",
+    "interviewed",
+    "sources",
+    "filed",
+    "deadline"
+   ],
+   "off_context": [
+    "filed",
+    "interviewed"
+   ],
+   "expected_sectors": [
+    "51"
+   ],
+   "expected_cip": [
+    "09"
+   ]
+  },
+  {
+   "field": "advertising",
+   "text": "The agency designed the ad campaign and bought media placements for the brand.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Professional, Scientific, and Technical Services",
+     5
+    ],
+    [
+     "Manufacturing",
+     4
+    ],
+    [
+     "Management of Companies and Enterprises",
+     4
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Advertising, Public Relations, and Related Services",
+     4
+    ],
+    [
+     "Management of Companies and Enterprises",
+     4
+    ],
+    [
+     "Management, Scientific, and Technical Consulting Services",
+     3
+    ]
+   ],
+   "professions": [
+    "Advertising and Promotions Managers",
+    "Search Marketing Strategists",
+    "Pharmacists"
+   ],
+   "study_areas": [
+    "BUSINESS, MANAGEMENT, MARKETING, AND RELATED SUPPORT SERVICES",
+    "COMMUNICATION, JOURNALISM, AND RELATED PROGRAMS",
+    "HEALTH PROFESSIONS AND RELATED PROGRAMS"
+   ],
+   "terms": [
+    "agency",
+    "designed",
+    "ad campaign",
+    "placements",
+    "brand"
+   ],
+   "off_context": [],
+   "expected_sectors": [
+    "54"
+   ],
+   "expected_cip": [
+    "09",
+    "52"
+   ]
+  },
+  {
+   "field": "military",
+   "text": "The infantry platoon cleared the compound and called in artillery support.",
+   "sector@1": false,
+   "sector@3": false,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Manufacturing",
+     1
+    ],
+    [
+     "Retail Trade",
+     1
+    ],
+    [
+     "Construction",
+     1
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Electric Power Generation, Transmission and Distribution",
+     1
+    ],
+    [
+     "Natural Gas Distribution",
+     1
+    ],
+    [
+     "Residential Building Construction",
+     1
+    ]
+   ],
+   "professions": [
+    "Armored Assault Vehicle Officers",
+    "Infantry Officers",
+    "First-Line Supervisors of Weapons Specialists/Crew Members"
+   ],
+   "study_areas": [
+    "MILITARY SCIENCE, LEADERSHIP AND OPERATIONAL ART"
+   ],
+   "terms": [
+    "infantry",
+    "cleared",
+    "compound",
+    "artillery"
+   ],
+   "off_context": [
+    "cleared",
+    "compound"
+   ],
+   "expected_sectors": [
+    "92"
+   ],
+   "expected_cip": [
+    "29",
+    "28"
+   ]
+  },
+  {
+   "field": "police",
+   "text": "The officer arrested the suspect and read him his Miranda rights.",
+   "sector@1": false,
+   "sector@3": false,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Professional, Scientific, and Technical Services",
+     1
+    ],
+    [
+     "Administrative and Support and Waste Management and Remediation Services",
+     1
+    ],
+    [
+     "Educational Services",
+     1
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Management, Scientific, and Technical Consulting Services",
+     1
+    ],
+    [
+     "Investigation and Security Services",
+     1
+    ],
+    [
+     "Elementary and Secondary Schools",
+     1
+    ]
+   ],
+   "professions": [
+    "Gambling Managers",
+    "Loss Prevention Managers",
+    "Environmental Compliance Inspectors"
+   ],
+   "study_areas": [
+    "HOMELAND SECURITY, LAW ENFORCEMENT, FIREFIGHTING AND RELATED PROTECTIVE SERVICES",
+    "NATURAL RESOURCES AND CONSERVATION",
+    "BUSINESS, MANAGEMENT, MARKETING, AND RELATED SUPPORT SERVICES"
+   ],
+   "terms": [
+    "suspect"
+   ],
+   "off_context": [],
+   "expected_sectors": [
+    "92"
+   ],
+   "expected_cip": [
+    "43"
+   ]
+  },
+  {
+   "field": "firefighting",
+   "text": "The firefighters connected the hose to the hydrant and ventilated the roof.",
+   "sector@1": false,
+   "sector@3": false,
+   "cip@1": false,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Construction",
+     3
+    ],
+    [
+     "Utilities",
+     2
+    ],
+    [
+     "Mining, Quarrying, and Oil and Gas Extraction",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Building Equipment Contractors",
+     3
+    ],
+    [
+     "Electric Power Generation, Transmission and Distribution",
+     2
+    ],
+    [
+     "Natural Gas Distribution",
+     2
+    ]
+   ],
+   "professions": [
+    "Firefighters",
+    "Control and Valve Installers and Repairers, Except Mechanical Door",
+    "Loading and Moving Machine Operators, Underground Mining"
+   ],
+   "study_areas": [
+    "MECHANIC AND REPAIR TECHNOLOGIES/TECHNICIANS",
+    "NATURAL RESOURCES AND CONSERVATION",
+    "HOMELAND SECURITY, LAW ENFORCEMENT, FIREFIGHTING AND RELATED PROTECTIVE SERVICES"
+   ],
+   "terms": [
+    "firefighters",
+    "connected",
+    "hose",
+    "hydrant",
+    "roof"
+   ],
+   "off_context": [
+    "connected",
+    "firefighters"
+   ],
+   "expected_sectors": [
+    "92"
+   ],
+   "expected_cip": [
+    "43"
+   ]
+  },
+  {
+   "field": "government",
+   "text": "The city council passed the zoning ordinance and approved the municipal budget.",
+   "sector@1": false,
+   "sector@3": false,
+   "cip@1": false,
+   "cip@3": false,
+   "sectors": [
+    [
+     "Professional, Scientific, and Technical Services",
+     4
+    ],
+    [
+     "Health Care and Social Assistance",
+     2
+    ],
+    [
+     "Management of Companies and Enterprises",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Architectural, Engineering, and Related Services",
+     4
+    ],
+    [
+     "Management, Scientific, and Technical Consulting Services",
+     3
+    ],
+    [
+     "Management of Companies and Enterprises",
+     2
+    ]
+   ],
+   "professions": [
+    "Court, Municipal, and License Clerks",
+    "Property, Real Estate, and Community Association Managers",
+    "Recycling Coordinators"
+   ],
+   "study_areas": [
+    "ARCHITECTURE AND RELATED SERVICES",
+    "BUSINESS, MANAGEMENT, MARKETING, AND RELATED SUPPORT SERVICES"
+   ],
+   "terms": [
+    "city council",
+    "zoning",
+    "ordinance",
+    "approved",
+    "municipal",
+    "budget"
+   ],
+   "off_context": [
+    "approved",
+    "city council"
+   ],
+   "expected_sectors": [
+    "92"
+   ],
+   "expected_cip": [
+    "44",
+    "45"
+   ]
+  },
+  {
+   "field": "religion",
+   "text": "The pastor led the worship service, preached the sermon, and baptized the infant.",
+   "sector@1": false,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Health Care and Social Assistance",
+     4
+    ],
+    [
+     "Other Services (except Public Administration)",
+     3
+    ]
+   ],
+   "industry_groups": [
+    [
+     "General Medical and Surgical Hospitals",
+     4
+    ],
+    [
+     "Home Health Care Services",
+     3
+    ],
+    [
+     "Religious Organizations",
+     3
+    ]
+   ],
+   "professions": [
+    "Clergy"
+   ],
+   "study_areas": [
+    "THEOLOGY AND RELIGIOUS VOCATIONS",
+    "HEALTH PROFESSIONS AND RELATED PROGRAMS"
+   ],
+   "terms": [
+    "pastor",
+    "worship",
+    "sermon",
+    "infant"
+   ],
+   "off_context": [
+    "infant"
+   ],
+   "expected_sectors": [
+    "81"
+   ],
+   "expected_cip": [
+    "38",
+    "39"
+   ]
+  },
+  {
+   "field": "sports",
+   "text": "The coach drew up the play and the quarterback threw a touchdown pass.",
+   "sector@1": false,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Transportation and Warehousing",
+     2
+    ],
+    [
+     "Arts, Entertainment, and Recreation",
+     1
+    ],
+    [
+     "Educational Services",
+     1
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Urban Transit Systems",
+     1
+    ],
+    [
+     "Management, Scientific, and Technical Consulting Services",
+     1
+    ],
+    [
+     "Advertising, Public Relations, and Related Services",
+     1
+    ]
+   ],
+   "professions": [
+    "Agents and Business Managers of Artists, Performers, and Athletes",
+    "Industrial-Organizational Psychologists",
+    "Recreation and Fitness Studies Teachers, Postsecondary"
+   ],
+   "study_areas": [
+    "PARKS, RECREATION, LEISURE, FITNESS, AND KINESIOLOGY",
+    "HEALTH PROFESSIONS AND RELATED PROGRAMS",
+    "VISUAL AND PERFORMING ARTS"
+   ],
+   "terms": [
+    "coach",
+    "touchdown"
+   ],
+   "off_context": [],
+   "expected_sectors": [
+    "71"
+   ],
+   "expected_cip": [
+    "31"
+   ]
+  },
+  {
+   "field": "fitness",
+   "text": "The personal trainer led the client through squats, deadlifts, and a cardio circuit.",
+   "sector@1": false,
+   "sector@3": true,
+   "cip@1": false,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Health Care and Social Assistance",
+     3
+    ],
+    [
+     "Educational Services",
+     3
+    ],
+    [
+     "Arts, Entertainment, and Recreation",
+     3
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Offices of Physicians",
+     3
+    ],
+    [
+     "General Medical and Surgical Hospitals",
+     3
+    ],
+    [
+     "Other Amusement and Recreation Industries",
+     3
+    ]
+   ],
+   "professions": [
+    "Exercise Trainers and Group Fitness Instructors",
+    "Security Management Specialists",
+    "Security and Fire Alarm Systems Installers"
+   ],
+   "study_areas": [
+    "BUSINESS, MANAGEMENT, MARKETING, AND RELATED SUPPORT SERVICES",
+    "EDUCATION",
+    "PARKS, RECREATION, LEISURE, FITNESS, AND KINESIOLOGY"
+   ],
+   "terms": [
+    "personal trainer",
+    "client",
+    "cardio",
+    "circuit"
+   ],
+   "off_context": [
+    "cardio"
+   ],
+   "expected_sectors": [
+    "71"
+   ],
+   "expected_cip": [
+    "31"
+   ]
+  },
+  {
+   "field": "music",
+   "text": "The musicians rehearsed the symphony and the conductor adjusted the tempo.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": false,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Arts, Entertainment, and Recreation",
+     4
+    ],
+    [
+     "Other Services (except Public Administration)",
+     4
+    ],
+    [
+     "Professional, Scientific, and Technical Services",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Performing Arts Companies",
+     4
+    ],
+    [
+     "Religious Organizations",
+     4
+    ],
+    [
+     "Other Professional, Scientific, and Technical Services",
+     1
+    ]
+   ],
+   "professions": [
+    "Music Directors and Composers"
+   ],
+   "study_areas": [
+    "THEOLOGY AND RELIGIOUS VOCATIONS",
+    "VISUAL AND PERFORMING ARTS"
+   ],
+   "terms": [
+    "musicians",
+    "symphony",
+    "conductor",
+    "adjusted",
+    "tempo"
+   ],
+   "off_context": [
+    "adjusted"
+   ],
+   "expected_sectors": [
+    "71"
+   ],
+   "expected_cip": [
+    "50"
+   ]
+  },
+  {
+   "field": "hair salon",
+   "text": "The stylist shampooed the client's hair, cut layers, and applied highlights.",
+   "sector@1": false,
+   "sector@3": false,
+   "cip@1": false,
+   "cip@3": false,
+   "sectors": [
+    [
+     "Educational Services",
+     4
+    ],
+    [
+     "Health Care and Social Assistance",
+     3
+    ],
+    [
+     "Professional, Scientific, and Technical Services",
+     3
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Architectural, Engineering, and Related Services",
+     2
+    ],
+    [
+     "Other Miscellaneous Retailers",
+     2
+    ],
+    [
+     "General Medical and Surgical Hospitals",
+     2
+    ]
+   ],
+   "professions": [
+    "Biofuels/Biodiesel Technology and Product Development Managers",
+    "Art Therapists",
+    "Music Therapists"
+   ],
+   "study_areas": [
+    "HEALTH PROFESSIONS AND RELATED PROGRAMS",
+    "ARCHITECTURE AND RELATED SERVICES",
+    "ENGINEERING"
+   ],
+   "terms": [
+    "stylist",
+    "client's",
+    "layers",
+    "applied",
+    "highlight"
+   ],
+   "off_context": [],
+   "expected_sectors": [
+    "81"
+   ],
+   "expected_cip": [
+    "12"
+   ]
+  },
+  {
+   "field": "childcare",
+   "text": "The daycare worker changed diapers and supervised the toddlers during nap time.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Health Care and Social Assistance",
+     5
+    ],
+    [
+     "Educational Services",
+     5
+    ],
+    [
+     "Other Services (except Public Administration)",
+     4
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Elementary and Secondary Schools",
+     5
+    ],
+    [
+     "Child Care Services",
+     5
+    ],
+    [
+     "Traveler Accommodation",
+     3
+    ]
+   ],
+   "professions": [
+    "Childcare Workers",
+    "First-Line Supervisors of Housekeeping and Janitorial Workers",
+    "Laundry and Dry-Cleaning Workers"
+   ],
+   "study_areas": [
+    "FAMILY AND CONSUMER SCIENCES/HUMAN SCIENCES",
+    "CONSTRUCTION TRADES"
+   ],
+   "terms": [
+    "daycare",
+    "worker",
+    "diapers",
+    "supervised",
+    "toddler",
+    "nap"
+   ],
+   "off_context": [],
+   "expected_sectors": [
+    "62"
+   ],
+   "expected_cip": [
+    "19"
+   ]
+  },
+  {
+   "field": "social work",
+   "text": "The social worker conducted a home visit and updated the client's case plan.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": false,
+   "cip@3": false,
+   "sectors": [
+    [
+     "Health Care and Social Assistance",
+     4
+    ],
+    [
+     "Educational Services",
+     3
+    ],
+    [
+     "Administrative and Support and Waste Management and Remediation Services",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Outpatient Care Centers",
+     3
+    ],
+    [
+     "General Medical and Surgical Hospitals",
+     3
+    ],
+    [
+     "Colleges, Universities, and Professional Schools",
+     2
+    ]
+   ],
+   "professions": [
+    "Community Health Workers",
+    "Residential Advisors",
+    "Telecommunications Equipment Installers and Repairers, Except Line Installers"
+   ],
+   "study_areas": [
+    "EDUCATION",
+    "MECHANIC AND REPAIR TECHNOLOGIES/TECHNICIANS",
+    "COMMUNICATION, JOURNALISM, AND RELATED PROGRAMS"
+   ],
+   "terms": [
+    "social worker",
+    "conducted",
+    "home visit",
+    "updated",
+    "client's",
+    "case plan"
+   ],
+   "off_context": [
+    "updated"
+   ],
+   "expected_sectors": [
+    "62"
+   ],
+   "expected_cip": [
+    "44"
+   ]
+  },
+  {
+   "field": "architecture",
+   "text": "The architect drafted the floor plans and elevations for the building permit.",
+   "sector@1": false,
+   "sector@3": true,
+   "cip@1": true,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Construction",
+     3
+    ],
+    [
+     "Professional, Scientific, and Technical Services",
+     3
+    ],
+    [
+     "Administrative and Support and Waste Management and Remediation Services",
+     2
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Building Equipment Contractors",
+     2
+    ],
+    [
+     "Computer Systems Design and Related Services",
+     2
+    ],
+    [
+     "Residential Building Construction",
+     2
+    ]
+   ],
+   "professions": [
+    "Architectural and Civil Drafters"
+   ],
+   "study_areas": [
+    "ARCHITECTURE AND RELATED SERVICES",
+    "ENGINEERING/ENGINEERING-RELATED TECHNOLOGIES/TECHNICIANS"
+   ],
+   "terms": [
+    "architect",
+    "floor plan",
+    "elevations",
+    "building permit"
+   ],
+   "off_context": [
+    "building permit",
+    "floor plan"
+   ],
+   "expected_sectors": [
+    "54"
+   ],
+   "expected_cip": [
+    "04"
+   ]
+  },
+  {
+   "field": "civil engineering",
+   "text": "The engineer designed the bridge girders and checked the load calculations.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": false,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Construction",
+     5
+    ],
+    [
+     "Manufacturing",
+     5
+    ],
+    [
+     "Professional, Scientific, and Technical Services",
+     5
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Architectural, Engineering, and Related Services",
+     4
+    ],
+    [
+     "Nonresidential Building Construction",
+     3
+    ],
+    [
+     "Foundation, Structure, and Building Exterior Contractors",
+     3
+    ]
+   ],
+   "professions": [
+    "Transportation Engineers",
+    "Sailors and Marine Oilers",
+    "Structural Iron and Steel Workers"
+   ],
+   "study_areas": [
+    "CONSTRUCTION TRADES",
+    "ENGINEERING"
+   ],
+   "terms": [
+    "engineer",
+    "designed",
+    "bridge",
+    "girders",
+    "checked",
+    "load",
+    "calculation"
+   ],
+   "off_context": [
+    "checked"
+   ],
+   "expected_sectors": [
+    "54",
+    "23"
+   ],
+   "expected_cip": [
+    "14"
+   ]
+  },
+  {
+   "field": "telecom",
+   "text": "The technician spliced fiber optic cable and tested the signal at the cell tower.",
+   "sector@1": false,
+   "sector@3": false,
+   "cip@1": false,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Construction",
+     4
+    ],
+    [
+     "Professional, Scientific, and Technical Services",
+     4
+    ],
+    [
+     "Health Care and Social Assistance",
+     3
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Utility System Construction",
+     3
+    ],
+    [
+     "Building Equipment Contractors",
+     3
+    ],
+    [
+     "Aerospace Product and Parts Manufacturing",
+     3
+    ]
+   ],
+   "professions": [
+    "Nursing Assistants",
+    "Radio, Cellular, and Tower Equipment Installers and Repairers",
+    "Robotics Engineers"
+   ],
+   "study_areas": [
+    "HEALTH PROFESSIONS AND RELATED PROGRAMS",
+    "MECHANIC AND REPAIR TECHNOLOGIES/TECHNICIANS",
+    "ENGINEERING/ENGINEERING-RELATED TECHNOLOGIES/TECHNICIANS"
+   ],
+   "terms": [
+    "technician",
+    "fiber optic cable",
+    "tested",
+    "signal",
+    "cell tower"
+   ],
+   "off_context": [
+    "fiber optic cable"
+   ],
+   "expected_sectors": [
+    "51"
+   ],
+   "expected_cip": [
+    "11",
+    "47"
+   ]
+  },
+  {
+   "field": "logistics",
+   "text": "The warehouse associate picked orders, scanned barcodes, and loaded pallets with a forklift.",
+   "sector@1": true,
+   "sector@3": true,
+   "cip@1": false,
+   "cip@3": true,
+   "sectors": [
+    [
+     "Transportation and Warehousing",
+     4
+    ],
+    [
+     "Administrative and Support and Waste Management and Remediation Services",
+     4
+    ],
+    [
+     "Construction",
+     3
+    ]
+   ],
+   "industry_groups": [
+    [
+     "Warehousing and Storage",
+     3
+    ],
+    [
+     "Employment Services",
+     3
+    ],
+    [
+     "Couriers and Express Delivery Services",
+     2
+    ]
+   ],
+   "professions": [
+    "Industrial Truck and Tractor Operators",
+    "Stockers and Order Fillers",
+    "Logistics Analysts"
+   ],
+   "study_areas": [
+    "TRANSPORTATION AND MATERIALS MOVING",
+    "BUSINESS, MANAGEMENT, MARKETING, AND RELATED SUPPORT SERVICES",
+    "AGRICULTURAL/ANIMAL/PLANT/VETERINARY SCIENCE AND RELATED FIELDS"
+   ],
+   "terms": [
+    "warehouse",
+    "associate",
+    "orders",
+    "scanned",
+    "loaded pallet",
+    "forklift"
+   ],
+   "off_context": [
+    "scanned"
+   ],
+   "expected_sectors": [
+    "48-49",
+    "49"
+   ],
+   "expected_cip": [
+    "52"
+   ]
+  }
+ ]
+}

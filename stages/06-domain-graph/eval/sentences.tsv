@@ -1,0 +1,54 @@
+field	expected_sectors	expected_cip	text
+dentistry	62	51	The dentists cleaned the patient's teeth and fixed two cavities.
+law	54	22	Plaintiffs filed motions for summary judgments.
+law	54;92	22	The judge denied the defendant's motion to dismiss.
+drywall	23	46	We hung gypsum board and insulated the wall cavity.
+film	51	50;10	The studio released a motion picture with a big film budget.
+nursing	62	51	The nurse checked the patient's vital signs and administered the IV medication.
+surgery	62	51	The surgeon performed a laparoscopic appendectomy under general anesthesia.
+pharmacy	44-45;62	51	The pharmacist filled the prescription and counseled the patient on drug interactions.
+veterinary	54	01;51	The veterinarian vaccinated the puppy and treated the cat's ear infection.
+accounting	54	52	The auditor reconciled the general ledger and reviewed accounts receivable before the quarterly close.
+banking	52	52	The loan officer reviewed the borrower's credit score and approved the mortgage application.
+insurance	52	52	The underwriter assessed the risk and set the premium for the homeowner's policy.
+software	54;51	11	The developer refactored the API, fixed the memory leak, and pushed the commit to the repository.
+networking	54;51	11	The network administrator configured the router, firewall rules, and VLANs.
+electrical	23	46	The electrician pulled conduit and wired the breaker panel to code.
+plumbing	23	46	The plumber replaced the corroded pipe and installed a new water heater.
+roofing	23	46	The crew tore off the old shingles and installed new flashing and underlayment.
+auto repair	81	47	The mechanic replaced the brake pads and rotors and flushed the transmission fluid.
+aviation	48-49	49	The pilot completed the preflight checklist and requested clearance for takeoff from the tower.
+trucking	48-49	49	The driver logged hours of service and secured the freight on the flatbed trailer.
+farming	11	01	The farmer planted corn, applied nitrogen fertilizer, and harvested soybeans with the combine.
+forestry	11	03	The crew thinned the timber stand and replanted seedlings after the clear-cut.
+mining	21	15	The miners drilled blast holes and hauled the ore from the open pit.
+oil and gas	21	15	The rig crew drilled the well and set casing before fracking the shale formation.
+restaurant	72	12	The line cook seared the steak, plated the entree, and sent it to the dining room.
+baking	31-33;72	12	The baker proofed the dough and baked sourdough loaves in the deck oven.
+hotel	72	52	The front desk clerk checked in the guests and assigned their rooms.
+retail	44-45	52	The cashier rang up the customer's purchase and restocked the shelves.
+real estate	53	52	The realtor listed the house, held an open house, and negotiated the closing costs.
+teaching	61	13	The teacher graded the essays and prepared a lesson plan for her third grade class.
+university	61	13	The professor taught the seminar and supervised doctoral dissertations.
+manufacturing	31-33	15;48	The machinist set up the CNC lathe and checked the part tolerances with a micrometer.
+welding	31-33;23	48	The welder ran a bead with the MIG welder and ground the seam smooth.
+chemistry	54;31-33	40	The chemist titrated the solution and recorded the pH and molarity.
+physics	54	40	The physicist measured the particle's momentum in the accelerator experiment.
+biology	54	26	The biologist sequenced the genome and analyzed gene expression with PCR.
+journalism	51	09	The reporter interviewed sources and filed the story before the editor's deadline.
+advertising	54	09;52	The agency designed the ad campaign and bought media placements for the brand.
+military	92	29;28	The infantry platoon cleared the compound and called in artillery support.
+police	92	43	The officer arrested the suspect and read him his Miranda rights.
+firefighting	92	43	The firefighters connected the hose to the hydrant and ventilated the roof.
+government	92	44;45	The city council passed the zoning ordinance and approved the municipal budget.
+religion	81	38;39	The pastor led the worship service, preached the sermon, and baptized the infant.
+sports	71	31	The coach drew up the play and the quarterback threw a touchdown pass.
+fitness	71	31	The personal trainer led the client through squats, deadlifts, and a cardio circuit.
+music	71	50	The musicians rehearsed the symphony and the conductor adjusted the tempo.
+hair salon	81	12	The stylist shampooed the client's hair, cut layers, and applied highlights.
+childcare	62	19	The daycare worker changed diapers and supervised the toddlers during nap time.
+social work	62	44	The social worker conducted a home visit and updated the client's case plan.
+architecture	54	04	The architect drafted the floor plans and elevations for the building permit.
+civil engineering	54;23	14	The engineer designed the bridge girders and checked the load calculations.
+telecom	51	11;47	The technician spliced fiber optic cable and tested the signal at the cell tower.
+logistics	48-49;49	52	The warehouse associate picked orders, scanned barcodes, and loaded pallets with a forklift.
